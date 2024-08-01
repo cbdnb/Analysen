@@ -48,7 +48,7 @@ public class MatheStatistik {
 			});
 		//@formatter:on
 		System.out.println(dets);
-		System.out.println("---");
+		System.out.println("----");
 		System.out.println(dates);
 
 	}
