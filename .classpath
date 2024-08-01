@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" path="src"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/jdk-19.0.2">
+		<attributes>
+			<attribute name="module" value="true"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry combineaccessrules="false" kind="src" path="/zmarc"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/GND"/>
+	<classpathentry kind="lib" path="/GND/lib/commons-collections4-4.1.jar"/>
+	<classpathentry kind="lib" path="/GND/lib/poi-3.15.jar" sourcepath="C:/Users/BAUMAN~1.AD-/AppData/Local/Temp/decompiler/source/poi-3.15-sources.jar">
+		<attributes>
+			<attribute name="javadoc_location" value="jar:platform:/resource/GND/lib/poi-bin-3.15-20160924.zip!/poi-3.15/docs/apidocs"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="lib" path="/GND/lib/poi-ooxml-3.15.jar">
+		<attributes>
+			<attribute name="javadoc_location" value="jar:platform:/resource/GND/lib/poi-bin-3.15-20160924.zip!/poi-3.15/docs/apidocs"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="lib" path="/GND/lib/poi-ooxml-schemas-3.15.jar">
+		<attributes>
+			<attribute name="javadoc_location" value="jar:platform:/resource/GND/lib/poi-bin-3.15-20160924.zip!/poi-3.15/docs/apidocs"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="lib" path="/GND/lib/poi-scratchpad-3.15.jar">
+		<attributes>
+			<attribute name="javadoc_location" value="jar:platform:/resource/GND/lib/poi-bin-3.15-20160924.zip!/poi-3.15/docs/apidocs"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="lib" path="/GND/lib/xmlbeans-2.6.0.jar"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/SEUtils"/>
+	<classpathentry kind="output" path="bin"/>
+</classpath>
