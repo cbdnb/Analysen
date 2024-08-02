@@ -21,7 +21,7 @@ import de.dnb.gnd.parser.RecordReader;
 import de.dnb.gnd.utils.ContainsTag;
 import de.dnb.gnd.utils.IDNUtils;
 import de.dnb.gnd.utils.SubjectUtils;
-import de.dnb.ie.utils.DB.GND_DB_UTIL;
+import utils.DB.GND_DB_UTIL;
 
 /**
  * @author baumann

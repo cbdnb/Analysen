@@ -8,7 +8,7 @@ import java.util.Scanner;
 
 import de.dnb.basics.applicationComponents.StreamUtils;
 import de.dnb.gnd.utils.IDNFinderLeven;
-import de.dnb.ie.utils.DB.GND_DB_UTIL;
+import utils.DB.GND_DB_UTIL;
 
 /**
  * @author baumann

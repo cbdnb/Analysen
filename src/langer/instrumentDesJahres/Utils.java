@@ -15,7 +15,7 @@ import de.dnb.basics.collections.BiMapVisitor.Order;
 import de.dnb.basics.collections.BiMultimap;
 import de.dnb.basics.collections.RankingQueue;
 import de.dnb.gnd.utils.IDNUtils;
-import de.dnb.ie.utils.DB.GND_DB_UTIL;
+import utils.DB.GND_DB_UTIL;
 
 /**
  * @author baumann

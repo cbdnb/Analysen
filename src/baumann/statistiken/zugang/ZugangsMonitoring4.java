@@ -30,7 +30,7 @@ import de.dnb.gnd.utils.DDC_SG.HUNDERTER;
 import de.dnb.gnd.utils.RecordUtils;
 import de.dnb.gnd.utils.SGUtils;
 import de.dnb.gnd.utils.SubjectUtils.TIEFE;
-import de.dnb.ie.utils.DB.Status_Generator;
+import utils.DB.Status_Generator;
 
 /**
  * Germanica und Übersetzungen. <a href=

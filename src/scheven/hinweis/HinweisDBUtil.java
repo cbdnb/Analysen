@@ -27,8 +27,8 @@ import de.dnb.gnd.parser.line.Line;
 import de.dnb.gnd.utils.GNDUtils;
 import de.dnb.gnd.utils.IDNUtils;
 import de.dnb.gnd.utils.SubfieldUtils;
-import de.dnb.ie.utils.DB.GND_DB_UTIL;
-import de.dnb.ie.utils.DB.GUI;
+import utils.DB.GND_DB_UTIL;
+import utils.DB.GUI;
 
 /**
  * @author baumann

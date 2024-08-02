@@ -18,7 +18,7 @@ import de.dnb.gnd.parser.line.Line;
 import de.dnb.gnd.parser.tag.GNDTagDB;
 import de.dnb.gnd.utils.ContainsTag;
 import de.dnb.gnd.utils.GNDUtils;
-import de.dnb.ie.utils.DB.GND_DB_UTIL;
+import utils.DB.GND_DB_UTIL;
 
 /**
  * @author baumann

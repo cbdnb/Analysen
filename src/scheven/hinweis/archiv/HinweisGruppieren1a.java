@@ -19,7 +19,7 @@ import de.dnb.gnd.utils.ContainsTag;
 import de.dnb.gnd.utils.DownloadWorker;
 import de.dnb.gnd.utils.GNDUtils;
 import de.dnb.gnd.utils.formatter.RDAFormatter;
-import de.dnb.ie.utils.DB.GND_DB_UTIL;
+import utils.DB.GND_DB_UTIL;
 
 /**
  * @author baumann

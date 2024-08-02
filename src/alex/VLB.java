@@ -27,7 +27,7 @@ import de.dnb.gnd.utils.RecordUtils;
 import de.dnb.gnd.utils.SubfieldUtils;
 import de.dnb.gnd.utils.SubjectUtils;
 import de.dnb.gnd.utils.SubjectUtils.TIEFE;
-import de.dnb.ie.utils.DB.GND_DB_UTIL;
+import utils.DB.GND_DB_UTIL;
 
 //@formatter:off
 

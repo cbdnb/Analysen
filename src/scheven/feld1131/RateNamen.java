@@ -14,7 +14,7 @@ import de.dnb.basics.applicationComponents.strings.StringUtils;
 import de.dnb.basics.applicationComponents.tuples.Pair;
 import de.dnb.basics.collections.BiMultimap;
 import de.dnb.basics.collections.ListUtils;
-import de.dnb.ie.utils.DB.GND_DB_UTIL;
+import utils.DB.GND_DB_UTIL;
 
 /**
  * @author baumann

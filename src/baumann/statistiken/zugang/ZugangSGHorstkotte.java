@@ -30,7 +30,7 @@ import de.dnb.gnd.utils.RecordUtils.STANDORT_DNB;
 import de.dnb.gnd.utils.StatusAndCodeFilter;
 import de.dnb.gnd.utils.SubfieldUtils;
 import de.dnb.gnd.utils.SubjectUtils.TIEFE;
-import de.dnb.ie.utils.DB.Status_Generator;
+import utils.DB.Status_Generator;
 
 /**
  * @author baumann

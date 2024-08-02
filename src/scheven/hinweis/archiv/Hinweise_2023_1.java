@@ -21,7 +21,7 @@ import de.dnb.gnd.utils.ContainsTag;
 import de.dnb.gnd.utils.GNDUtils;
 import de.dnb.gnd.utils.IDNUtils;
 import de.dnb.gnd.utils.SubfieldUtils;
-import de.dnb.ie.utils.DB.GND_DB_UTIL;
+import utils.DB.GND_DB_UTIL;
 
 /**
  * @author baumann

@@ -10,7 +10,7 @@ import java.util.List;
 import de.dnb.basics.applicationComponents.strings.StringUtils;
 import de.dnb.basics.applicationComponents.tuples.Triplett;
 import de.dnb.gnd.utils.IDNFinderLeven;
-import de.dnb.ie.utils.DB.GND_DB_UTIL;
+import utils.DB.GND_DB_UTIL;
 
 /**
  * @author baumann
