@@ -18,7 +18,7 @@ import de.dnb.gnd.utils.DownloadWorker;
 import de.dnb.gnd.utils.SGUtils;
 import de.dnb.gnd.utils.SubjectUtils;
 import de.dnb.gnd.utils.SubjectUtils.TIEFE;
-import de.dnb.ie.utils.AcDatabase;
+
 import de.dnb.gnd.utils.WV;
 
 public class ErschlosseneMedienwerke extends DownloadWorker {
@@ -57,7 +57,8 @@ public class ErschlosseneMedienwerke extends DownloadWorker {
 		TIEFE status = SubjectUtils.getErschliessungsTiefe(record);
 		if (status == null) { // übergeordneten versuchen
 			final String idnBroader = BibRecUtils.getBroaderTitleIDN(record);
-			final Pair<String, TIEFE> pair = AcDatabase.getStatus(idnBroader);
+			final Pair<String, TIEFE> pair = utils.AcDatabase
+					.getStatus(idnBroader);
 			// System.err.println(pair);
 			if (pair != null) {
 				status = pair.second;

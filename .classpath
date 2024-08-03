@@ -20,6 +20,5 @@
 		</attributes>
 	</classpathentry>
 	<classpathentry combineaccessrules="false" kind="src" path="/pica4J"/>
-	<classpathentry combineaccessrules="false" kind="src" path="/SEUtils"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

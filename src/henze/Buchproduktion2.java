@@ -32,7 +32,7 @@ import de.dnb.gnd.utils.SGUtils;
 import de.dnb.gnd.utils.StatusAndCodeFilter;
 import de.dnb.gnd.utils.SubjectUtils;
 import de.dnb.gnd.utils.SubjectUtils.TIEFE;
-import de.dnb.ie.utils.AcDatabase;
+import utils.AcDatabase;
 
 /**
  * Wieviele Bücher wurden im Jahr 2010-2019 in den MINT-Fächern gedruckt?
@@ -261,7 +261,8 @@ public class Buchproduktion2 extends DownloadWorker {
 		DDC_SG dhs = SGUtils.getDDCDHS(record);
 		if (dhs == null) {
 			final String idnBroader = BibRecUtils.getBroaderTitleIDN(record);
-			final Pair<String, TIEFE> pair = AcDatabase.getStatus(idnBroader);
+			final Pair<String, TIEFE> pair = utils.AcDatabase
+					.getStatus(idnBroader);
 			if (pair != null) {
 				final String ddcStr = pair.first;
 				dhs = SGUtils.getSG(ddcStr);

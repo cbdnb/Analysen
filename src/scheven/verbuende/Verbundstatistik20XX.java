@@ -21,7 +21,7 @@ import de.dnb.gnd.utils.ContainsTag;
 import de.dnb.gnd.utils.SGUtils;
 import de.dnb.gnd.utils.StatusAndCodeFilter;
 import de.dnb.gnd.utils.SubjectUtils.TIEFE;
-import de.dnb.ie.utils.AcDatabase;
+import utils.AcDatabase;
 
 /**
  * @author baumann

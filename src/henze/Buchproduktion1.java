@@ -27,7 +27,7 @@ import de.dnb.gnd.utils.StatusAndCodeFilter;
 import de.dnb.gnd.utils.SubjectUtils;
 import de.dnb.gnd.utils.DDC_SG.REFERATE;
 import de.dnb.gnd.utils.SubjectUtils.TIEFE;
-import de.dnb.ie.utils.AcDatabase;
+import utils.AcDatabase;
 
 /**
  * Wieviele Bücher wurden im Jahr 2010-2019 in den MINT-Fächern gedruckt?

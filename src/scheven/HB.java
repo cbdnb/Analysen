@@ -16,7 +16,6 @@ import de.dnb.gnd.utils.BibRecUtils;
 import de.dnb.gnd.utils.DDC_SG;
 import de.dnb.gnd.utils.RecordUtils;
 import de.dnb.gnd.utils.SubfieldUtils;
-import de.dnb.ie.utils.AcDatabase;
 
 /**
  * @author baumann
@@ -42,7 +41,7 @@ public class HB {
 
 			final String shortTitle = BibRecUtils.createShortTitle(record);
 			final String idn = record.getId();
-			final DDC_SG sg = AcDatabase.getSG(record);
+			final DDC_SG sg = utils.AcDatabase.getSG(record);
 			final String dhs = sg != null ? sg.getDDCString() : null;
 
 			final ArrayList<Line> lines = RecordUtils.getLines(record,
