@@ -24,6 +24,12 @@ import de.dnb.gnd.utils.formatter.RDAFormatter;
  */
 public class Idn2RDA_Name_Generator extends TableGenerator {
 
+	/*
+	 * Shortcut, um die korrekte Form für Einfügen in $z oder andere Unterfelder
+	 * zu erzeugen - übel, übel!
+	 */
+	private final boolean fuerDollarZ = false;
+
 	/**
 	 * @param path
 	 * @param data
@@ -42,7 +48,10 @@ public class Idn2RDA_Name_Generator extends TableGenerator {
 		try {
 			String name;
 			try {
-				name = RDAFormatter.getRDAHeading(record);
+				if (fuerDollarZ) {
+					name = GNDUtils.geoNameFuerUnterfeld(record);
+				} else
+					name = RDAFormatter.getRDAHeading(record);
 			} catch (final IllFormattedLineException e) {
 				name = GNDUtils.getNameOfRecord(record);
 			}

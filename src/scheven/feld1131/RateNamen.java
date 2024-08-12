@@ -8,6 +8,7 @@ import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.Set;
 
 import de.dnb.basics.applicationComponents.FileUtils;
 import de.dnb.basics.applicationComponents.strings.StringUtils;
@@ -133,14 +134,23 @@ public class RateNamen {
 		ppns = ppn2rdaNorm.getKeys(geo);
 		size = ppns.size();
 		if (size > 1) {
-			realname = ppn2rda.searchValues(ppns).toString();
+			final Set<String> searchValues = ppn2rda.searchValues(ppns);
+			if (searchValues.size() == 1)
+				realname = ListUtils.getFirst(searchValues);
+			else
+				realname = searchValues.toString();
+			System.err.println(realname + ": " + ppns);
 			return new Pair<>(realname, 10 + size);
 		}
 
 		ppns = ppn2verwNorm.getKeys(geo);
 		size = ppns.size();
 		if (size > 1) {
-			realname = ppn2rda.searchValues(ppns).toString();
+			final Set<String> searchValues = ppn2rda.searchValues(ppns);
+			if (searchValues.size() == 1)
+				realname = ListUtils.getFirst(searchValues);
+			else
+				realname = searchValues.toString();
 			return new Pair<>(realname, 20 + size);
 		}
 
