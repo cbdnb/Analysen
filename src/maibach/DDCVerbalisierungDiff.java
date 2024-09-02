@@ -13,7 +13,7 @@ import org.marc4j.MarcXmlReader;
 import org.marc4j.marc.Record;
 
 import utils.Database;
-import de.dnb.basics.applicationComponents.FileUtils;
+import de.dnb.basics.applicationComponents.MyFileUtils;
 import de.dnb.basics.applicationComponents.strings.StringUtils;
 import de.dnb.basics.applicationComponents.tuples.Pair;
 import de.dnb.basics.collections.Frequency;
@@ -87,7 +87,7 @@ public class DDCVerbalisierungDiff {
 					database.getTitleIDsForDDC(number).size()));
 		}
 
-		FileUtils.safeClose(input);
+		MyFileUtils.safeClose(input);
 
 	}
 }

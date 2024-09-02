@@ -14,7 +14,7 @@ import org.marc4j.MarcXmlReader;
 import org.marc4j.marc.Record;
 
 import de.dnb.basics.Constants;
-import de.dnb.basics.applicationComponents.FileUtils;
+import de.dnb.basics.applicationComponents.MyFileUtils;
 import de.dnb.basics.marc.DDCMarcUtils;
 
 /**
@@ -59,7 +59,7 @@ public class DDCNames {
 		final ObjectOutputStream out = new ObjectOutputStream(
 				new FileOutputStream("D:/Normdaten/ddcNamesAsTreeMap.out"));
 		out.writeObject(ddc2Caption);
-		FileUtils.safeClose(out);
+		MyFileUtils.safeClose(out);
 		System.err.println("Saved");
 		final Set<Entry<String, String>> entrySet = ddc2Caption.entrySet();
 		for (final Entry<String, String> entry : entrySet) {

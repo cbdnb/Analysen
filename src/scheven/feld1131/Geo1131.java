@@ -6,7 +6,7 @@ package scheven.feld1131;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
-import de.dnb.basics.applicationComponents.FileUtils;
+import de.dnb.basics.applicationComponents.MyFileUtils;
 import de.dnb.basics.applicationComponents.strings.StringUtils;
 import de.dnb.basics.collections.BiMultimap;
 import de.dnb.basics.collections.Frequency;
@@ -33,9 +33,9 @@ public class Geo1131 {
 	public static void main(final String[] args)
 			throws IOException, ClassNotFoundException {
 		final Frequency<String> falscheGeos = new Frequency<>();
-		final PrintWriter out = FileUtils.outputFile(path + "/falsche.txt",
+		final PrintWriter out = MyFileUtils.outputFile(path + "/falsche.txt",
 				false);
-		final PrintWriter statistik = FileUtils
+		final PrintWriter statistik = MyFileUtils
 				.outputFile(path + "/statistik.txt", false);
 		final BiMultimap<Integer, String> table = GND_DB_UTIL.getppn2RDAName();
 		final RecordReader reader = RecordReader.getMatchingReader(
@@ -65,9 +65,9 @@ public class Geo1131 {
 
 		}
 
-		FileUtils.safeClose(out);
+		MyFileUtils.safeClose(out);
 		statistik.println(falscheGeos);
-		FileUtils.safeClose(statistik);
+		MyFileUtils.safeClose(statistik);
 
 	}
 

@@ -11,7 +11,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 import de.dnb.basics.Constants;
-import de.dnb.basics.applicationComponents.FileUtils;
+import de.dnb.basics.applicationComponents.MyFileUtils;
 import de.dnb.basics.applicationComponents.StreamUtils;
 import de.dnb.basics.filtering.FilterUtils;
 import de.dnb.gnd.parser.RecordReader;
@@ -32,10 +32,10 @@ public class GND_Auszug {
 	public static void main(final String[] args) throws IOException {
 
 		final Set<String> nids = new HashSet<>();
-		FileUtils.readFileIntoCollection(NSogg.FOLDER + "nids.txt", nids);
+		MyFileUtils.readFileIntoCollection(NSogg.FOLDER + "nids.txt", nids);
 
 		final Set<String> ppns = new HashSet<>();
-		FileUtils.readFileIntoCollection(NSogg.FOLDER + "ppns.txt", ppns);
+		MyFileUtils.readFileIntoCollection(NSogg.FOLDER + "ppns.txt", ppns);
 
 		System.err.println("tc laden");
 		final RecordReader tcReader = RecordReader.getMatchingReader(NSogg.TC);
@@ -48,7 +48,7 @@ public class GND_Auszug {
 				.collect(Collectors.toSet());
 
 		System.err.println("Abzug laden");
-		final PrintStream out = FileUtils
+		final PrintStream out = MyFileUtils
 				.getGZipPrintStream(NSogg.FOLDER + "gnd_extrakt.gzip");
 		final RecordReader reader = RecordReader
 				.getMatchingReader(Constants.GND);

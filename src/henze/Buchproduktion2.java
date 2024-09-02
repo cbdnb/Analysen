@@ -17,7 +17,7 @@ import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 import de.dnb.basics.Constants;
-import de.dnb.basics.applicationComponents.FileUtils;
+import de.dnb.basics.applicationComponents.MyFileUtils;
 import de.dnb.basics.applicationComponents.LogiParser;
 import de.dnb.basics.applicationComponents.strings.StringUtils;
 import de.dnb.basics.applicationComponents.tuples.Pair;
@@ -219,7 +219,7 @@ public class Buchproduktion2 extends DownloadWorker {
 
 		});
 
-		FileUtils.safeClose(printStream);
+		MyFileUtils.safeClose(printStream);
 
 	}
 

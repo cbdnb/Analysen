@@ -11,7 +11,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 import de.dnb.basics.Constants;
-import de.dnb.basics.applicationComponents.FileUtils;
+import de.dnb.basics.applicationComponents.MyFileUtils;
 import de.dnb.gnd.parser.RecordReader;
 import de.dnb.gnd.utils.GNDUtils;
 import de.dnb.gnd.utils.IDNUtils;
@@ -28,7 +28,7 @@ public class LevelFalsch {
 	 * @throws IOException
 	 */
 	public static void main(final String[] args) throws IOException {
-		final PrintWriter out = FileUtils
+		final PrintWriter out = MyFileUtils
 				.outputFile("D:/Analysen/baumann/level_falsch.txt", false);
 		final RecordReader reader1 = RecordReader
 				.getMatchingReader(Constants.GND);

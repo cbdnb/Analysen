@@ -9,7 +9,7 @@ import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import de.dnb.basics.Constants;
-import de.dnb.basics.applicationComponents.FileUtils;
+import de.dnb.basics.applicationComponents.MyFileUtils;
 import de.dnb.basics.applicationComponents.strings.StringUtils;
 import de.dnb.basics.collections.ListUtils;
 import de.dnb.gnd.parser.Record;
@@ -63,7 +63,7 @@ public class Kein011Titel {
 
 		// Titel analysieren und ausgeben:
 		System.err.println("Titel lesen");
-		final PrintWriter out = FileUtils.outputFile(
+		final PrintWriter out = MyFileUtils.outputFile(
 				folder + "/" + "kein011_in_5100_mit_Titel.txt", false);
 
 		final RecordReader titReader = RecordReader
@@ -101,7 +101,7 @@ public class Kein011Titel {
 				});
 			});
 		});
-		FileUtils.safeClose(out);
+		MyFileUtils.safeClose(out);
 
 	}
 

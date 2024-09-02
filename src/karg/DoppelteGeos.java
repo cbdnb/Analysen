@@ -7,7 +7,7 @@ import java.util.HashSet;
 import java.util.function.Predicate;
 
 import de.dnb.basics.Constants;
-import de.dnb.basics.applicationComponents.FileUtils;
+import de.dnb.basics.applicationComponents.MyFileUtils;
 import de.dnb.basics.applicationComponents.strings.StringUtils;
 import de.dnb.basics.collections.Frequency;
 import de.dnb.basics.collections.Multimap;
@@ -114,7 +114,7 @@ public class DoppelteGeos {
 						+ StringUtils.concatenate("\t", ids));
 			}
 		}
-		FileUtils.safeClose(stream);
+		MyFileUtils.safeClose(stream);
 	}
 
 }

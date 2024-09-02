@@ -9,7 +9,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import de.dnb.basics.Constants;
-import de.dnb.basics.applicationComponents.FileUtils;
+import de.dnb.basics.applicationComponents.MyFileUtils;
 import de.dnb.gnd.parser.RecordReader;
 import de.dnb.gnd.parser.line.Line;
 import de.dnb.gnd.parser.tag.BibTagDB;
@@ -72,7 +72,7 @@ public class DDC5400Fehlt {
 				System.out.println(record.getId());
 			// schreiber.println(record.getId());
 		});
-		FileUtils.safeClose(schreiber);
+		MyFileUtils.safeClose(schreiber);
 	}
 
 }

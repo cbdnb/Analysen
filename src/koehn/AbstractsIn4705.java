@@ -9,7 +9,7 @@ import java.util.Date;
 import java.util.List;
 
 import de.dnb.basics.Constants;
-import de.dnb.basics.applicationComponents.FileUtils;
+import de.dnb.basics.applicationComponents.MyFileUtils;
 import de.dnb.basics.applicationComponents.strings.StringUtils;
 import de.dnb.basics.utils.TimeUtils;
 import de.dnb.gnd.parser.RecordReader;
@@ -32,7 +32,7 @@ public class AbstractsIn4705 {
 		final RecordReader reader = RecordReader
 				.getMatchingReader(Constants.TITEL_STICHPROBE);
 		reader.setStreamFilter(new ContainsTag("4705", BibTagDB.getDB()));
-		final PrintWriter out = FileUtils
+		final PrintWriter out = MyFileUtils
 				.outputFile("D:/Analysen/koehn/4705.txt", false);
 		out.println(StringUtils.concatenateTab("idn", "bbg", "maximale Länge",
 				"Publikationsjahr", "Jahr der Ersterfassung"));
@@ -65,7 +65,7 @@ public class AbstractsIn4705 {
 
 		});
 
-		FileUtils.safeClose(out);
+		MyFileUtils.safeClose(out);
 
 	}
 

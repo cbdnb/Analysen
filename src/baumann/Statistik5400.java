@@ -5,7 +5,7 @@ import java.io.IOException;
 import java.util.function.Predicate;
 
 import de.dnb.basics.Constants;
-import de.dnb.basics.applicationComponents.FileUtils;
+import de.dnb.basics.applicationComponents.MyFileUtils;
 import de.dnb.basics.collections.Frequency;
 import de.dnb.gnd.parser.RecordReader;
 import de.dnb.gnd.parser.tag.BibTagDB;
@@ -58,7 +58,7 @@ public class Statistik5400 {
 			}
 		});
 
-		FileUtils.safeClose(recordReader);
+		MyFileUtils.safeClose(recordReader);
 		ddc2Titles.safe(FILENAME_5400_2_Titles);
 		System.out.println(ddc2Titles);
 	}

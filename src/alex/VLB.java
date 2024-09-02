@@ -12,7 +12,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 
-import de.dnb.basics.applicationComponents.FileUtils;
+import de.dnb.basics.applicationComponents.MyFileUtils;
 import de.dnb.basics.applicationComponents.strings.StringUtils;
 import de.dnb.basics.applicationComponents.tuples.Pair;
 import de.dnb.basics.applicationComponents.tuples.Quadruplett;
@@ -71,7 +71,7 @@ public class VLB {
 	 */
 	public static void main(final String[] args)
 			throws IOException, ClassNotFoundException {
-		final PrintWriter out = FileUtils
+		final PrintWriter out = MyFileUtils
 				.outputFile("D:/Analysen/alex/vlb-wn.txt", false);
 		final Map<Integer, CrossProductFrequency> wn2sgg = new TreeMap<>();
 		final RecordReader reader = RecordReader.getMatchingReader(
@@ -158,7 +158,7 @@ public class VLB {
 			out.println();
 		});
 
-		FileUtils.safeClose(out);
+		MyFileUtils.safeClose(out);
 
 	}
 

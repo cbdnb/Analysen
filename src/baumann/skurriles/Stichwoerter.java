@@ -14,7 +14,7 @@ import java.util.Map;
 import java.util.Set;
 
 import de.dnb.basics.Constants;
-import de.dnb.basics.applicationComponents.FileUtils;
+import de.dnb.basics.applicationComponents.MyFileUtils;
 import de.dnb.basics.applicationComponents.strings.StringUtils;
 import de.dnb.basics.applicationComponents.tuples.Pair;
 import de.dnb.basics.collections.Frequency;
@@ -76,14 +76,14 @@ public class Stichwoerter {
 		final Map<Integer, Pair<String, Long>> rankmap = StatisticUtils
 				.rankMap(stichwoerter);
 
-		final PrintWriter out = FileUtils.outputFile(
+		final PrintWriter out = MyFileUtils.outputFile(
 				"D:/Analysen/baumann/skurriles/stichwörter.txt", false);
 		for (int i = 0; i < rankmap.size(); i++) {
 			final Pair<String, Long> pair = rankmap.get(i);
 			out.println(
 					StringUtils.concatenateTab(i + 1, pair.first, pair.second));
 		}
-		FileUtils.safeClose(out);
+		MyFileUtils.safeClose(out);
 
 	}
 

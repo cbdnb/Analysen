@@ -10,7 +10,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Set;
 
-import de.dnb.basics.applicationComponents.FileUtils;
+import de.dnb.basics.applicationComponents.MyFileUtils;
 import de.dnb.basics.applicationComponents.strings.StringUtils;
 import de.dnb.basics.applicationComponents.tuples.Pair;
 import de.dnb.basics.collections.BiMultimap;
@@ -36,10 +36,10 @@ public class RateNamen {
 	public static void main(final String[] args)
 			throws ClassNotFoundException, IOException {
 		initialisiere();
-		final PrintWriter out = FileUtils
+		final PrintWriter out = MyFileUtils
 				.outputFile(Geo1131.path + "/Korrektur.txt", false);
 		final List<String> falscheGeos = new ArrayList<>();
-		FileUtils.readFileIntoCollection(Geo1131.path + "/liste.txt",
+		MyFileUtils.readFileIntoCollection(Geo1131.path + "/liste.txt",
 				falscheGeos);
 		falscheGeos.forEach(geoFalsch ->
 		{
@@ -47,7 +47,7 @@ public class RateNamen {
 			out.println(StringUtils.concatenateTab(pair.first, pair.second));
 		});
 
-		FileUtils.safeClose(out);
+		MyFileUtils.safeClose(out);
 
 	}
 

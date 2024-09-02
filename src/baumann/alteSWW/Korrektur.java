@@ -9,7 +9,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 
-import de.dnb.basics.applicationComponents.FileUtils;
+import de.dnb.basics.applicationComponents.MyFileUtils;
 import de.dnb.basics.applicationComponents.strings.StringUtils;
 import de.dnb.gnd.utils.IDNUtils;
 
@@ -53,11 +53,11 @@ public class Korrektur {
 				System.err.println("Wurde nicht entfernt: " + loe);
 		});
 
-		final PrintWriter out = FileUtils.outputFile(
+		final PrintWriter out = MyFileUtils.outputFile(
 				"V:/03_FB_EE/14_IE/_intern/00_Arbeitsordner/Baumann/Alte_SWW/konkordanz_neu.txt",
 				false);
 		konkordanz.forEach((a, b) -> out.println(a + "\t" + b));
-		FileUtils.safeClose(out);
+		MyFileUtils.safeClose(out);
 	}
 
 	/**

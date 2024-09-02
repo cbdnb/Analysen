@@ -7,7 +7,7 @@ import java.util.HashMap;
 import java.util.function.Predicate;
 
 import de.dnb.basics.Constants;
-import de.dnb.basics.applicationComponents.FileUtils;
+import de.dnb.basics.applicationComponents.MyFileUtils;
 import de.dnb.basics.applicationComponents.tuples.Pair;
 import de.dnb.gnd.parser.Record;
 import de.dnb.gnd.parser.tag.BibTagDB;
@@ -95,15 +95,15 @@ public class MakeAcDatabase extends DownloadWorker {
 		ObjectOutputStream out = new ObjectOutputStream(
 				new FileOutputStream(FILE_AC_TO_LEVEL));
 		out.writeObject(MAP_AC_LEVEL);
-		FileUtils.safeClose(out);
+		MyFileUtils.safeClose(out);
 
 		out = new ObjectOutputStream(new FileOutputStream(FILE_AC_TO_PUB));
 		out.writeObject(MAP_AC_PUB);
-		FileUtils.safeClose(out);
+		MyFileUtils.safeClose(out);
 
 		out = new ObjectOutputStream(new FileOutputStream(FILE_AC_TO_TITLE));
 		out.writeObject(MAP_AC_TITLE);
-		FileUtils.safeClose(out);
+		MyFileUtils.safeClose(out);
 
 	}
 

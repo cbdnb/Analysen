@@ -11,7 +11,7 @@ import java.util.GregorianCalendar;
 import java.util.List;
 
 import de.dnb.basics.Constants;
-import de.dnb.basics.applicationComponents.FileUtils;
+import de.dnb.basics.applicationComponents.MyFileUtils;
 import de.dnb.basics.filtering.Between;
 import de.dnb.basics.filtering.StringContains;
 import de.dnb.basics.utils.TimeUtils;
@@ -32,7 +32,7 @@ public class SachgruppeDollarAI {
 	 * @throws IOException
 	 */
 	public static void main(final String[] args) throws IOException {
-		final PrintWriter out = FileUtils
+		final PrintWriter out = MyFileUtils
 				.outputFile("D:/Analysen/jahns/doppelte5050.txt", false);
 		final RecordReader reader = RecordReader
 				.getMatchingReader(Constants.TITEL_PLUS_EXEMPLAR_Z);
@@ -57,7 +57,7 @@ public class SachgruppeDollarAI {
 			out.println(record.getId());
 		});
 
-		FileUtils.safeClose(out);
+		MyFileUtils.safeClose(out);
 
 	}
 

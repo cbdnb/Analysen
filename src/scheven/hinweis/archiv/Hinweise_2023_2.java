@@ -10,7 +10,7 @@ import java.util.List;
 import java.util.TreeSet;
 
 import de.dnb.basics.Constants;
-import de.dnb.basics.applicationComponents.FileUtils;
+import de.dnb.basics.applicationComponents.MyFileUtils;
 import de.dnb.basics.applicationComponents.strings.StringUtils;
 import de.dnb.gnd.parser.Record;
 import de.dnb.gnd.parser.RecordReader;
@@ -43,7 +43,7 @@ public class Hinweise_2023_2 {
 		reader.setStreamFilter(
 				new ContainsTag("005", '0', TYP, GNDTagDB.getDB()));
 
-		final PrintWriter pw = FileUtils.outputFile(folder + TYP + ".txt",
+		final PrintWriter pw = MyFileUtils.outputFile(folder + TYP + ".txt",
 				false);
 
 		reader.forEach(record ->
@@ -55,7 +55,7 @@ public class Hinweise_2023_2 {
 
 		});
 
-		FileUtils.safeClose(pw);
+		MyFileUtils.safeClose(pw);
 
 	}
 

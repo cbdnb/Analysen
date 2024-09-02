@@ -5,7 +5,7 @@ import java.io.IOException;
 import java.io.ObjectOutputStream;
 import java.util.Collection;
 
-import de.dnb.basics.applicationComponents.FileUtils;
+import de.dnb.basics.applicationComponents.MyFileUtils;
 import de.dnb.basics.applicationComponents.strings.StringUtils;
 import de.dnb.basics.applicationComponents.tuples.Triplett;
 import de.dnb.basics.collections.ListMultimap;
@@ -101,7 +101,7 @@ public class CreateG2T2Map {
                 new ObjectOutputStream(
                         new FileOutputStream(FILENAME_IDN_TO_DDC));
         out.writeObject(idnToT2);
-        FileUtils.safeClose(out);
+        MyFileUtils.safeClose(out);
     }
 
 }

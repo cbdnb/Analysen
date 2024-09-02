@@ -9,7 +9,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import de.dnb.basics.Constants;
-import de.dnb.basics.applicationComponents.FileUtils;
+import de.dnb.basics.applicationComponents.MyFileUtils;
 import de.dnb.basics.applicationComponents.strings.StringUtils;
 import de.dnb.gnd.exceptions.IllFormattedLineException;
 import de.dnb.gnd.parser.Record;
@@ -37,7 +37,7 @@ public class Fassung_etc {
 	 * @throws IOException
 	 */
 	public static void main(final String[] args) throws IOException {
-		pw = FileUtils.oeffneAusgabeDatei(
+		pw = MyFileUtils.oeffneAusgabeDatei(
 				folder + "Expressionskandidaten" + "_wim_667.." + ".txt",
 				false);
 		pw.println(StringUtils.concatenateTab("IDN", "Name", "Syst.", "Level",

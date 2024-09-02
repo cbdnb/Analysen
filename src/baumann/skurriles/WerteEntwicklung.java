@@ -9,7 +9,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import de.dnb.basics.Constants;
-import de.dnb.basics.applicationComponents.FileUtils;
+import de.dnb.basics.applicationComponents.MyFileUtils;
 import de.dnb.basics.applicationComponents.strings.StringUtils;
 import de.dnb.basics.collections.Frequency;
 import de.dnb.basics.collections.StatisticUtils;
@@ -45,7 +45,7 @@ public class WerteEntwicklung extends DownloadWorker {
 
 		werte.processGZipFile(Constants.TITEL_GESAMT_D);
 
-		final PrintWriter out = FileUtils.outputFile(
+		final PrintWriter out = MyFileUtils.outputFile(
 				"D:/Analysen/baumann/skurriles/wertentwicklung.txt", false);
 
 		out.println(StringUtils.concatenateTab("Jahr",
@@ -61,7 +61,7 @@ public class WerteEntwicklung extends DownloadWorker {
 					zahlProPubjahr, wertProEingjahr, zahlProEingjahr));
 		}
 
-		FileUtils.safeClose(out);
+		MyFileUtils.safeClose(out);
 
 	}
 

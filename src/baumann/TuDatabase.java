@@ -12,7 +12,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import de.dnb.basics.Constants;
-import de.dnb.basics.applicationComponents.FileUtils;
+import de.dnb.basics.applicationComponents.MyFileUtils;
 import de.dnb.gnd.parser.RecordReader;
 import de.dnb.gnd.parser.tag.GNDTagDB;
 import de.dnb.gnd.utils.ContainsTag;
@@ -57,7 +57,7 @@ public class TuDatabase {
 		final ObjectInputStream objectInputStream = new ObjectInputStream(
 				new FileInputStream(TITEL_KOMP));
 		tu2Komp = (HashMap<String, String>) objectInputStream.readObject();
-		FileUtils.safeClose(objectInputStream);
+		MyFileUtils.safeClose(objectInputStream);
 	}
 
 	/**
@@ -95,7 +95,7 @@ public class TuDatabase {
 		final ObjectOutputStream out = new ObjectOutputStream(
 				new FileOutputStream(TITEL_KOMP));
 		out.writeObject(tu2Komp);
-		FileUtils.safeClose(out);
+		MyFileUtils.safeClose(out);
 	}
 
 	public static void main(final String... args) throws IOException {

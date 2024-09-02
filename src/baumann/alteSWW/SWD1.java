@@ -14,7 +14,7 @@ import java.util.Map;
 
 import org.apache.commons.collections4.map.HashedMap;
 
-import de.dnb.basics.applicationComponents.FileUtils;
+import de.dnb.basics.applicationComponents.MyFileUtils;
 import de.dnb.basics.applicationComponents.StreamUtils;
 import de.dnb.gnd.parser.Record;
 import de.dnb.gnd.utils.DownloadWorker;
@@ -73,7 +73,7 @@ public final class SWD1 extends DownloadWorker {
 		final ObjectInputStream objectInputStream = new ObjectInputStream(
 				new FileInputStream(DATEI));
 		name2idn = (Map<String, String>) objectInputStream.readObject();
-		FileUtils.safeClose(objectInputStream);
+		MyFileUtils.safeClose(objectInputStream);
 
 	}
 

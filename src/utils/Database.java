@@ -27,7 +27,7 @@ import org.marc4j.MarcXmlReader;
 import de.dnb.basics.Constants;
 import de.dnb.basics.applicationComponents.DbProperties;
 import de.dnb.basics.applicationComponents.DbUtils;
-import de.dnb.basics.applicationComponents.FileUtils;
+import de.dnb.basics.applicationComponents.MyFileUtils;
 import de.dnb.basics.applicationComponents.strings.StringUtils;
 import de.dnb.basics.applicationComponents.tuples.Pair;
 import de.dnb.basics.applicationComponents.tuples.Triplett;
@@ -127,7 +127,7 @@ public class Database {
 		final ObjectOutputStream out = new ObjectOutputStream(
 				new FileOutputStream(FILENAME_DDC_2_DET3AND4_OUT));
 		out.writeObject(ddc2Det34);
-		FileUtils.safeClose(out);
+		MyFileUtils.safeClose(out);
 	}
 
 	/**
@@ -149,7 +149,7 @@ public class Database {
 		}
 		ddc2Det34 = (ListMultimap<String, Pair<String, String>>) objectInputStream
 				.readObject();
-		FileUtils.safeClose(objectInputStream);
+		MyFileUtils.safeClose(objectInputStream);
 	}
 
 	/**
@@ -225,7 +225,7 @@ public class Database {
 		final ObjectOutputStream out = new ObjectOutputStream(
 				new FileOutputStream(FILENAME_DDC_2_SWW));
 		out.writeObject(ddc2Sww);
-		FileUtils.safeClose(out);
+		MyFileUtils.safeClose(out);
 
 	}
 
@@ -242,7 +242,7 @@ public class Database {
 		}
 		ddc2Sww = (ListMultimap<String, Triplett<String, String, String>>) objectInputStream
 				.readObject();
-		FileUtils.safeClose(objectInputStream);
+		MyFileUtils.safeClose(objectInputStream);
 	}
 
 	/**
@@ -293,7 +293,7 @@ public class Database {
 		final ObjectOutputStream out = new ObjectOutputStream(
 				new FileOutputStream(FILENAME_DDC_2_CAPTION));
 		out.writeObject(ddc2Caption);
-		FileUtils.safeClose(out);
+		MyFileUtils.safeClose(out);
 		// System.err.println("Saved");
 		final Set<Entry<String, String>> entrySet = ddc2Caption.entrySet();
 	}
@@ -312,7 +312,7 @@ public class Database {
 		objectInputStream = new ObjectInputStream(
 				new FileInputStream(FILENAME_DDC_2_CAPTION));
 		ddc2Caption = (TreeMap<String, String>) objectInputStream.readObject();
-		FileUtils.safeClose(objectInputStream);
+		MyFileUtils.safeClose(objectInputStream);
 	}
 
 	/**
@@ -364,7 +364,7 @@ public class Database {
 		final ObjectOutputStream out = new ObjectOutputStream(
 				new FileOutputStream(FILENAME_DDC_2_REGISTER));
 		out.writeObject(ddc2Register);
-		FileUtils.safeClose(out);
+		MyFileUtils.safeClose(out);
 		// System.err.println("Saved");
 	}
 
@@ -381,7 +381,7 @@ public class Database {
 		}
 		ddc2Register = (Multimap<String, String>) objectInputStream
 				.readObject();
-		FileUtils.safeClose(objectInputStream);
+		MyFileUtils.safeClose(objectInputStream);
 	}
 
 	/**
@@ -443,7 +443,7 @@ public class Database {
 		final ObjectOutputStream out = new ObjectOutputStream(
 				new FileOutputStream(FILENAME_DDC_2_TITLES));
 		out.writeObject(ddc2Titles);
-		FileUtils.safeClose(out);
+		MyFileUtils.safeClose(out);
 		System.out.println(ddc2Titles);
 
 		for (final String string : ddc2Titles) {
@@ -464,7 +464,7 @@ public class Database {
 		}
 		ddc2Titles = (TreeMultimap<String, String>) objectInputStream
 				.readObject();
-		FileUtils.safeClose(objectInputStream);
+		MyFileUtils.safeClose(objectInputStream);
 	}
 
 	/**

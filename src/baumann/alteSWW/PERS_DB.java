@@ -23,7 +23,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Stream;
 
 import de.dnb.basics.Constants;
-import de.dnb.basics.applicationComponents.FileUtils;
+import de.dnb.basics.applicationComponents.MyFileUtils;
 import de.dnb.basics.applicationComponents.strings.StringUtils;
 import de.dnb.basics.collections.ListUtils;
 import de.dnb.basics.collections.TreeMultimap;
@@ -59,11 +59,11 @@ public class PERS_DB {
 			ObjectOutputStream out = new ObjectOutputStream(
 					new FileOutputStream(NAME_2_IDN));
 			out.writeObject(pndName2idns);
-			FileUtils.safeClose(out);
+			MyFileUtils.safeClose(out);
 
 			out = new ObjectOutputStream(new FileOutputStream(IDN_2_RECORD));
 			out.writeObject(idn2record);
-			FileUtils.safeClose(out);
+			MyFileUtils.safeClose(out);
 
 		} catch (final FileNotFoundException e) {
 			// TODO Auto-generated catch block
@@ -192,13 +192,13 @@ public class PERS_DB {
 					new FileInputStream(NAME_2_IDN));
 			pndName2idns = (TreeMultimap<String, String>) objectInputStream
 					.readObject();
-			FileUtils.safeClose(objectInputStream);
+			MyFileUtils.safeClose(objectInputStream);
 
 			objectInputStream = new ObjectInputStream(
 					new FileInputStream(IDN_2_RECORD));
 			idn2record = (HashMap<String, MyRecord>) objectInputStream
 					.readObject();
-			FileUtils.safeClose(objectInputStream);
+			MyFileUtils.safeClose(objectInputStream);
 
 		} catch (final IOException e) {
 			// TODO Auto-generated catch block

@@ -7,7 +7,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.Set;
 
-import de.dnb.basics.applicationComponents.FileUtils;
+import de.dnb.basics.applicationComponents.MyFileUtils;
 import de.dnb.basics.collections.CollectionUtils;
 import de.dnb.basics.collections.RankingQueue;
 import de.dnb.gnd.utils.IDNUtils;
@@ -25,7 +25,7 @@ public class EinspielungenVonMusikerInnen {
 	 */
 	public static void main(final String[] args) throws IOException {
 
-		final PrintWriter pWriter = FileUtils.oeffneAusgabeDatei(Utils.OUT_FILE,
+		final PrintWriter pWriter = MyFileUtils.oeffneAusgabeDatei(Utils.OUT_FILE,
 				true);
 
 		for (int i = 0; i < Utils.BERUFE_IDNS.size(); i++) {
@@ -51,7 +51,7 @@ public class EinspielungenVonMusikerInnen {
 			pWriter.println();
 		}
 
-		FileUtils.safeClose(pWriter);
+		MyFileUtils.safeClose(pWriter);
 
 	}
 

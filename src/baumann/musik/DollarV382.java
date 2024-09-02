@@ -9,7 +9,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import de.dnb.basics.Constants;
-import de.dnb.basics.applicationComponents.FileUtils;
+import de.dnb.basics.applicationComponents.MyFileUtils;
 import de.dnb.basics.applicationComponents.strings.StringUtils;
 import de.dnb.basics.collections.Frequency;
 import de.dnb.gnd.parser.RecordReader;
@@ -36,11 +36,11 @@ public class DollarV382 {
 			dollarvFreq.addCollection(dollarvs);
 		});
 
-		final PrintWriter file = FileUtils
+		final PrintWriter file = MyFileUtils
 				.oeffneAusgabeDatei("D:/Analysen/baumann/Musik/dollarV", false);
 
 		file.println(dollarvFreq);
-		FileUtils.safeClose(file);
+		MyFileUtils.safeClose(file);
 
 	}
 

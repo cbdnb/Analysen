@@ -13,7 +13,7 @@ import java.util.Set;
 
 import javax.naming.OperationNotSupportedException;
 
-import de.dnb.basics.applicationComponents.FileUtils;
+import de.dnb.basics.applicationComponents.MyFileUtils;
 import de.dnb.basics.applicationComponents.strings.StringUtils;
 import de.dnb.basics.applicationComponents.tuples.Pair;
 import de.dnb.basics.collections.ListUtils;
@@ -143,14 +143,14 @@ final class TransformerSammlung extends Transformer {
 	public static void main(final String[] args)
 			throws OperationNotSupportedException, IllFormattedLineException,
 			IOException {
-		final PrintWriter outHTML = FileUtils
+		final PrintWriter outHTML = MyFileUtils
 				.outputFile(FOLDER + "test_" + SIGNATUR + ".html", false);
-		final PrintWriter log = FileUtils
+		final PrintWriter log = MyFileUtils
 				.outputFile(FOLDER + "log_" + SIGNATUR + ".txt", false);
-		final PrintWriter prod = FileUtils
+		final PrintWriter prod = MyFileUtils
 				.outputFile(FOLDER + "produktion_" + SIGNATUR + ".txt", false);
 		final Transformer transformer = new TransformerSammlung('u');
-		final PrintWriter zuloeschen = FileUtils
+		final PrintWriter zuloeschen = MyFileUtils
 				.outputFile(FOLDER + "zu_loeschen_" + SIGNATUR + ".txt", false);
 
 		transformer.db.getKombis().forEach(kombi ->
@@ -185,9 +185,9 @@ final class TransformerSammlung extends Transformer {
 		System.out.println("Anzahl der bearbeiteten Hinweissätze: "
 				+ transformer.db.getAnzahlHinweissaetze());
 		transformer.idnsHinweis.forEach(zuloeschen::println);
-		FileUtils.safeClose(outHTML);
-		FileUtils.safeClose(log);
-		FileUtils.safeClose(prod);
-		FileUtils.safeClose(zuloeschen);
+		MyFileUtils.safeClose(outHTML);
+		MyFileUtils.safeClose(log);
+		MyFileUtils.safeClose(prod);
+		MyFileUtils.safeClose(zuloeschen);
 	}
 }

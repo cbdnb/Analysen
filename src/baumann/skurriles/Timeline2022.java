@@ -18,7 +18,7 @@ import baumann.skurriles.filter.Katar;
 import baumann.skurriles.filter.Klima;
 import baumann.skurriles.filter.Ukraine;
 import de.dnb.basics.Constants;
-import de.dnb.basics.applicationComponents.FileUtils;
+import de.dnb.basics.applicationComponents.MyFileUtils;
 import de.dnb.basics.applicationComponents.tuples.Triplett;
 import de.dnb.basics.collections.Frequency;
 import de.dnb.basics.utils.TimeUtils;
@@ -91,7 +91,7 @@ public class Timeline2022 {
 			});
 		});
 
-		final PrintWriter pw = FileUtils.oeffneAusgabeDatei(
+		final PrintWriter pw = MyFileUtils.oeffneAusgabeDatei(
 				SkurConstants.FOLDER + "timeline2022.txt", false);
 		pw.print("Quartal");
 		tripletts.forEach(triplett -> pw.print("\t" + triplett.third));

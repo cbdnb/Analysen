@@ -11,7 +11,7 @@ import java.util.Comparator;
 import java.util.HashMap;
 
 import de.dnb.basics.Constants;
-import de.dnb.basics.applicationComponents.FileUtils;
+import de.dnb.basics.applicationComponents.MyFileUtils;
 import de.dnb.basics.applicationComponents.strings.StringUtils;
 import de.dnb.basics.collections.BiMap;
 import de.dnb.basics.collections.CollectionUtils;
@@ -75,7 +75,7 @@ public class SWHistogram {
 		final BiMap<Integer, Long> cdf = StatisticUtils.getCDF(newHist);
 
 		System.err.println("speichern");
-		final PrintWriter out = FileUtils
+		final PrintWriter out = MyFileUtils
 				.outputFile("D:/Analysen/baumann/SWW-Haeufigkeit.txt", false);
 		// und alles ausgeben:
 		for (int i = 0; i < keys.length; i++) {
@@ -90,8 +90,8 @@ public class SWHistogram {
 					sum));
 		}
 
-		FileUtils.safeClose(out);
-		FileUtils.safeClose(reader);
+		MyFileUtils.safeClose(out);
+		MyFileUtils.safeClose(reader);
 
 	}
 

@@ -9,7 +9,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 import de.dnb.basics.Constants;
-import de.dnb.basics.applicationComponents.FileUtils;
+import de.dnb.basics.applicationComponents.MyFileUtils;
 import de.dnb.gnd.parser.Record;
 import de.dnb.gnd.parser.RecordReader;
 import de.dnb.gnd.parser.tag.BibTagDB;
@@ -32,7 +32,7 @@ public class NichtSamTitel {
 	 */
 	public static void main(final String[] args) throws IOException {
 
-		final PrintWriter pw = FileUtils.oeffneAusgabeDatei(
+		final PrintWriter pw = MyFileUtils.oeffneAusgabeDatei(
 				"D:/Analysen/baumann/tbs_s/nicht_s_trotzdem_verknüpft.txt",
 				false);
 

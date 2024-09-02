@@ -11,7 +11,7 @@ import java.util.function.Predicate;
 
 import baumann.skurriles.filter.Ukraine;
 import de.dnb.basics.Constants;
-import de.dnb.basics.applicationComponents.FileUtils;
+import de.dnb.basics.applicationComponents.MyFileUtils;
 import de.dnb.basics.applicationComponents.strings.StringUtils;
 import de.dnb.basics.utils.TimeUtils;
 import de.dnb.gnd.parser.Record;
@@ -35,7 +35,7 @@ public class Test {
 		final RecordReader reader = RecordReader
 				.getMatchingReader(Constants.TITEL_GESAMT_Z);
 
-		final PrintWriter pw = FileUtils.oeffneAusgabeDatei(
+		final PrintWriter pw = MyFileUtils.oeffneAusgabeDatei(
 				SkurConstants.FOLDER + "ukraine_idns.txt", false);
 
 		reader.forEach(record ->
@@ -51,7 +51,7 @@ public class Test {
 				pw.println(StringUtils.concatenateTab(jahr, id));
 		});
 
-		FileUtils.safeClose(pw);
+		MyFileUtils.safeClose(pw);
 
 	}
 

@@ -16,7 +16,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import de.dnb.basics.Constants;
-import de.dnb.basics.applicationComponents.FileUtils;
+import de.dnb.basics.applicationComponents.MyFileUtils;
 import de.dnb.basics.applicationComponents.strings.StringUtils;
 import de.dnb.basics.collections.Frequency;
 import de.dnb.basics.filtering.FilterUtils;
@@ -155,10 +155,10 @@ public class Motive3 {
 		ausgeben(idn2motiv450, stream_mot_nur_450);
 		ausgeben(idn2syst, stream_nur_syst);
 
-		FileUtils.safeClose(stream_mot_150);
-		FileUtils.safeClose(stream_mot_150_450);
-		FileUtils.safeClose(stream_mot_nur_450);
-		FileUtils.safeClose(stream_nur_syst);
+		MyFileUtils.safeClose(stream_mot_150);
+		MyFileUtils.safeClose(stream_mot_150_450);
+		MyFileUtils.safeClose(stream_mot_nur_450);
+		MyFileUtils.safeClose(stream_nur_syst);
 
 		System.out.println("Ende: " + TimeUtils.getActualTimehhMM());
 

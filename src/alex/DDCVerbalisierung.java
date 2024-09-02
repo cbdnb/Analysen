@@ -10,7 +10,7 @@ import org.marc4j.MarcReader;
 import org.marc4j.MarcXmlReader;
 import org.marc4j.marc.Record;
 
-import de.dnb.basics.applicationComponents.FileUtils;
+import de.dnb.basics.applicationComponents.MyFileUtils;
 import de.dnb.basics.applicationComponents.strings.StringUtils;
 import de.dnb.basics.marc.DDCMarcUtils;
 import de.dnb.basics.marc.MarcUtils;
@@ -34,7 +34,7 @@ public class DDCVerbalisierung {
 
 		}
 
-		FileUtils.safeClose(input);
+		MyFileUtils.safeClose(input);
 
 	}
 }

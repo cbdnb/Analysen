@@ -10,7 +10,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import de.dnb.basics.applicationComponents.FileUtils;
+import de.dnb.basics.applicationComponents.MyFileUtils;
 
 /**
  * @author baumann
@@ -34,7 +34,7 @@ public class ISBNvonEKZ {
 			final Set<String> isbns = new HashSet<>();
 			final String file = pathprefix + y + ".txt";
 			try {
-				FileUtils.readFileIntoCollection(file, isbns);
+				MyFileUtils.readFileIntoCollection(file, isbns);
 			} catch (final FileNotFoundException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();

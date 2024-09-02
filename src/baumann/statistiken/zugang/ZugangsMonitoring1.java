@@ -11,7 +11,7 @@ import java.util.Date;
 import java.util.Map;
 
 import de.dnb.basics.Constants;
-import de.dnb.basics.applicationComponents.FileUtils;
+import de.dnb.basics.applicationComponents.MyFileUtils;
 import de.dnb.basics.applicationComponents.strings.StringUtils;
 import de.dnb.basics.applicationComponents.tuples.Quadruplett;
 import de.dnb.basics.collections.CrossProductFrequency;
@@ -60,9 +60,9 @@ public class ZugangsMonitoring1 {
 		final Map<Integer, Quadruplett<DDC_SG, DDC_SG, TIEFE, String>> table = generator
 				.getTable();
 
-		final PrintWriter error = FileUtils.outputFile(FOLDER + "keine_SG.txt",
+		final PrintWriter error = MyFileUtils.outputFile(FOLDER + "keine_SG.txt",
 				false);
-		final PrintWriter out = FileUtils
+		final PrintWriter out = MyFileUtils
 				.outputFile(FOLDER + "ZugangsMonitoring1.txt", false);
 
 		System.err.println("flöhen");
@@ -111,8 +111,8 @@ public class ZugangsMonitoring1 {
 		});
 
 		out.println(zugangsStat.toString());
-		FileUtils.safeClose(error);
-		FileUtils.safeClose(out);
+		MyFileUtils.safeClose(error);
+		MyFileUtils.safeClose(out);
 
 	}
 

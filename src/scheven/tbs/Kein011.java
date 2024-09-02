@@ -13,7 +13,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import de.dnb.basics.Constants;
-import de.dnb.basics.applicationComponents.FileUtils;
+import de.dnb.basics.applicationComponents.MyFileUtils;
 import de.dnb.basics.applicationComponents.strings.StringUtils;
 import de.dnb.basics.collections.CollectionUtils;
 import de.dnb.basics.collections.ListUtils;
@@ -112,7 +112,7 @@ public class Kein011 {
 	 */
 	private static void output(final String filename,
 			final Collection<Record> records) throws IOException {
-		final PrintWriter out = FileUtils.outputFile(filename, false);
+		final PrintWriter out = MyFileUtils.outputFile(filename, false);
 
 		final List<Record> recsFound = new ArrayList<>(records);
 		recsFound.sort(myComp);
@@ -121,7 +121,7 @@ public class Kein011 {
 						RecordUtils.getDatatype(rec),
 						GNDUtils.getFirstGNDClassification(rec),
 						GNDUtils.getNameOfRecord(rec))));
-		FileUtils.safeClose(out);
+		MyFileUtils.safeClose(out);
 	}
 
 }

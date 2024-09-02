@@ -15,7 +15,7 @@ import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 import de.dnb.basics.Constants;
-import de.dnb.basics.applicationComponents.FileUtils;
+import de.dnb.basics.applicationComponents.MyFileUtils;
 import de.dnb.basics.applicationComponents.strings.StringUtils;
 import de.dnb.basics.applicationComponents.tuples.Pair;
 import de.dnb.basics.applicationComponents.tuples.Triplett;
@@ -130,8 +130,8 @@ public class FreqGeoDDC {
 					StringUtils.concatenate("\t", ddc, count, crisscross));
 		});
 
-		FileUtils.safeClose(outputStreamSWw);
-		FileUtils.safeClose(outputStreamDDC);
+		MyFileUtils.safeClose(outputStreamSWw);
+		MyFileUtils.safeClose(outputStreamDDC);
 
 	}
 

@@ -10,7 +10,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import de.dnb.basics.Constants;
-import de.dnb.basics.applicationComponents.FileUtils;
+import de.dnb.basics.applicationComponents.MyFileUtils;
 import de.dnb.basics.collections.CrossProductFrequency;
 import de.dnb.basics.filtering.Between;
 import de.dnb.basics.filtering.StringContains;
@@ -50,7 +50,7 @@ public class ZugangsMonitoring5 {
 				.getMatchingReader(Constants.TITEL_PLUS_EXEMPLAR_D);
 		reader.setStreamFilter(
 				new StringContains(Constants.MARC_SUB_SEP + "z" + "StatZUG"));
-		final PrintWriter out = FileUtils.outputFile(FOLDER + outFileName,
+		final PrintWriter out = MyFileUtils.outputFile(FOLDER + outFileName,
 				false);
 
 		final Between<Integer> erlaubteJahre = new Between<>(2018, 2023);
@@ -95,7 +95,7 @@ public class ZugangsMonitoring5 {
 		});
 
 		out.println(zugangsStat.toString());
-		FileUtils.safeClose(out);
+		MyFileUtils.safeClose(out);
 
 	}
 

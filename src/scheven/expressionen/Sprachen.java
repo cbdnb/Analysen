@@ -10,7 +10,7 @@ import java.util.List;
 import java.util.Set;
 
 import de.dnb.basics.Constants;
-import de.dnb.basics.applicationComponents.FileUtils;
+import de.dnb.basics.applicationComponents.MyFileUtils;
 import de.dnb.basics.applicationComponents.strings.StringUtils;
 import de.dnb.gnd.exceptions.IllFormattedLineException;
 import de.dnb.gnd.parser.RecordReader;
@@ -51,7 +51,7 @@ public class Sprachen {
 		});
 		System.err.println("tu mit sprachen suchen");
 		// nun alle $g absuchen auf Sprachen:
-		final PrintWriter pw = FileUtils.oeffneAusgabeDatei(Fassung_etc.folder
+		final PrintWriter pw = MyFileUtils.oeffneAusgabeDatei(Fassung_etc.folder
 				+ "Expressionskandidaten" + "_sprachen_in_130" + ".txt", false);
 		final RecordReader tuReader = RecordReader
 				.getMatchingReader(Constants.Tu);

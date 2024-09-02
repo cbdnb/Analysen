@@ -9,7 +9,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.concurrent.atomic.AtomicInteger;
 
-import de.dnb.basics.applicationComponents.FileUtils;
+import de.dnb.basics.applicationComponents.MyFileUtils;
 import de.dnb.basics.applicationComponents.StreamUtils;
 import de.dnb.basics.applicationComponents.strings.StringUtils;
 import de.dnb.basics.applicationComponents.tuples.Triplett;
@@ -56,11 +56,11 @@ public class Durchlaufzeiten {
 		/* Constants.TITEL_PLUS_EXEMPLAR_Z */);
 		reader.setStreamFilter(new StringContains("StatIE")
 				.and(new StringContains(JJJJ + "-")));
-		final PrintWriter alle = FileUtils.oeffneAusgabeDatei(
+		final PrintWriter alle = MyFileUtils.oeffneAusgabeDatei(
 				FOLDER + "alle_idns_nicht_ZDB " + JJJJ + ".txt", false);
-		final PrintWriter histogram = FileUtils.oeffneAusgabeDatei(
+		final PrintWriter histogram = MyFileUtils.oeffneAusgabeDatei(
 				FOLDER + "histogramm_nicht_ZDB " + JJJJ + ".txt", false);
-		final PrintWriter auswertung = FileUtils.oeffneAusgabeDatei(
+		final PrintWriter auswertung = MyFileUtils.oeffneAusgabeDatei(
 				FOLDER + "auswertung_nicht_ZDB " + JJJJ + ".txt", false);
 
 		final AtomicInteger countErschliessung = new AtomicInteger();

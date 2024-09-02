@@ -11,7 +11,7 @@ import java.util.TreeSet;
 import java.util.stream.Collectors;
 
 import de.dnb.basics.Constants;
-import de.dnb.basics.applicationComponents.FileUtils;
+import de.dnb.basics.applicationComponents.MyFileUtils;
 import de.dnb.basics.applicationComponents.strings.StringUtils;
 import de.dnb.gnd.parser.Record;
 import de.dnb.gnd.parser.RecordReader;
@@ -49,9 +49,9 @@ public class Hinweise_2023_1 {
 		reader.setStreamFilter(
 				new ContainsTag("005", '0', TYP, GNDTagDB.getDB()));
 
-		final PrintWriter syst12_12 = FileUtils.outputFile(folder + "11_12.txt",
+		final PrintWriter syst12_12 = MyFileUtils.outputFile(folder + "11_12.txt",
 				false);
-		final PrintWriter nicht_syst12_12 = FileUtils
+		final PrintWriter nicht_syst12_12 = MyFileUtils
 				.outputFile(folder + "nicht_11_12.txt", false);
 
 		reader.forEach(record ->
@@ -67,8 +67,8 @@ public class Hinweise_2023_1 {
 
 		});
 
-		FileUtils.safeClose(nicht_syst12_12);
-		FileUtils.safeClose(syst12_12);
+		MyFileUtils.safeClose(nicht_syst12_12);
+		MyFileUtils.safeClose(syst12_12);
 
 	}
 

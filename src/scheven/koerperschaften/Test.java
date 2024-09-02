@@ -17,7 +17,7 @@ public class Test {
 	public static final String FOLDER = "D:/Analysen/scheven/Tb/";
 
 	public static void main(final String[] args) throws IOException {
-		final PrintWriter out = de.dnb.basics.applicationComponents.FileUtils
+		final PrintWriter out = de.dnb.basics.applicationComponents.MyFileUtils
 				.outputFile(FOLDER + "test.txt", false);
 		final UnionFind<Integer> uf = new UnionFind<Integer>(null);
 		final RecordReader reader = RecordReader
@@ -39,7 +39,7 @@ public class Test {
 			out.println(IDNUtils.ints2ppns(cluster));
 			statLaenge.add(cluster.size());
 		}
-		de.dnb.basics.applicationComponents.FileUtils.safeClose(out);
+		de.dnb.basics.applicationComponents.MyFileUtils.safeClose(out);
 		System.out.println(statLaenge);
 
 	}

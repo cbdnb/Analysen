@@ -10,7 +10,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import de.dnb.basics.Constants;
-import de.dnb.basics.applicationComponents.FileUtils;
+import de.dnb.basics.applicationComponents.MyFileUtils;
 import de.dnb.basics.applicationComponents.Mutable;
 import de.dnb.basics.applicationComponents.strings.StringUtils;
 import de.dnb.gnd.parser.RecordReader;
@@ -91,11 +91,11 @@ public class DoppelterBindestrich {
 			}
 
 		});
-		FileUtils.safeClose(writerDE);
-		FileUtils.safeClose(writerFR);
-		FileUtils.safeClose(writerAT);
-		FileUtils.safeClose(writerHU);
-		FileUtils.safeClose(writerRest);
+		MyFileUtils.safeClose(writerDE);
+		MyFileUtils.safeClose(writerFR);
+		MyFileUtils.safeClose(writerAT);
+		MyFileUtils.safeClose(writerHU);
+		MyFileUtils.safeClose(writerRest);
 	}
 
 }

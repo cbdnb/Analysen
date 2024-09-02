@@ -7,7 +7,7 @@ import java.io.IOException;
 import java.io.PrintStream;
 
 import de.dnb.basics.Constants;
-import de.dnb.basics.applicationComponents.FileUtils;
+import de.dnb.basics.applicationComponents.MyFileUtils;
 import de.dnb.basics.collections.Frequency;
 import de.dnb.gnd.parser.Field;
 import de.dnb.gnd.parser.RecordReader;
@@ -61,7 +61,7 @@ public class Statistik4201 {
 
 		final PrintStream outputStream = new PrintStream(OUT_FILE);
 		outputStream.println(frequency);
-		FileUtils.safeClose(outputStream);
+		MyFileUtils.safeClose(outputStream);
 
 	}
 

@@ -20,7 +20,7 @@ import java.util.Optional;
 import java.util.stream.Stream;
 
 import de.dnb.basics.Constants;
-import de.dnb.basics.applicationComponents.FileUtils;
+import de.dnb.basics.applicationComponents.MyFileUtils;
 import de.dnb.basics.applicationComponents.strings.StringUtils;
 import de.dnb.basics.filtering.FilterUtils;
 import de.dnb.basics.tries.TrieMultimap;
@@ -54,17 +54,17 @@ public class GND_DB_Test {
 			final ObjectOutputStream out1 = new ObjectOutputStream(
 					new FileOutputStream(NAME_2_IDNS));
 			out1.writeObject(name2idns);
-			FileUtils.safeClose(out1);
+			MyFileUtils.safeClose(out1);
 
 			final ObjectOutputStream out2 = new ObjectOutputStream(
 					new FileOutputStream(IDN_2_RECORD));
 			out2.writeObject(idn2record);
-			FileUtils.safeClose(out2);
+			MyFileUtils.safeClose(out2);
 
 			final ObjectOutputStream out3 = new ObjectOutputStream(
 					new FileOutputStream(VWW_2_IDNS));
 			out3.writeObject(vww2idns);
-			FileUtils.safeClose(out3);
+			MyFileUtils.safeClose(out3);
 		} catch (final FileNotFoundException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -151,17 +151,17 @@ public class GND_DB_Test {
 			objectInputStream = new ObjectInputStream(
 					new FileInputStream(NAME_2_IDNS));
 			name2idns = (TrieMultimap<String>) objectInputStream.readObject();
-			FileUtils.safeClose(objectInputStream);
+			MyFileUtils.safeClose(objectInputStream);
 
 			objectInputStream = new ObjectInputStream(
 					new FileInputStream(VWW_2_IDNS));
 			vww2idns = (TrieMultimap<String>) objectInputStream.readObject();
-			FileUtils.safeClose(objectInputStream);
+			MyFileUtils.safeClose(objectInputStream);
 
 			objectInputStream = new ObjectInputStream(
 					new FileInputStream(IDN_2_RECORD));
 			idn2record = (Map<String, MyRecord>) objectInputStream.readObject();
-			FileUtils.safeClose(objectInputStream);
+			MyFileUtils.safeClose(objectInputStream);
 		} catch (final IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

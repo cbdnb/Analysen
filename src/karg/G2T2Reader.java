@@ -6,7 +6,7 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.util.Collection;
 
-import de.dnb.basics.applicationComponents.FileUtils;
+import de.dnb.basics.applicationComponents.MyFileUtils;
 import de.dnb.basics.applicationComponents.strings.StringUtils;
 import de.dnb.basics.applicationComponents.tuples.Triplett;
 import de.dnb.basics.collections.ListMultimap;
@@ -46,7 +46,7 @@ public class G2T2Reader {
                 (ListMultimap<String, Triplett<String, String, String>>) objectInputStream
                         .readObject();
 
-        FileUtils.safeClose(objectInputStream);
+        MyFileUtils.safeClose(objectInputStream);
 
     }
 

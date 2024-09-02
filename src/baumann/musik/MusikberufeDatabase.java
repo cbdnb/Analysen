@@ -14,7 +14,7 @@ import java.util.List;
 import java.util.Map;
 
 import de.dnb.basics.Constants;
-import de.dnb.basics.applicationComponents.FileUtils;
+import de.dnb.basics.applicationComponents.MyFileUtils;
 import de.dnb.basics.filtering.FilterUtils;
 import de.dnb.gnd.parser.RecordReader;
 import de.dnb.gnd.parser.line.Line;
@@ -67,7 +67,7 @@ public class MusikberufeDatabase {
 				new FileInputStream(MUSIK_BERUFE));
 		idn2Musikberuf = (HashMap<String, String>) objectInputStream
 				.readObject();
-		FileUtils.safeClose(objectInputStream);
+		MyFileUtils.safeClose(objectInputStream);
 	}
 
 	/**
@@ -112,7 +112,7 @@ public class MusikberufeDatabase {
 		final ObjectOutputStream out = new ObjectOutputStream(
 				new FileOutputStream(MUSIK_BERUFE));
 		out.writeObject(idn2Musikberuf);
-		FileUtils.safeClose(out);
+		MyFileUtils.safeClose(out);
 	}
 
 }

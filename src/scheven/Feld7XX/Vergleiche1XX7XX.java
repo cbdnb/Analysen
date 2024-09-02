@@ -12,7 +12,7 @@ import java.util.Map;
 import java.util.TreeMap;
 
 import de.dnb.basics.Constants;
-import de.dnb.basics.applicationComponents.FileUtils;
+import de.dnb.basics.applicationComponents.MyFileUtils;
 import de.dnb.basics.applicationComponents.strings.StringUtils;
 import de.dnb.gnd.parser.Format;
 import de.dnb.gnd.parser.Record;
@@ -46,7 +46,7 @@ public class Vergleiche1XX7XX {
 
 		final Map<String, PrintWriter> falsche2out = new TreeMap<>();
 		for (final String falscher : falscheTags) {
-			final PrintWriter out = FileUtils.outputFile(
+			final PrintWriter out = MyFileUtils.outputFile(
 					FOLDER + "/" + falscher + "_statt_" + richtigerTag + ".txt",
 					false);
 			falsche2out.put(falscher, out);
@@ -72,7 +72,7 @@ public class Vergleiche1XX7XX {
 		}
 
 		for (final String falscher : falscheTags) {
-			FileUtils.safeClose(falsche2out.get(falscher));
+			MyFileUtils.safeClose(falsche2out.get(falscher));
 		}
 
 	}

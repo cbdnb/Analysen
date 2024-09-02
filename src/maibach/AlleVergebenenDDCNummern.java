@@ -7,7 +7,7 @@ import java.util.Set;
 import java.util.function.Predicate;
 
 import de.dnb.basics.Constants;
-import de.dnb.basics.applicationComponents.FileUtils;
+import de.dnb.basics.applicationComponents.MyFileUtils;
 import de.dnb.basics.collections.TreeMultimap;
 import de.dnb.basics.filtering.StringContains;
 import de.dnb.gnd.parser.Record;
@@ -60,7 +60,7 @@ public class AlleVergebenenDDCNummern {
 		final ObjectOutputStream out = new ObjectOutputStream(
 				new FileOutputStream(FILENAME_DDC_2_Titles));
 		out.writeObject(ddc2Titles);
-		FileUtils.safeClose(out);
+		MyFileUtils.safeClose(out);
 		System.out.println(ddc2Titles);
 
 		for (final String string : ddc2Titles) {

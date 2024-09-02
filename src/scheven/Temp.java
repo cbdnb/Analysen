@@ -6,7 +6,7 @@ package scheven;
 import java.io.IOException;
 import java.io.PrintWriter;
 
-import de.dnb.basics.applicationComponents.FileUtils;
+import de.dnb.basics.applicationComponents.MyFileUtils;
 import de.dnb.basics.applicationComponents.strings.StringUtils;
 import de.dnb.gnd.parser.RecordReader;
 import de.dnb.gnd.utils.GNDUtils;
@@ -34,7 +34,7 @@ public class Temp {
 	 */
 	public static void main(final String[] args) throws IOException {
 		final RecordReader reader = RecordReader.getMatchingReader(IN_FILE);
-		final PrintWriter out = FileUtils.outputFile(OUT_FILE, false);
+		final PrintWriter out = MyFileUtils.outputFile(OUT_FILE, false);
 		out.println(StringUtils.concatenateTab("idn", "nid", "satzart", "name",
 				"verbund"));
 		reader.forEach(record ->

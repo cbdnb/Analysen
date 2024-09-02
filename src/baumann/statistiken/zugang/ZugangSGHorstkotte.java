@@ -12,7 +12,7 @@ import java.util.EnumSet;
 import java.util.Map;
 
 import de.dnb.basics.Constants;
-import de.dnb.basics.applicationComponents.FileUtils;
+import de.dnb.basics.applicationComponents.MyFileUtils;
 import de.dnb.basics.applicationComponents.strings.StringUtils;
 import de.dnb.basics.applicationComponents.tuples.Quadruplett;
 import de.dnb.basics.collections.CrossProductFrequency;
@@ -60,7 +60,7 @@ public class ZugangSGHorstkotte {
 				.getTable();
 		final StatusAndCodeFilter ismusi = StatusAndCodeFilter.filterMusikalie()
 				.setIgnoreStatus(true);
-		final PrintWriter error = FileUtils.outputFile(
+		final PrintWriter error = MyFileUtils.outputFile(
 				"D:/Analysen/baumann/statistik/keine_SG_Horstkotte.txt", false);
 
 		reader.forEach(record ->
@@ -104,7 +104,7 @@ public class ZugangSGHorstkotte {
 		EnumSet.allOf(HUNDERTER.class).forEach(hund -> printRow(hund));
 		printRow(null);
 
-		FileUtils.safeClose(error);
+		MyFileUtils.safeClose(error);
 
 	}
 

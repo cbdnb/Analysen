@@ -7,7 +7,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.List;
 
-import de.dnb.basics.applicationComponents.FileUtils;
+import de.dnb.basics.applicationComponents.MyFileUtils;
 import de.dnb.basics.applicationComponents.strings.StringUtils;
 import de.dnb.gnd.parser.RecordReader;
 import de.dnb.gnd.parser.line.Line;
@@ -30,7 +30,7 @@ public class FalscheB {
 	public static void main(final String[] args) throws IOException {
 		final RecordReader reader = RecordReader.getMatchingReader(
 				"D:/pica-0.22.0-x86_64-pc-windows-msvc/temp.dat.gz");
-		final PrintWriter out = FileUtils
+		final PrintWriter out = MyFileUtils
 				.outputFile("D:/Analysen/alex/Falsche_NSG_B.txt", false);
 		reader.forEach(rec ->
 		{
@@ -56,7 +56,7 @@ public class FalscheB {
 			out.println(StringUtils.concatenateTab(idn, typ, jahr, sgg, titel));
 		});
 
-		FileUtils.safeClose(out);
+		MyFileUtils.safeClose(out);
 
 	}
 

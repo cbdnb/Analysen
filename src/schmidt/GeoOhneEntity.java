@@ -11,7 +11,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import de.dnb.basics.Constants;
-import de.dnb.basics.applicationComponents.FileUtils;
+import de.dnb.basics.applicationComponents.MyFileUtils;
 import de.dnb.basics.applicationComponents.strings.StringUtils;
 import de.dnb.gnd.parser.RecordReader;
 import de.dnb.gnd.parser.tag.GNDTagDB;
@@ -89,7 +89,7 @@ public class GeoOhneEntity {
 
 		kontinente.forEach(kont ->
 		{
-			FileUtils.safeClose(kont2pw.get(kont));
+			MyFileUtils.safeClose(kont2pw.get(kont));
 		});
 
 	}

@@ -9,7 +9,7 @@ import java.util.ArrayList;
 
 import javax.swing.JFileChooser;
 
-import de.dnb.basics.applicationComponents.FileUtils;
+import de.dnb.basics.applicationComponents.MyFileUtils;
 import de.dnb.basics.applicationComponents.strings.StringUtils;
 import de.dnb.basics.utils.HTMLEntities;
 
@@ -74,8 +74,8 @@ public class IBWOutPretty {
 
         }
 
-        FileUtils.safeClose(in);
-        FileUtils.safeClose(pw);
+        MyFileUtils.safeClose(in);
+        MyFileUtils.safeClose(pw);
 
     }
 

@@ -7,7 +7,7 @@ import java.util.Collection;
 import java.util.function.Predicate;
 
 import de.dnb.basics.Constants;
-import de.dnb.basics.applicationComponents.FileUtils;
+import de.dnb.basics.applicationComponents.MyFileUtils;
 import de.dnb.basics.applicationComponents.strings.StringUtils;
 import de.dnb.basics.applicationComponents.tuples.Triplett;
 import de.dnb.basics.collections.ListMultimap;
@@ -85,7 +85,7 @@ public class CreateCrissCrossMap {
 		final ObjectOutputStream out = new ObjectOutputStream(
 				new FileOutputStream(Database.FILENAME_DDC_2_SWW));
 		out.writeObject(ccm.numbers);
-		FileUtils.safeClose(out);
+		MyFileUtils.safeClose(out);
 	}
 
 }

@@ -10,7 +10,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.concurrent.atomic.AtomicInteger;
 
-import de.dnb.basics.applicationComponents.FileUtils;
+import de.dnb.basics.applicationComponents.MyFileUtils;
 import de.dnb.basics.applicationComponents.StreamUtils;
 import de.dnb.basics.applicationComponents.strings.StringUtils;
 import de.dnb.basics.applicationComponents.tuples.Triplett;
@@ -80,12 +80,12 @@ public class Durchlaufzeiten2 extends DownloadWorker {
 				.and(new StringContains(JJJJ + "-")));
 		durchlauf.setFilePrefix(PREFIX);
 
-		alle = FileUtils.oeffneAusgabeDatei(FOLDER_OUT + "alle_test.txt",
+		alle = MyFileUtils.oeffneAusgabeDatei(FOLDER_OUT + "alle_test.txt",
 				false);
 
 		durchlauf.processAllFiles();
 
-		histogram = FileUtils.oeffneAusgabeDatei(
+		histogram = MyFileUtils.oeffneAusgabeDatei(
 				FOLDER_OUT + "häufigkeiten_test.txt", false);
 
 		histogram.println("--FE--");

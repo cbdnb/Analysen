@@ -13,7 +13,7 @@ import java.util.Set;
 
 import javax.naming.OperationNotSupportedException;
 
-import de.dnb.basics.applicationComponents.FileUtils;
+import de.dnb.basics.applicationComponents.MyFileUtils;
 import de.dnb.basics.applicationComponents.strings.StringUtils;
 import de.dnb.basics.applicationComponents.tuples.Pair;
 import de.dnb.basics.collections.ListUtils;
@@ -183,13 +183,13 @@ final class Transformer313ab extends Transformer {
 			IOException {
 		final String datum = TimeUtils.getToday();
 		final String signatur = SIGNATUR + "_" + datum;
-		final PrintWriter outHTML = FileUtils
+		final PrintWriter outHTML = MyFileUtils
 				.outputFile(FOLDER + "test_" + signatur + ".html", false);
-		final PrintWriter log = FileUtils
+		final PrintWriter log = MyFileUtils
 				.outputFile(FOLDER + "log_" + signatur + ".txt", false);
-		final PrintWriter prod = FileUtils
+		final PrintWriter prod = MyFileUtils
 				.outputFile(FOLDER + "produktion_" + signatur + ".txt", false);
-		final PrintWriter zuloeschen = FileUtils
+		final PrintWriter zuloeschen = MyFileUtils
 				.outputFile(FOLDER + "zu_loeschen_" + signatur + ".txt", false);
 
 		final Transformer transformer = new Transformer313ab('g');
@@ -226,9 +226,9 @@ final class Transformer313ab extends Transformer {
 		System.out.println("Anzahl der bearbeiteten Hinweissätze: "
 				+ transformer.db.getAnzahlHinweissaetze());
 
-		FileUtils.safeClose(outHTML);
-		FileUtils.safeClose(log);
-		FileUtils.safeClose(prod);
-		FileUtils.safeClose(zuloeschen);
+		MyFileUtils.safeClose(outHTML);
+		MyFileUtils.safeClose(log);
+		MyFileUtils.safeClose(prod);
+		MyFileUtils.safeClose(zuloeschen);
 	}
 }

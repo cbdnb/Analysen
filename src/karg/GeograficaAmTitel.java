@@ -6,7 +6,7 @@ import java.util.Collection;
 import java.util.function.Predicate;
 
 import de.dnb.basics.Constants;
-import de.dnb.basics.applicationComponents.FileUtils;
+import de.dnb.basics.applicationComponents.MyFileUtils;
 import de.dnb.basics.applicationComponents.strings.StringUtils;
 import de.dnb.basics.applicationComponents.tuples.Triplett;
 import de.dnb.basics.collections.Frequency;
@@ -97,7 +97,7 @@ public class GeograficaAmTitel {
             }
         }
 
-        FileUtils.safeClose(stream);
+        MyFileUtils.safeClose(stream);
 
     }
 

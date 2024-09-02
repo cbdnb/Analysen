@@ -6,7 +6,7 @@ package scheven.feld548;
 import java.io.IOException;
 import java.io.PrintWriter;
 
-import de.dnb.basics.applicationComponents.FileUtils;
+import de.dnb.basics.applicationComponents.MyFileUtils;
 import de.dnb.gnd.parser.RecordReader;
 
 /**
@@ -21,7 +21,7 @@ public class GestGeb {
 	 */
 	public static void main(final String[] args) throws IOException {
 		final String flag = "geb";
-		final PrintWriter out = FileUtils
+		final PrintWriter out = MyFileUtils
 				.outputFile("D:/Analysen/scheven/" + flag + "_tab.txt", false);
 		final RecordReader reader = RecordReader
 				.getMatchingReader("D:/Analysen/scheven/" + flag + ".txt");
@@ -30,7 +30,7 @@ public class GestGeb {
 			out.println(Util.macheAusgabeZeile(record));
 		});
 
-		FileUtils.safeClose(out);
+		MyFileUtils.safeClose(out);
 	}
 
 }

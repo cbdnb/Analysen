@@ -5,7 +5,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.util.HashMap;
-import de.dnb.basics.applicationComponents.FileUtils;
+import de.dnb.basics.applicationComponents.MyFileUtils;
 import de.dnb.basics.applicationComponents.strings.StringUtils;
 import de.dnb.basics.applicationComponents.tuples.Pair;
 import de.dnb.gnd.parser.Record;
@@ -140,7 +140,7 @@ public class AcDatabase {
 		objectInputStream = new ObjectInputStream(
 				new FileInputStream(MakeAcDatabase.FILE_AC_TO_TITLE));
 		MAP_AC_TITLE = (HashMap<String, String>) objectInputStream.readObject();
-		FileUtils.safeClose(objectInputStream);
+		MyFileUtils.safeClose(objectInputStream);
 	}
 
 	/**
@@ -155,7 +155,7 @@ public class AcDatabase {
 		objectInputStream = new ObjectInputStream(
 				new FileInputStream(MakeAcDatabase.FILE_AC_TO_PUB));
 		MAP_AC_PUB = (HashMap<String, String>) objectInputStream.readObject();
-		FileUtils.safeClose(objectInputStream);
+		MyFileUtils.safeClose(objectInputStream);
 	}
 
 	/**
@@ -170,7 +170,7 @@ public class AcDatabase {
 				new FileInputStream(MakeAcDatabase.FILE_AC_TO_LEVEL));
 		MAP_AC_LEVEL = (HashMap<String, Pair<String, TIEFE>>) objectInputStream
 				.readObject();
-		FileUtils.safeClose(objectInputStream);
+		MyFileUtils.safeClose(objectInputStream);
 	}
 
 	public static void main(final String[] args) throws IOException {

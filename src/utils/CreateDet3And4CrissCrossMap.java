@@ -9,7 +9,7 @@ import java.util.List;
 import java.util.function.Predicate;
 
 import de.dnb.basics.Constants;
-import de.dnb.basics.applicationComponents.FileUtils;
+import de.dnb.basics.applicationComponents.MyFileUtils;
 import de.dnb.basics.applicationComponents.tuples.Pair;
 import de.dnb.basics.collections.ListMultimap;
 import de.dnb.basics.filtering.StringContains;
@@ -86,7 +86,7 @@ public class CreateDet3And4CrissCrossMap {
 				new ObjectOutputStream(new FileOutputStream(
 						"D:/Normdaten/numbers3and4.out"));
 		out.writeObject(ccm.numbers);
-		FileUtils.safeClose(out);
+		MyFileUtils.safeClose(out);
 	}
 
 }

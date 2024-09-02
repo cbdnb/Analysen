@@ -14,7 +14,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import de.dnb.basics.Constants;
-import de.dnb.basics.applicationComponents.FileUtils;
+import de.dnb.basics.applicationComponents.MyFileUtils;
 import de.dnb.basics.applicationComponents.StreamUtils;
 import de.dnb.basics.applicationComponents.tuples.Pair;
 import de.dnb.gnd.parser.RecordReader;
@@ -41,7 +41,7 @@ public class OrteMitKoordinatenDB {
 				new FileInputStream(ORTE));
 		idn2Geo = (Map<String, Pair<String, Point2D>>) objectInputStream
 				.readObject();
-		FileUtils.safeClose(objectInputStream);
+		MyFileUtils.safeClose(objectInputStream);
 
 	}
 
@@ -89,7 +89,7 @@ public class OrteMitKoordinatenDB {
 		final ObjectOutputStream out = new ObjectOutputStream(
 				new FileOutputStream(ORTE));
 		out.writeObject(idn2Geo);
-		FileUtils.safeClose(out);
+		MyFileUtils.safeClose(out);
 	}
 
 	/**
@@ -149,7 +149,7 @@ public class OrteMitKoordinatenDB {
 				new FileInputStream(ORTE_ANG));
 		idn2GeoAngereichert = (Map<String, Pair<String, Point2D>>) objectInputStream
 				.readObject();
-		FileUtils.safeClose(objectInputStream);
+		MyFileUtils.safeClose(objectInputStream);
 
 	}
 
@@ -176,7 +176,7 @@ public class OrteMitKoordinatenDB {
 		final ObjectOutputStream out = new ObjectOutputStream(
 				new FileOutputStream(ORTE_ANG));
 		out.writeObject(idn2GeoAngereichert);
-		FileUtils.safeClose(out);
+		MyFileUtils.safeClose(out);
 
 	}
 

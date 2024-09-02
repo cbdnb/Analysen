@@ -14,7 +14,7 @@ import org.marc4j.marc.Record;
 
 import scheven.StatistikDtEng;
 import utils.Database;
-import de.dnb.basics.applicationComponents.FileUtils;
+import de.dnb.basics.applicationComponents.MyFileUtils;
 import de.dnb.basics.applicationComponents.strings.StringUtils;
 import de.dnb.basics.applicationComponents.tuples.Pair;
 import de.dnb.basics.collections.Frequency;
@@ -67,7 +67,7 @@ public class DDCVerbalisierung {
 
         System.out.println(frequency.getAverage());
 
-        FileUtils.safeClose(input);
+        MyFileUtils.safeClose(input);
 
     }
 }

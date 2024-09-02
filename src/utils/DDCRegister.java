@@ -11,7 +11,7 @@ import org.marc4j.MarcReader;
 import org.marc4j.MarcXmlReader;
 import org.marc4j.marc.Record;
 
-import de.dnb.basics.applicationComponents.FileUtils;
+import de.dnb.basics.applicationComponents.MyFileUtils;
 import de.dnb.basics.collections.ListMultimap;
 import de.dnb.basics.collections.Multimap;
 import de.dnb.basics.marc.DDCMarcUtils;
@@ -58,7 +58,7 @@ public class DDCRegister {
         ObjectOutputStream out =
                 new ObjectOutputStream(new FileOutputStream("D:/Normdaten/ddcRegister.out"));
         out.writeObject(ddc2Register);
-        FileUtils.safeClose(out);
+        MyFileUtils.safeClose(out);
         System.err.println("Saved");
     }
 }

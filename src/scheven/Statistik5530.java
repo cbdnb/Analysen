@@ -9,7 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import de.dnb.basics.Constants;
-import de.dnb.basics.applicationComponents.FileUtils;
+import de.dnb.basics.applicationComponents.MyFileUtils;
 import de.dnb.basics.applicationComponents.strings.StringUtils;
 import de.dnb.basics.collections.Frequency;
 import de.dnb.gnd.parser.Field;
@@ -71,7 +71,7 @@ public class Statistik5530 {
 			outputStream.println(s);
 		});
 
-		FileUtils.safeClose(outputStream);
+		MyFileUtils.safeClose(outputStream);
 
 	}
 
