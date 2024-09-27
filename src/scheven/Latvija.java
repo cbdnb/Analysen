@@ -12,7 +12,7 @@ import de.dnb.gnd.utils.GNDUtils;
 import de.dnb.gnd.utils.RecordUtils;
 
 /**
- * Such nach Latvija / Latvijskaja SSR in $a / $g von 1XX.
+ * Such nach Latvija / Latvijskaja SSR in $a / $g von 1XX und 4XX.
  */
 public class Latvija {
 
@@ -44,12 +44,13 @@ public class Latvija {
 	}
 
 	private static void ausgabe(final Record record, final PrintWriter pw) {
+		final String idn = record.getId();
 		final String nid = GNDUtils.getNID(record);
 		final String satzart = RecordUtils.getDatatype(record);
 		final String feld1XX = GNDUtils.getNameOfRecord(record);
 		final String redaktion = GNDUtils.getIsilVerbund(record);
-		pw.println(
-				StringUtils.concatenateTab(nid, satzart, feld1XX, redaktion));
+		pw.println(StringUtils.concatenateTab(idn, nid, satzart, feld1XX,
+				redaktion));
 
 	}
 
