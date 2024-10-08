@@ -8,17 +8,15 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import de.dnb.basics.Constants;
+
 public class RunPicaRS {
-	protected String exe = "D:/pica-0.22.0-x86_64-pc-windows-msvc/pica.exe";
+	protected String exe = "pica";
 	protected String source = "D:/pica-0.22.0-x86_64-pc-windows-msvc/temp.dat.gz";
 	protected String target = "-o D:/pica-0.22.0-x86_64-pc-windows-msvc/temp.dat.gz";
 	protected boolean useTarget = false;
 	protected Commands command = Commands.PRINT;
 	protected List<String> options = Arrays.asList("-l4");
-
-	public void setExe(final String exe) {
-		this.exe = exe;
-	}
 
 	public void setSource(final String source) {
 		this.source = source;
@@ -38,6 +36,10 @@ public class RunPicaRS {
 
 	public void setOptions(final List<String> options) {
 		this.options = options;
+	}
+
+	public void setOptions(final String... options) {
+		this.options = Arrays.asList(options);
 	}
 
 	protected enum Commands {
@@ -91,6 +93,8 @@ public class RunPicaRS {
 
 	public static void main(final String[] args) throws IOException {
 		final RunPicaRS batch = new RunPicaRS();
+		batch.setSource(Constants.GND);
+		batch.setOptions("-s", "-l6");
 		batch.exec();
 	}
 
