@@ -47,7 +47,7 @@ public class Covid implements Predicate<Record> {
 	public boolean test(final Record record) {
 		if (idns == null)
 			load();
-		if (CollectionUtils.containsAny(RecordUtils.getAllIDNints(record),
+		if (CollectionUtils.intersects(RecordUtils.getAllIDNints(record),
 				idns))
 			return true;
 		final String title = BibRecUtils.getHaupttitelUndZusatz(record);
