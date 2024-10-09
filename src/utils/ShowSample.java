@@ -1,9 +1,11 @@
+package utils;
+
 import java.io.IOException;
 
 import de.dnb.gnd.parser.Record;
 import de.dnb.gnd.parser.RecordReader;
 
-public class Sample {
+public class ShowSample {
 
 	public static void main(final String[] args) throws IOException {
 		final RecordReader reader = RecordReader.getMatchingReader(

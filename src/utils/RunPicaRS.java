@@ -1,4 +1,4 @@
-package scheven.koerperschaften;
+package utils;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -9,21 +9,26 @@ import java.util.Arrays;
 import java.util.List;
 
 import de.dnb.basics.Constants;
+import de.dnb.basics.applicationComponents.MyFileUtils;
+import de.dnb.basics.applicationComponents.strings.StringUtils;
 
 public class RunPicaRS {
+	private static final String OPTION_OUTPUT = "-o ";
 	protected String exe = "pica";
 	protected String source = "D:/pica-0.22.0-x86_64-pc-windows-msvc/temp.dat.gz";
-	protected String target = "-o D:/pica-0.22.0-x86_64-pc-windows-msvc/temp.dat.gz";
+	protected String target = OPTION_OUTPUT
+			+ "D:/pica-0.22.0-x86_64-pc-windows-msvc/temp.dat.gz";
 	protected boolean useTarget = false;
 	protected Commands command = Commands.PRINT;
 	protected List<String> options = Arrays.asList("-l4");
+	private List<String> argList;
 
 	public void setSource(final String source) {
 		this.source = source;
 	}
 
-	public void setTarget(final String target) {
-		this.target = target;
+	public void setTarget(final String targetFile) {
+		target = OPTION_OUTPUT + targetFile;
 	}
 
 	public void setUseTarget(final boolean useTarget) {
@@ -72,7 +77,7 @@ public class RunPicaRS {
 	}
 
 	public void exec() throws IOException {
-		final List<String> argList = new ArrayList<String>();
+		argList = new ArrayList<>();
 		argList.add(exe);
 		argList.add(command.toString());
 		argList.addAll(options);
@@ -80,20 +85,30 @@ public class RunPicaRS {
 		if (useTarget)
 			argList.add(target);
 
+		System.out.println(StringUtils.concatenate(" ", argList));
+
 		final Runtime rt = Runtime.getRuntime();
 		final Process process = rt.exec(argList.toArray(new String[] {}));
 		final InputStream inputStream = process.getInputStream();
+		final InputStream errorStream = process.getErrorStream();
 		final BufferedReader in = new BufferedReader(
 				new InputStreamReader(inputStream));
-		String line;
-		while ((line = in.readLine()) != null)
-			System.out.println(line);
-		in.close();
+		final BufferedReader err = new BufferedReader(
+				new InputStreamReader(errorStream));
+		String lineIn;
+		while ((lineIn = in.readLine()) != null)
+			System.out.println(lineIn);
+		String lineErr;
+		while ((lineErr = err.readLine()) != null)
+			System.err.println(lineErr);
+		MyFileUtils.safeClose(err);
+		MyFileUtils.safeClose(in);
+
 	}
 
 	public static void main(final String[] args) throws IOException {
 		final RunPicaRS batch = new RunPicaRS();
-		batch.setSource(Constants.GND);
+		batch.setSource(Constants.Ts);
 		batch.setOptions("-s", "-l6");
 		batch.exec();
 	}
