@@ -12,6 +12,9 @@ import de.dnb.basics.Constants;
 import de.dnb.basics.applicationComponents.MyFileUtils;
 import de.dnb.basics.applicationComponents.strings.StringUtils;
 
+/**
+ * Test
+ */
 public class RunPicaRS {
 	private static final String OPTION_OUTPUT = "-o ";
 	protected String exe = "pica";
