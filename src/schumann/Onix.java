@@ -1,7 +1,7 @@
 package schumann;
 
 import java.io.IOException;
-import java.text.ParsePosition;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
@@ -26,39 +26,41 @@ import de.dnb.basics.utils.TimeUtils;
  */
 public class Onix {
 
-	static SimpleDateFormat parser = new SimpleDateFormat(
-			"LLL dd HH:mm:ss yyyy");
-	static Pattern zahlP = Pattern.compile("Output: (\\d+)");
+	static SimpleDateFormat parser = new SimpleDateFormat("yyyy-MM-dd");
+	static Pattern outputP = Pattern.compile("Output: (\\d+)");
 
 	public static void main(final String[] args) throws IOException {
-		Date dateAktuell = null;
+		Date dateAktuell = getDate("1900-01-01");
 		int zahlF = 0;
 		int zahlL = 0;
 		boolean leipzigFound = false;
 		System.out.println(StringUtils.concatenateTab("Datum", "L", "F"));
 
 		final List<String> lines = StringUtils
-				.readLinesFromFile("D:/Temp/AW Frage zu MVB 1.txt");
+				.readLinesFromFile("D:/MVB/2024.txt");
 		for (final String line : lines) {
 			final Date date = getDate(line);
-			// Neuer Datensatz:
+			// Neuer Datensatz?
 			if (date != null) {
-				if (dateAktuell != null) {
+				if (!dateAktuell.equals(date)
+						&& !dateAktuell.equals(getDate("1900-01-01"))) {
 					// Ausgabe:
 					System.out.println(StringUtils.concatenateTab(
 							TimeUtils.toYYYYMMDD(dateAktuell), zahlL, zahlF));
 				}
 				dateAktuell = date;
-				leipzigFound = false;
 			}
-			final Matcher matcher = zahlP.matcher(line);
-			if (matcher.find()) {
-				final int zahl = Integer.parseInt(matcher.group(1));
-				if (!leipzigFound) {
+			final Matcher outputM = outputP.matcher(line); // findet String
+															// "Output"
+			if (outputM.find()) {
+				final int zahl = Integer.parseInt(outputM.group(1));
+				if (!leipzigFound) {// Leipzig ist das erste
 					leipzigFound = true;
 					zahlL = zahl;
-				} else
+				} else {
 					zahlF = zahl;
+					leipzigFound = false;
+				}
 			}
 
 		}
@@ -69,13 +71,19 @@ public class Onix {
 
 	}
 
-	static Date getDate(String s) {
-		if (s == null)
-			return null;
-		// Date date = null;
-		s = s.replace("CET", "");
-		return parser.parse(s, new ParsePosition(7));
-		// return date;
+	static Date getDate(final String s) {
+		Date date = null;
+		try {
+			date = parser.parse(s);
+		} catch (final ParseException e) {
+		}
+		return date;
+
+	}
+
+	public static void main1(final String[] args) {
+		final String s = StringUtils.readClipboard();
+		System.out.println(getDate(s));
 	}
 
 }
