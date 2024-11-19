@@ -28,7 +28,7 @@ import de.dnb.basics.utils.TimeUtils;
  *
  * erkennbar.
  */
-public class Onix2 {
+public class Onix2 {//
 
 	public static enum STANDORT {
 		FRANKFURT, LEIPZIG
