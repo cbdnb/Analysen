@@ -26,11 +26,16 @@ import de.dnb.basics.utils.TimeUtils;
  */
 public class Onix {
 
+	public static enum STANDORT {
+		FRANKFURT, LEIPZIG
+	};
+
 	static SimpleDateFormat parser = new SimpleDateFormat("yyyy-MM-dd");
 	static Pattern outputP = Pattern.compile("Output: (\\d+)");
 
 	public static void main(final String[] args) throws IOException {
 		Date dateAktuell = getDate("1900-01-01");
+		STANDORT naechsterStandortErwartet = STANDORT.LEIPZIG;
 		int zahlF = 0;
 		int zahlL = 0;
 		boolean leipzigFound = false;
@@ -57,9 +62,11 @@ public class Onix {
 				if (!leipzigFound) {// Leipzig ist das erste
 					leipzigFound = true;
 					zahlL = zahl;
+					naechsterStandortErwartet = STANDORT.FRANKFURT;
 				} else {
 					zahlF = zahl;
 					leipzigFound = false;
+					naechsterStandortErwartet = STANDORT.LEIPZIG;
 				}
 			}
 
