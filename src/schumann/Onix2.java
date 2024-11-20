@@ -45,10 +45,6 @@ public class Onix2 {//
 				.filter(file -> !file.isDirectory())
 				.forEach(Onix2::printMailData);
 
-		final File msg = new File(
-				"V:/Temp/baumann/MVB-Mails/2024/Statistik MVB-Import (1).msg");
-		printMailData(msg);
-
 	}
 
 	private static void printMailData(final File msg) {
