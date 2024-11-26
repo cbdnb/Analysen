@@ -23,10 +23,9 @@ public class Clustern {
 	public static final String SET = FOLDER + "gesplittete.set";
 
 	public static void main(final String[] args) throws IOException {
-		final PrintWriter outPartitions = de.dnb.basics.applicationComponents.MyFileUtils
-				.outputFile(PARTITIONEN, false);
-		final PrintWriter outStat = de.dnb.basics.applicationComponents.MyFileUtils
-				.outputFile(STAT, false);
+		final PrintWriter outPartitions = MyFileUtils.outputFile(PARTITIONEN,
+				false);
+		final PrintWriter outStat = MyFileUtils.outputFile(STAT, false);
 		final UnionFind<Integer> uf = new UnionFind<Integer>(null);
 		final RecordReader reader = RecordReader
 				.getMatchingReader(Constants.Tb);
