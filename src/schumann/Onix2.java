@@ -36,14 +36,20 @@ public class Onix2 {//
 
 	static Pattern outputP = Pattern.compile("Output: (\\d+)");
 
+	static int fgesamt = 0;
+	static int lgesamt = 0;
+
 	public static void main(final String[] args)
 			throws IOException, ChunkNotFoundException {
 		System.out.println(
 				StringUtils.concatenateTab("Datum", "L", "F", "gesamt"));
 
-		Stream.of(new File("V:/Temp/baumann/MVB-Mails/2024").listFiles())
+		Stream.of(new File("V:/Temp/baumann/MVB-Mails/2023").listFiles())
 				.filter(file -> !file.isDirectory())
 				.forEach(Onix2::printMailData);
+
+		System.out.println("Frankfurt insgesamt: " + fgesamt);
+		System.out.println("Leipzig insgesamt: " + lgesamt);
 
 	}
 
@@ -81,6 +87,8 @@ public class Onix2 {//
 		}
 		System.out.println(StringUtils.concatenateTab(TimeUtils.toYYYYMMDD(cal),
 				zahlL, zahlF, zahlL + zahlF));
+		lgesamt += zahlL;
+		fgesamt += zahlF;
 	}
 
 }
