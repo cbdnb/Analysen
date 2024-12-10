@@ -18,6 +18,10 @@
 	<classpathentry combineaccessrules="false" kind="src" path="/pica4J"/>
 	<classpathentry kind="lib" path="lib/poi-ooxml-5.3.0.jar"/>
 	<classpathentry kind="lib" path="lib/poi-ooxml-schemas-4.1.2.jar"/>
-	<classpathentry kind="lib" path="lib/poi-scratchpad-5.3.0.jar"/>
+	<classpathentry kind="lib" path="lib/poi-scratchpad-5.3.0.jar" sourcepath="lib/apache-poi-src-5.3.0-20240625.zip">
+		<attributes>
+			<attribute name="javadoc_location" value="https://poi.apache.org/apidocs/5.0/"/>
+		</attributes>
+	</classpathentry>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
