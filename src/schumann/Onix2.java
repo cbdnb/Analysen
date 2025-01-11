@@ -3,10 +3,8 @@ package schumann;
 import java.io.File;
 import java.io.IOException;
 import java.util.Calendar;
-import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import org.apache.poi.hsmf.MAPIMessage;
@@ -31,10 +29,22 @@ import de.dnb.basics.utils.TimeUtils;
 public class Onix2 {//
 
 	public static enum STANDORT {
-		FRANKFURT, LEIPZIG
+		FRANKFURT("1245"), LEIPZIG("1145");
+
+		String code;
+
+		/**
+		 * @param code
+		 */
+		private STANDORT(final String code) {
+			this.code = code;
+		}
+
 	};
 
 	static Pattern outputP = Pattern.compile("Output: (\\d+)");
+	static Pattern sourceP = Pattern.compile("Source code +: +(\\d+)");
+	static Pattern dateP = Pattern.compile("(\\d{4}-\\d{2}-\\d{2}) ");
 
 	static int fgesamt = 0;
 	static int lgesamt = 0;
@@ -57,6 +67,7 @@ public class Onix2 {//
 		MAPIMessage mapimsg;
 		String text;
 		Calendar cal;
+		String datS;
 		try {
 			mapimsg = new MAPIMessage(msg.getAbsolutePath());
 			text = mapimsg.getTextBody();
@@ -64,31 +75,46 @@ public class Onix2 {//
 		} catch (final IOException | ChunkNotFoundException e) {
 			return;
 		}
+		final Matcher dateM = dateP.matcher(text);
+		if (dateM.find())
+			datS = dateM.group(1);
+		else
+			datS = TimeUtils.toYYYYMMDD(cal);
 
-		STANDORT naechsterStandortErwartet = STANDORT.LEIPZIG;
+		final String[] teile = text
+				.split("Read |Inserted | Updated | Deleted | Skipped", 2);
+		if (teile.length != 2) {
+			System.err.println("hä?");
+			return;
+		}
+
 		int zahlF = 0;
 		int zahlL = 0;
 
-		final List<String> lines = text.lines().collect(Collectors.toList());
-		for (final String line : lines) {
-			final Matcher outputM = outputP.matcher(line); // findet String
-															// "Output"
+		for (final String teil : teile) {
+			STANDORT standort = null;
+			final Matcher sourceM = sourceP.matcher(teil);
+			if (sourceM.find()) {
+				final String source = sourceM.group(1);
+				if (source.equals(STANDORT.LEIPZIG.code))
+					standort = STANDORT.LEIPZIG;
+				else if (source.equals(STANDORT.FRANKFURT.code))
+					standort = STANDORT.FRANKFURT;
+			}
+			final Matcher outputM = outputP.matcher(teil);
 			if (outputM.find()) {
 				final int zahl = Integer.parseInt(outputM.group(1));
-				if (naechsterStandortErwartet == STANDORT.LEIPZIG) {// Leipzig
-																	// ist das
-																	// erste
+				if (standort == STANDORT.LEIPZIG)
 					zahlL = zahl;
-					naechsterStandortErwartet = STANDORT.FRANKFURT;
-				} else {
+				else
 					zahlF = zahl;
-				}
 			}
 		}
-		System.out.println(StringUtils.concatenateTab(TimeUtils.toYYYYMMDD(cal),
-				zahlL, zahlF, zahlL + zahlF));
+		System.out.println(
+				StringUtils.concatenateTab(datS, zahlL, zahlF, zahlL + zahlF));
 		lgesamt += zahlL;
 		fgesamt += zahlF;
+
 	}
 
 }
