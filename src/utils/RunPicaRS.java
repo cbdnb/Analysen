@@ -8,7 +8,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import de.dnb.basics.Constants;
 import de.dnb.basics.applicationComponents.MyFileUtils;
 import de.dnb.basics.applicationComponents.strings.StringUtils;
 
@@ -50,7 +49,7 @@ public class RunPicaRS {
 		this.options = Arrays.asList(options);
 	}
 
-	protected enum Commands {
+	public enum Commands {
 		//@formatter:off
 		CAT("cat"),
 		COMPLETIONS("completions"),
@@ -101,6 +100,7 @@ public class RunPicaRS {
 		String lineIn;
 		while ((lineIn = in.readLine()) != null)
 			System.out.println(lineIn);
+		;
 		String lineErr;
 		while ((lineErr = err.readLine()) != null)
 			System.err.println(lineErr);
@@ -111,7 +111,7 @@ public class RunPicaRS {
 
 	public static void main(final String[] args) throws IOException {
 		final RunPicaRS batch = new RunPicaRS();
-		batch.setSource(Constants.Ts);
+		batch.setSource("D:/Analysen/scheven/mx/mx.gz");
 		batch.setOptions("-s", "-l6");
 		batch.exec();
 	}

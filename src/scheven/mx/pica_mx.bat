@@ -1,0 +1,1 @@
+pica filter -s "#047A/01>0" D:/Normdaten/DNBGND.dat.gz -o D:/Analysen/scheven/mx/mx.gz

@@ -44,7 +44,8 @@ public class AeltesteMX extends DownloadWorker {
 	protected void processRecord(final Record record) {
 		// System.out.println(record.getId());
 		if (GNDUtils.containsMX(record)) {
-			final Date date = Mailbox.getFirstDate(record);
+			final Date date = Mailbox.getFirstDate(record).orElse(oldestdate);
+
 			if (oldestdate.compareTo(date) > 0)
 				oldestdate = date;
 		}
