@@ -42,7 +42,7 @@ public class Onix2 {//
 
 	};
 
-	static Pattern outputP = Pattern.compile("Output: (\\d+)");
+	static Pattern outputP = Pattern.compile("Output: +(\\d+)");
 	static Pattern sourceP = Pattern.compile("Source code +: +(\\d+)");
 	static Pattern dateP = Pattern.compile("(\\d{4}-\\d{2}-\\d{2}) ");
 
@@ -54,7 +54,9 @@ public class Onix2 {//
 		System.out.println(
 				StringUtils.concatenateTab("Datum", "L", "F", "gesamt"));
 
-		Stream.of(new File("V:/Temp/baumann/MVB-Mails/2023").listFiles())
+		Stream.of(new File(
+				"//dnbf-fs01/DNB-Gesamt/03_FB_EE/13_BF/_Bestandsaufbau/MVB-Zahlen/2024_Statistikmails")
+						.listFiles())
 				.filter(file -> !file.isDirectory())
 				.forEach(Onix2::printMailData);
 
