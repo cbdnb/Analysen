@@ -12,9 +12,11 @@ import de.dnb.basics.applicationComponents.MyFileUtils;
 import de.dnb.basics.applicationComponents.strings.StringUtils;
 import de.dnb.basics.collections.ListUtils;
 import de.dnb.basics.utils.TimeUtils;
+import de.dnb.gnd.exceptions.IllFormattedLineException;
 import de.dnb.gnd.parser.Record;
 import de.dnb.gnd.utils.DownloadWorker;
 import de.dnb.gnd.utils.GNDUtils;
+import de.dnb.gnd.utils.formatter.RDAFormatter;
 import de.dnb.gnd.utils.mx.MXAddress;
 import de.dnb.gnd.utils.mx.Mailbox;
 
@@ -35,9 +37,9 @@ public class MxTabelle3 extends DownloadWorker {
 
 		out = MyFileUtils.outputFile("D:/Analysen/scheven/mx/Mailboxen.txt",
 				false);
-		final String uberschr = StringUtils.concatenateTab("Datum erste MX",
-				"Absender erste", "Datum letzte MX", "Absender letzte", "idn",
-				"nid", "Satzart", "Redaktion");
+		final String uberschr = StringUtils.concatenateTab("1XX",
+				"Datum erste MX", "Absender erste", "Datum letzte MX",
+				"Absender letzte", "idn", "nid", "Satzart", "065", "Redaktion");
 		out.println(uberschr);
 		mxTabelle.processGZipFile("D:/Analysen/scheven/mx/mx.gz");
 		MyFileUtils.safeClose(out);
@@ -69,6 +71,16 @@ public class MxTabelle3 extends DownloadWorker {
 		if (StringUtils.contains(text, "Arbeitsnotiz", true))
 			return;
 
+		String feld1XX = "";
+		try {
+			feld1XX = RDAFormatter.getPureRDAHeading(record);
+		} catch (final IllFormattedLineException e) {
+			feld1XX = GNDUtils.getNameOfRecord(record);
+		}
+		final String firstGNDClassification = GNDUtils
+				.getFirstGNDClassification(record);
+		final String feld065 = firstGNDClassification == null ? ""
+				: firstGNDClassification;
 		final String idn = record.getId();
 		final String nid = GNDUtils.getNID(record);
 		final String bbg = GNDUtils.getBBG(record);
@@ -84,8 +96,8 @@ public class MxTabelle3 extends DownloadWorker {
 		final String absLastStr = absenderLast != null
 				? absenderLast.getLibrary().nameKurz
 				: last.getRawAdresses();
-		final String outS = StringUtils.concatenate("\t", dateFirst,
-				absFirstStr, dateLast, absLastStr, idn, nid, bbg,
+		final String outS = StringUtils.concatenate("\t", feld1XX, dateFirst,
+				absFirstStr, dateLast, absLastStr, idn, nid, bbg, feld065,
 				GNDUtils.getIsilVerbund(record));
 
 		out.println(outS);
