@@ -17,7 +17,6 @@ public class StandardTabelle {
 				"Redaktion");
 
 		for (final Record record : reader) {
-
 			final String zeile = StringUtils.concatenateTab(
 					RecordUtils.getDatatype(record),
 					GNDUtils.getSimpleName(record), GNDUtils.getNID(record),
