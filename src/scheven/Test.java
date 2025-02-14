@@ -16,6 +16,9 @@ public class Test {
 	 * @throws IOException
 	 */
 	public static void main(final String[] args) throws IOException {
+		for (final String string : args) {
+			System.out.format(string, args);
+		}
 	}
 
 }

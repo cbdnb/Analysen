@@ -13,8 +13,8 @@ public class StandardTabelle {
 	public static void main(final String[] args) throws IOException {
 		final String path = StringUtils.readClipboard();
 		final RecordReader reader = RecordReader.getMatchingReader(path);
-		String out = StringUtils.concatenateTab("Satzart", "1XX", "nid",
-				"Redaktion");
+		final StringBuilder outputBuilder = new StringBuilder(StringUtils
+				.concatenateTab("Satzart", "1XX", "nid", "Redaktion"));
 
 		for (final Record record : reader) {
 			final String zeile = StringUtils.concatenateTab(
@@ -22,10 +22,8 @@ public class StandardTabelle {
 					GNDUtils.getSimpleName(record), GNDUtils.getNID(record),
 					GNDUtils.getIsilVerbund(record));
 			System.out.println(zeile);
-			out += "\n" + zeile;
+			outputBuilder.append("\n").append(zeile);
 		}
-		StringUtils.writeToClipboard(out);
-
+		StringUtils.writeToClipboard(outputBuilder.toString());
 	}
-
 }
