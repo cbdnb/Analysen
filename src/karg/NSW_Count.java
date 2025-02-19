@@ -2,8 +2,7 @@ package karg;
 
 import java.io.IOException;
 import java.util.List;
-import java.util.TreeSet;
-
+import java.util.Set;
 import de.dnb.basics.Constants;
 import de.dnb.basics.applicationComponents.strings.StringUtils;
 import de.dnb.basics.collections.CollectionUtils;
@@ -14,12 +13,11 @@ import de.dnb.gnd.parser.RecordReader;
 import de.dnb.gnd.parser.tag.GNDTagDB;
 import de.dnb.gnd.utils.ContainsTag;
 import de.dnb.gnd.utils.GNDUtils;
-import static java.lang.System.out;
-import static java.lang.System.err;
 
 public class NSW_Count {
 
-	private static TreeSet<String> nsws;
+	private static final int DUMMY = 0;
+	private static Set<String> nsws;
 	private static Trie<Integer> trie;
 	private static Frequency<String> nsw2count;
 	private static final boolean TRIE = true;
@@ -28,17 +26,36 @@ public class NSW_Count {
 			throws ClassNotFoundException, IOException {
 		nsws = CollectionUtils.loadTreeSet(NSW_DB.NSW_DB);
 		trie = new TST<>();
-		// für Phrase "M unter Quelle", damit nicht auch "Muntere Quelle" unter
-		// M eingetragen wird
-		nsws.forEach(s -> trie.putValue(s + " ", 0));
-		err.println(trie.size());
+		nsw2count = new Frequency<>();
+
+		nsws.forEach(s ->
+		{
+			String sNeu = s;
+			sNeu = StringUtils.unicodeComposition(sNeu);
+			sNeu = sNeu.replaceAll("\\(A\\)", "");
+			sNeu = sNeu.replaceAll("\\(J\\)", "");
+			sNeu = sNeu.trim();
+			if (sNeu.contains("(J)") || sNeu.contains("(A)"))
+				System.err.println(sNeu);
+			nsw2count.addKey(sNeu);
+			// für Phrase "M unter Quelle", damit nicht auch "Muntere Quelle"
+			// unter M eingetragen wird
+			final Integer found = trie.put(sNeu + " ", DUMMY);
+			if (found != null)
+				System.err.println("doppelt:" + sNeu);
+
+		});
+
+		final Set<String> triekeys = trie.keySet();
+		System.err.println(triekeys.size());
+		final Set<String> freqKeys = nsw2count.keySet();
+		System.err.println(freqKeys.size());
+		nsws = freqKeys;
+
 		final RecordReader reader = RecordReader
 				.getMatchingReader(Constants.GND);
 		reader.setStreamFilter(new ContainsTag("670", GNDTagDB.getDB()));
-		nsw2count = new Frequency<>();
-		// initialisieren:
-		nsws.forEach(nsw2count::addKey);
-		err.println(nsw2count.size());
+
 		reader.forEach(record ->
 		{
 			final List<String> quellen = GNDUtils.getSourcesDataFound(record);
@@ -46,6 +63,7 @@ public class NSW_Count {
 			{
 				// 1. Versuch
 				quelle = quelle.trim();
+				quelle = StringUtils.unicodeComposition(quelle);
 				if (nsws.contains(quelle))
 					nsw2count.add(quelle);
 				else {
@@ -59,7 +77,8 @@ public class NSW_Count {
 
 			});
 		});
-		out.println(StringUtils.unicodeComposition(nsw2count.toString()));
+		nsw2count.safe(NSW_DB.FOLDER + "/nsw2count.out");
+		System.out.println(nsw2count.toString());
 
 	}
 

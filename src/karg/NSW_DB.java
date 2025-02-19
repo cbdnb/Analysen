@@ -10,7 +10,8 @@ import de.dnb.gnd.utils.BibRecUtils;
 
 public class NSW_DB {
 
-	static final String NSW_DB = "D:/Analysen/karg/nsw.out";
+	static final String FOLDER = "D:/Analysen/karg/NSW";
+	static final String NSW_DB = FOLDER + "/nsw.out";
 
 	public static void main(final String[] args) throws IOException {
 		final RecordReader reader = RecordReader.getMatchingReader(
