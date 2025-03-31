@@ -22,10 +22,19 @@ import de.dnb.gnd.parser.RecordReader;
 import de.dnb.gnd.utils.BibRecUtils;
 
 /**
+ * Vorher bitte die Batch-Datei
+ * D:\pica-0.22.0-x86_64-pc-windows-msvc\filter_4821.bat laufen lassen! Befehl
+ * ist :
+ *
+ * .\pica filter -s "220C/*.D =^ '2024' "
+ * D:\Normdaten\DNBtitelundexemplare.dat.gz -o .\temp.dat.gz
+ *
+ * Das Jahr 2024 muss natürlich angepasst werden.
+ *
  * @author baumann
  *
  */
-public class Durchlaufzeiten {
+public class DurchlaufzeitenFinal {
 
 	private static final String QUARTIL_3 = "3. Quartil: ";
 
