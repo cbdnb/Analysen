@@ -26,7 +26,6 @@ public class Idn2Nid {
 			System.out.println(StringUtils.concatenateTab(idn, nid));
 		});
 		System.err.println(idns.size());
-
 	}
 
 }
