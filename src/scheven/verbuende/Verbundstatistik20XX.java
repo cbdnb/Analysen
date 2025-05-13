@@ -96,7 +96,7 @@ public class Verbundstatistik20XX {
 					verlag, jahr, counts);
 
 			//@formatter:on
-			if (BibRecUtils.istHochschulschrift(record))
+			if (BibRecUtils.istHochschulschrift(record, false))
 				printStreamDiss.println(outLine);
 			else if (BibRecUtils.istBelletristik(record))
 				printStreamBell.println(outLine);

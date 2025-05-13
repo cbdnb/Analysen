@@ -67,7 +67,7 @@ public class StatistikTIB {
 				}
 			}
 
-			if (!BibRecUtils.istHochschulschrift(record))
+			if (!BibRecUtils.istHochschulschrift(record, false))
 				continue;
 
 			final DDC_SG dhs = SGUtils.getDDCDHS(record);

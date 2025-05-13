@@ -33,7 +33,7 @@ public class B_und_K_Fremddaten extends DownloadWorker {
 				.reiheA_selbststaendig();
 		if (!filter.test(record))
 			return;
-		if (BibRecUtils.istHochschulschrift(record))
+		if (BibRecUtils.istHochschulschrift(record, false))
 			return;
 
 		final boolean isB = BibRecUtils.istBelletristik(record);

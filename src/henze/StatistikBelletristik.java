@@ -113,7 +113,7 @@ public class StatistikBelletristik extends DownloadWorker {
 
 	public static boolean istKorrekteReihe(final Record record) {
 
-		if (BibRecUtils.istHochschulschrift(record))
+		if (BibRecUtils.istHochschulschrift(record, false))
 			return false;
 
 		final char c1 = RecordUtils.getDatatypeCharacterAt(record, 0);

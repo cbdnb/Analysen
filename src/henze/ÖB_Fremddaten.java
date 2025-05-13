@@ -49,7 +49,7 @@ public class ÖB_Fremddaten extends DownloadWorker {
 		if (!filter.test(record))
 			return;
 
-		if (BibRecUtils.istHochschulschrift(record))
+		if (BibRecUtils.istHochschulschrift(record, false))
 			return;
 
 		final String jahr = BibRecUtils.getYearOfPublicationString(record);
