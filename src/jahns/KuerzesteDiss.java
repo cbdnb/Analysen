@@ -1,11 +1,15 @@
 package jahns;
 
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Comparator;
+import java.util.HashMap;
+import java.util.Map;
 
 import de.dnb.basics.Constants;
+import de.dnb.basics.applicationComponents.MyFileUtils;
 import de.dnb.basics.applicationComponents.strings.StringUtils;
 import de.dnb.basics.applicationComponents.tuples.Triplett;
 import de.dnb.basics.collections.BoundedPriorityQueue;
@@ -26,7 +30,29 @@ public class KuerzesteDiss extends DownloadWorker {
 			"Spalte", "Spalten", "Blatt", "Blätter", "S.", "Sp.", "Bl.", "p.",
 			"page", "pages");
 
-	BoundedPriorityQueue<Triplett<String, String, Integer>> rekordeIDTitAnzahl;
+	final Map<DDC_SG, BoundedPriorityQueue<Triplett<String, String, Integer>>> dhs2recorde;
+
+	private Comparator<Triplett<String, String, Integer>> triplettComparator;
+
+	private final PrintWriter out;
+
+	/**
+	 * @throws IOException
+	 *
+	 */
+	public KuerzesteDiss() throws IOException {
+		triplettComparator = (Comparator.comparingInt(t -> t.third));
+		triplettComparator = triplettComparator.reversed();
+		dhs2recorde = new HashMap<>();
+		DDC_SG.enumSet().forEach(sg -> dhs2recorde.put(sg, makeQueue()));
+		final String folder = "D:\\Analysen\\jahns";
+		out = MyFileUtils.outputFile(folder + "\\" + "kürzeste_Diss.txt",
+				false);
+	}
+
+	private BoundedPriorityQueue<Triplett<String, String, Integer>> makeQueue() {
+		return new BoundedPriorityQueue<>(10, triplettComparator);
+	}
 
 	@Override
 	protected void processRecord(final Record record) {
@@ -61,9 +87,8 @@ public class KuerzesteDiss extends DownloadWorker {
 		if (umfang == null)
 			return;
 
-		// Medizin ausschließen:
 		final DDC_SG hsg = SGUtils.getDDCDHS(record);
-		if (hsg.equals(DDC_SG.SG_610))
+		if (hsg == null)
 			return;
 
 		// Suche nach S., Seite(n) etc.
@@ -86,20 +111,24 @@ public class KuerzesteDiss extends DownloadWorker {
 
 		final Triplett<String, String, Integer> tripel = new Triplett<String, String, Integer>(
 				record.getId(), mainTitle, number);
-		rekordeIDTitAnzahl.add(tripel);
-		if (number < 7)
-			System.err.println(tripel);
+		dhs2recorde.get(hsg).add(tripel);
 
+	}
+
+	private void ausgeben(final DDC_SG dhs,
+			final BoundedPriorityQueue<Triplett<String, String, Integer>> rekordeIDTitAnzahl) {
+		rekordeIDTitAnzahl.ordered().forEach(t -> out.println(dhs.getDDCString()
+				+ "\t" + StringUtils.concatenateTab(t.asList())));
+	}
+
+	public void ausgeben() {
+		DDC_SG.enumSet().forEach(sg -> ausgeben(sg, dhs2recorde.get(sg)));
+		out.println();
 	}
 
 	public static void main(final String[] args) throws IOException {
 
 		final KuerzesteDiss kueDiss = new KuerzesteDiss();
-		Comparator<Triplett<String, String, Integer>> triplettComparator = (Comparator
-				.comparingInt(t -> t.third));
-		triplettComparator = triplettComparator.reversed();
-		kueDiss.rekordeIDTitAnzahl = new BoundedPriorityQueue<>(10,
-				triplettComparator);
 
 		final ContainsTag contains4060 = new ContainsTag("4060",
 				BibTagDB.getDB());
@@ -107,16 +136,14 @@ public class KuerzesteDiss extends DownloadWorker {
 				BibTagDB.getDB());
 		kueDiss.setStreamFilter(contains4060.and(isA));
 
-		System.err.println("Titeldaten flöhen:");
 		try {
-			kueDiss.processGZipFile(Constants.TITEL_STICHPROBE);
+			kueDiss.processGZipFile(Constants.TITEL_GESAMT_D);
 
 		} catch (final Exception e) {
 			e.printStackTrace();
 		}
 
-		kueDiss.rekordeIDTitAnzahl.ordered().forEach(t -> System.out
-				.println(StringUtils.concatenateTab(t.asList())));
+		kueDiss.ausgeben();
 
 	}
 
