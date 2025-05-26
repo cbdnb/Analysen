@@ -36,7 +36,9 @@ import utils.DB.GUI;
  */
 public class HinweisDBUtil {
 
-	public static final String DOWNLOAD_FILE = "D:/Analysen/scheven/Hinweis/download_ohne_s_p.txt";
+	public static final String FOLDER = "D:/Analysen/scheven/Hinweis/";
+
+	public static final String DOWNLOAD_FILE = FOLDER + "download_ohne_s_p.txt";
 
 	public static Pair<String, String> extractHinweis(final Line line260) {
 		final String sub9 = line260.getIdnRelated();
