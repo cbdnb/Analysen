@@ -16,8 +16,7 @@ import de.dnb.gnd.utils.IDNUtils;
 import de.dnb.gnd.utils.formatter.RDAFormatter;
 
 /**
- * Erzeugt den RDA-Namen (Zusatz in Klammern...) und setzt ihn in
- * Kleinbuchstaben.
+ * Erzeugt den RDA-Namen (Zusatz in Klammern...).
  *
  * @author baumann
  *

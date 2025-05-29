@@ -83,6 +83,8 @@ abstract class TableGenerator {
 
 	static final Tb_orta_Generator TB_ORTA_GENERATOR = new Tb_orta_Generator();
 
+	static final Idn2nid_Generator IDN_NID_GENERATOR = new Idn2nid_Generator();
+
 	/**
 	 * Erzeugen die Tabellen der Datenbank.
 	 */
@@ -92,6 +94,6 @@ abstract class TableGenerator {
 			BIO_VERWEISUNG_GENERATOR, UB_OB_GENERATOR, P_INSTR_GENERATOR,
 			P_PROF_GENERATOR, WORK_INSTR_GENERATOR, WORK_AUTOR_GENERATOR,
 			TITLE_WORK_GENERATOR, TITLE_PERSON_GENERATOR, TITLE_BT_GENERATOR,
-			DHS_GENERATOR, TB_ORTA_GENERATOR);
+			DHS_GENERATOR, TB_ORTA_GENERATOR, IDN_NID_GENERATOR);
 
 }

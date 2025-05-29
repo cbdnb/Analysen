@@ -15,6 +15,7 @@ import java.util.function.Predicate;
 import de.dnb.basics.Constants;
 import de.dnb.basics.applicationComponents.strings.StringUtils;
 import de.dnb.basics.applicationComponents.tuples.Quadruplett;
+import de.dnb.basics.collections.BiMap;
 import de.dnb.basics.collections.BiMultimap;
 import de.dnb.basics.collections.CollectionUtils;
 import de.dnb.basics.utils.TimeUtils;
@@ -192,10 +193,11 @@ public class GND_DB_UTIL {
 
 	/**
 	 *
-	 * @return Tabelle mit int ppns:Bio-Namen (ohne $ in den Unterfeldern, nach
-	 *         RDA, aber klein und in Unicode-Composition (damit besser gesucht
-	 *         werden kann) Siehe
-	 *         {@link StringUtils#unicodeComposition(CharSequence)})
+	 * @return Tabelle mit int ppns:RDA-Namen (ohne $ in den Unterfeldern, nach
+	 *         RDA in Unicode-Composition (damit besser gesucht werden kann)
+	 *         Siehe {@link StringUtils#unicodeComposition(CharSequence)}). Das
+	 *         Ganze ist eine Multimap, da theoretisch auch zu einem Namen
+	 *         mehrere PPNs gehören könnten (umgekehrt natürlich nicht!).
 	 * @throws ClassNotFoundException
 	 *             wenns schiefgeht
 	 * @throws IOException
@@ -205,6 +207,25 @@ public class GND_DB_UTIL {
 			throws ClassNotFoundException, IOException {
 		System.err.println("lade ppns:RDA-Namen");
 		final BiMultimap<Integer, String> table = TableGenerator.RDA_NAMES_GENERATOR
+				.getTable();
+		System.err.println("fertig");
+		return table;
+	}
+
+	/**
+	 *
+	 * @return Tabelle mit int ppns:RDA-Namen (ohne $ in den Unterfeldern, nach
+	 *         RDA in Unicode-Composition (damit besser gesucht werden kann)
+	 *         Siehe {@link StringUtils#unicodeComposition(CharSequence)})
+	 * @throws ClassNotFoundException
+	 *             wenns schiefgeht
+	 * @throws IOException
+	 *             wenns noch nicht erzeugt ist
+	 */
+	public static BiMap<Integer, String> getppn2nid()
+			throws ClassNotFoundException, IOException {
+		System.err.println("lade ppns:nid");
+		final BiMap<Integer, String> table = TableGenerator.IDN_NID_GENERATOR
 				.getTable();
 		System.err.println("fertig");
 		return table;
@@ -390,18 +411,23 @@ public class GND_DB_UTIL {
 	public static void main(final String[] args)
 			throws ClassNotFoundException, IOException {
 
-		final BiMultimap<Integer, String> table = getppn2RDAVerweisungen();
+		final BiMap<Integer, String> ppn2nid = getppn2nid();
+		final BiMultimap<Integer, String> ppn2name = getppn2RDAName();
 
 		final Scanner scan = new Scanner(System.in);
 
-		System.out.println("Kopieren Sie eine idn und drücken Sie ENTER");
+		System.out.println("Kopieren Sie eine nid und drücken Sie ENTER");
 		while (scan.hasNext()) {
 
-			final String idn = StringUtils.readClipboard();
+			final String nid = StringUtils.readClipboard();
+			System.out.println("nid: " + nid);
+			final int idn = ppn2nid.getKey(nid);
+			System.out.println("idn: " + idn);
+			final Collection<String> name = ppn2name.get(idn);
 
-			System.out.println(table.get(IDNUtils.ppn2int(idn)));
+			System.out.println("Name(n):" + name);
 			System.out.println();
-			System.out.println("Kopieren Sie eine idn und drücken Sie ENTER");
+			System.out.println("Kopieren Sie eine nid und drücken Sie ENTER");
 			scan.nextLine();
 		}
 
