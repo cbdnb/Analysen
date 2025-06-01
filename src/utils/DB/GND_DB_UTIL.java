@@ -425,7 +425,7 @@ public class GND_DB_UTIL {
 			System.out.println("idn: " + idn);
 			final Collection<String> name = ppn2name.get(idn);
 
-			System.out.println("Name(n):" + name);
+			System.out.println("Name(n): " + name);
 			System.out.println();
 			System.out.println("Kopieren Sie eine nid und drücken Sie ENTER");
 			scan.nextLine();
