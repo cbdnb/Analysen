@@ -53,7 +53,7 @@ public class Recorde {
 			final Record record = rekorde.get(tag);
 			out.println(tag + ": " + "Anzahl: " + maxima.get(tag) + "<br>");
 			out.println("IDN: " + record.getId() + "<br>");
-			out.println(HTMLFormatter.simpleHTML(record) + "<br>");
+			out.println(HTMLFormatter.toHTML(record) + "<br>");
 			out.println("<br>");
 			out.println("<br>");
 		});

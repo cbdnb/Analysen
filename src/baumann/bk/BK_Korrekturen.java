@@ -67,8 +67,8 @@ public class BK_Korrekturen {
 				System.out.println(druckRecord);
 				System.out.println("------------");
 				final List<String> diff = Arrays.asList(
-						Pica3Formatter.simpleHTML(gndRecord),
-						Pica3Formatter.simpleHTML(druckRecord));
+						Pica3Formatter.toHTML(gndRecord),
+						Pica3Formatter.toHTML(druckRecord));
 				diffs.add(diff);
 			}
 		}

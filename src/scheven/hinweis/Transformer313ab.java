@@ -207,7 +207,7 @@ final class Transformer313ab extends Transformer {
 				kombi.forEach(pair -> outHTML.println(
 						HTMLUtils.heading(pair.toString(), 0) + "<br>"));
 				outHTML.println("<br>");
-				outHTML.println(Pica3Formatter.simpleHTML(newRec));
+				outHTML.println(Pica3Formatter.toHTML(newRec));
 				outHTML.println("<br><br><br>");
 				prod.println(RecordUtils.toPica(newRec, Format.PICA3, false,
 						null, '0'));

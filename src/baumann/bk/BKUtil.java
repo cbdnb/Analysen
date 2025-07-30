@@ -379,7 +379,7 @@ class BKUtil {
 		System.out.println(bkRecord);
 		final Record dnb_Tc = toDNB_Tc(bkRecord);
 
-		final String txt = Pica3Formatter.simpleHTML(dnb_Tc);
+		final String txt = Pica3Formatter.toHTML(dnb_Tc);
 
 		final String table = HTMLUtils.tableFromCells(
 				Arrays.asList(Arrays.asList(txt, txt), Arrays.asList(txt, txt)),

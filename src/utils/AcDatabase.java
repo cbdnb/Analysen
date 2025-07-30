@@ -93,7 +93,7 @@ public class AcDatabase {
 	 * @param record
 	 *            nicht null
 	 * @return Titel aus 4000 + Titel des Teils aus 4004, durch '. ' getrennt
-	 *         oder null
+	 *         oder null. Unicode-Composition.
 	 */
 	public static String getVollstaendigenTitel(final Record record) {
 		final String vollst = BibRecUtils.getVollstaendigenTitel(record);
