@@ -15,7 +15,7 @@ import de.dnb.gnd.utils.WorkUtils;
  * @author baumann
  *
  */
-public class Tonarten {
+public class TonartenStatistik {
 
 	/**
 	 * @param args
