@@ -6,6 +6,10 @@ import de.dnb.basics.utils.TimeUtils;
 
 public class ErzeugeKirchentoene {
 
+	enum SPALTEN {
+		DE, EN, FR, IT, GR, ALT_DE, WIKI, NUM_DE, NUM_IT, NUM_EN, NUM_FR, IDN
+	}
+
 	static final String TEMPLATE_MODUS = """
 			005 Ts1
 			008 saz
@@ -15,26 +19,23 @@ public class ErzeugeKirchentoene {
 			083 781.263$d2$t%s
 			150 %s
 			450 %s
+			450 %s$gMusik
+			450 %s
+			450 %s
+			450 %s
+			450 %s
+			450 %s
 			450 %s
 			450 %s
 			450 %s
 			450 %s
 			550 !041950585!$4obge
-			550 %s$4vbal
+			550 !041703375!$4obge
 			670 Riemann$bunter Kirchentöne
 			670 Wikipedia$bStand: %s$u%s""";
 
-	final static int DE = 0;
-	final static int EN = 1;
-	final static int FR = 2;
-	final static int IT = 3;
-	final static int GR = 4;
-	final static int ALT = 5;
-	final static int WIKI = 6;
-	final static int MODUS_REL = 7;
-	final static int IDN = 8;
-
 	public static void main(final String[] args) {
+
 		StringUtils.readLinesFromClip()
 				.forEach(ErzeugeKirchentoene::verarbeiteDurMoll);
 
@@ -45,24 +46,45 @@ public class ErzeugeKirchentoene {
 			return;
 
 		final String[] excel = line.trim().split("\t");
-		final String de = StringUtils.getArrayElement(excel, DE);
-		final String en = StringUtils.getArrayElement(excel, EN) + " mode";
-		final String fr = "Mode " + StringUtils.getArrayElement(excel, FR);
-		final String it = "Modo " + StringUtils.getArrayElement(excel, IT);
-		final String gr = StringUtils.getArrayElement(excel, GR);
-		String alt = StringUtils.getArrayElement(excel, ALT);
-		alt = !StringUtils.isNullOrWhitespace(alt) ? alt + " Kirchenton" : "";
-		final String wiki = StringUtils.getArrayElement(excel, WIKI);
-		final String modus_rel = StringUtils.getArrayElement(excel, MODUS_REL);
-		final String idn = StringUtils.getArrayElement(excel, IDN);
+		final String de = StringUtils.getArrayElement(excel,
+				SPALTEN.DE.ordinal());
+		final String wurzelDE = de.substring(0,
+				de.length() - "er Kirchenton".length());
+		final String de450_1 = wurzelDE + "er Modus";
+		final String en = StringUtils.getArrayElement(excel,
+				SPALTEN.EN.ordinal());
+		final String fr = StringUtils.getArrayElement(excel,
+				SPALTEN.FR.ordinal());
+		final String it = StringUtils.getArrayElement(excel,
+				SPALTEN.IT.ordinal());
+		final String gr = StringUtils.getArrayElement(excel,
+				SPALTEN.GR.ordinal());
+		String numDEverbal = StringUtils.getArrayElement(excel,
+				SPALTEN.ALT_DE.ordinal());
+		numDEverbal = !StringUtils.isNullOrWhitespace(numDEverbal)
+				? numDEverbal + " Kirchenton"
+				: "";
+		final String wiki = StringUtils.getArrayElement(excel,
+				SPALTEN.WIKI.ordinal());
+		final String numDE = StringUtils.getArrayElement(excel,
+				SPALTEN.NUM_DE.ordinal());
+		final String numEN = StringUtils.getArrayElement(excel,
+				SPALTEN.NUM_EN.ordinal());
+		final String numFR = StringUtils.capitalize(
+				StringUtils.getArrayElement(excel, SPALTEN.NUM_FR.ordinal()));
+		final String numIT = StringUtils.capitalize(
+				StringUtils.getArrayElement(excel, SPALTEN.NUM_IT.ordinal()));
+		final String idn = StringUtils.getArrayElement(excel,
+				SPALTEN.IDN.ordinal());
 		final GregorianCalendar now = new GregorianCalendar();
 		final String jjjjmmtt = TimeUtils.toYYYYMMDD(now);
 		final String ttmmjjjj = TimeUtils.toDDMMYYYY(now);
 
 		String ausgabe = "";
 
-		ausgabe = TEMPLATE_MODUS.formatted(jjjjmmtt, de, gr, alt, en, fr, it,
-				modus_rel, ttmmjjjj, wiki);
+		ausgabe = TEMPLATE_MODUS.formatted(jjjjmmtt, de, de450_1, wurzelDE, en,
+				fr, it, gr, numDE, numDEverbal, numEN, numFR, numIT, ttmmjjjj,
+				wiki);
 
 		if (idn != null)
 			System.out.println(
