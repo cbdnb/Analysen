@@ -4,10 +4,10 @@ import java.util.GregorianCalendar;
 import de.dnb.basics.applicationComponents.strings.StringUtils;
 import de.dnb.basics.utils.TimeUtils;
 
-public class ErzeugeKirchentoene {
+public class ErzeugeBasisKirchentoene {
 
 	enum SPALTEN {
-		DE, EN, FR, IT, GR, ALT_DE, WIKI, NUM_DE, NUM_IT, NUM_EN, NUM_FR, IDN
+		DE, EN, FR, IT, GR, ALT_DE, WIKI, NUM_DE, NUM_IT, NUM_EN, NUM_FR, IDN, FINALIS
 	}
 
 	static final String TEMPLATE_MODUS = """
@@ -17,8 +17,8 @@ public class ErzeugeKirchentoene {
 			040 $frswk
 			065 14.4
 			083 781.263$d2$t%s
-			150 %s
-			450 %s
+			150 %ser Kirchenton
+			450 %ser Modus
 			450 %s$gMusik
 			450 %s
 			450 %s
@@ -32,12 +32,13 @@ public class ErzeugeKirchentoene {
 			550 !041950585!$4obge
 			550 !041703375!$4obge
 			670 Riemann$bunter Kirchentöne
-			670 Wikipedia$bStand: %s$u%s""";
+			670 Wikipedia$bStand: %s$u%s
+			677 %s Kirchentonart mit Finalis %s.""";
 
 	public static void main(final String[] args) {
 
 		StringUtils.readLinesFromClip()
-				.forEach(ErzeugeKirchentoene::verarbeiteDurMoll);
+				.forEach(ErzeugeBasisKirchentoene::verarbeiteDurMoll);
 
 	}
 
@@ -48,9 +49,6 @@ public class ErzeugeKirchentoene {
 		final String[] excel = line.trim().split("\t");
 		final String de = StringUtils.getArrayElement(excel,
 				SPALTEN.DE.ordinal());
-		final String wurzelDE = de.substring(0,
-				de.length() - "er Kirchenton".length());
-		final String de450_1 = wurzelDE + "er Modus";
 		final String en = StringUtils.getArrayElement(excel,
 				SPALTEN.EN.ordinal());
 		final String fr = StringUtils.getArrayElement(excel,
@@ -76,17 +74,21 @@ public class ErzeugeKirchentoene {
 				StringUtils.getArrayElement(excel, SPALTEN.NUM_IT.ordinal()));
 		final String idn = StringUtils.getArrayElement(excel,
 				SPALTEN.IDN.ordinal());
+		final String authPlag = de.startsWith("Hypo") ? "Plagale"
+				: "Authentische";
+		final String finalis = StringUtils.getArrayElement(excel,
+				SPALTEN.FINALIS.ordinal());
 		final GregorianCalendar now = new GregorianCalendar();
 		final String jjjjmmtt = TimeUtils.toYYYYMMDD(now);
 		final String ttmmjjjj = TimeUtils.toDDMMYYYY(now);
 
 		String ausgabe = "";
 
-		ausgabe = TEMPLATE_MODUS.formatted(jjjjmmtt, de, de450_1, wurzelDE, en,
-				fr, it, gr, numDE, numDEverbal, numEN, numFR, numIT, ttmmjjjj,
-				wiki);
+		ausgabe = TEMPLATE_MODUS.formatted(jjjjmmtt, de, de, de, en, fr, it, gr,
+				numDE, numDEverbal, numEN, numFR, numIT, ttmmjjjj, wiki,
+				authPlag, finalis);
 
-		if (idn != null)
+		if (!StringUtils.isNullOrWhitespace(idn))
 			System.out.println(
 					"############### Vorhanden: " + idn + " ##############");
 		System.out.println(ausgabe);
