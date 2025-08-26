@@ -23,7 +23,7 @@ public class ErzeugeAbgeleiteteKirchentoene {
 			450 %s
 			550 !%s!$4obge
 			670 analog
-			677 %s Kirchentonart mit Finalis %s.""";
+			677 Transposition der %sen Kirchentonart mit Finalis %s.""";
 
 	public static void main(final String[] args) {
 
@@ -39,6 +39,7 @@ public class ErzeugeAbgeleiteteKirchentoene {
 		final String[] excel = line.trim().split("\t");
 		final String de = StringUtils.getArrayElement(excel,
 				SPALTEN.DE.ordinal());
+		final String original = de.substring(2);
 		final String en = StringUtils.getArrayElement(excel,
 				SPALTEN.EN.ordinal());
 		final String fr = StringUtils.getArrayElement(excel,
@@ -57,7 +58,7 @@ public class ErzeugeAbgeleiteteKirchentoene {
 		String ausgabe = "";
 
 		ausgabe = TEMPLATE_MODUS.formatted(jjjjmmtt, de, en, fr, it, gr,
-				authPlag, finalis);
+				original, finalis);
 
 		System.out.println(ausgabe);
 		System.out.println();

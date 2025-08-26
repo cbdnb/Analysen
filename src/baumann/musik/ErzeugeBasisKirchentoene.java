@@ -7,7 +7,7 @@ import de.dnb.basics.utils.TimeUtils;
 public class ErzeugeBasisKirchentoene {
 
 	enum SPALTEN {
-		DE, EN, FR, IT, GR, ALT_DE, WIKI, NUM_DE, NUM_IT, NUM_EN, NUM_FR, IDN, FINALIS
+		DE, EN, FR, IT, GR, ALT_DE, WIKI, NUM_DE, NUM_IT, NUM_EN, NUM_FR, IDN, VB, FINALIS
 	}
 
 	static final String TEMPLATE_MODUS = """
@@ -31,6 +31,7 @@ public class ErzeugeBasisKirchentoene {
 			450 %s
 			550 !041950585!$4obge
 			550 !041703375!$4obge
+			550 !%s!$4vbal
 			670 Riemann$bunter Kirchentöne
 			670 Wikipedia$bStand: %s$u%s
 			677 %s Kirchentonart mit Finalis %s.""";
@@ -74,6 +75,8 @@ public class ErzeugeBasisKirchentoene {
 				StringUtils.getArrayElement(excel, SPALTEN.NUM_IT.ordinal()));
 		final String idn = StringUtils.getArrayElement(excel,
 				SPALTEN.IDN.ordinal());
+		final String vb = StringUtils.getArrayElement(excel,
+				SPALTEN.VB.ordinal());
 		final String authPlag = de.startsWith("Hypo") ? "Plagale"
 				: "Authentische";
 		final String finalis = StringUtils.getArrayElement(excel,
@@ -85,7 +88,7 @@ public class ErzeugeBasisKirchentoene {
 		String ausgabe = "";
 
 		ausgabe = TEMPLATE_MODUS.formatted(jjjjmmtt, de, de, de, en, fr, it, gr,
-				numDE, numDEverbal, numEN, numFR, numIT, ttmmjjjj, wiki,
+				numDE, numDEverbal, numEN, numFR, numIT, vb, ttmmjjjj, wiki,
 				authPlag, finalis);
 
 		if (!StringUtils.isNullOrWhitespace(idn))
