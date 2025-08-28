@@ -24,11 +24,11 @@ public class ErzeugeBasisKirchentoene {
 			450 %s
 			450 %s
 			450 %s
+			450 %s$gKirchenton
 			450 %s
-			450 %s
-			450 %s
-			450 %s
-			450 %s
+			450 %s$gKirchenton
+			450 %s$gKirchenton
+			450 %s$gKirchenton
 			550 !041950585!$4obge
 			550 !041703375!$4obge
 			550 !%s!$4vbal
@@ -48,35 +48,37 @@ public class ErzeugeBasisKirchentoene {
 			return;
 
 		final String[] excel = line.trim().split("\t");
-		final String de = StringUtils.getArrayElement(excel,
-				SPALTEN.DE.ordinal());
-		final String en = StringUtils.getArrayElement(excel,
-				SPALTEN.EN.ordinal());
-		final String fr = StringUtils.getArrayElement(excel,
-				SPALTEN.FR.ordinal());
-		final String it = StringUtils.getArrayElement(excel,
-				SPALTEN.IT.ordinal());
-		final String gr = StringUtils.getArrayElement(excel,
-				SPALTEN.GR.ordinal());
-		String numDEverbal = StringUtils.getArrayElement(excel,
-				SPALTEN.ALT_DE.ordinal());
+		final String de = StringUtils
+				.getArrayElement(excel, SPALTEN.DE.ordinal()).trim();
+		final String en = StringUtils
+				.getArrayElement(excel, SPALTEN.EN.ordinal()).trim();
+		final String fr = StringUtils
+				.getArrayElement(excel, SPALTEN.FR.ordinal()).trim();
+		final String it = StringUtils
+				.getArrayElement(excel, SPALTEN.IT.ordinal()).trim();
+		final String gr = StringUtils
+				.getArrayElement(excel, SPALTEN.GR.ordinal()).trim();
+		String numDEverbal = StringUtils
+				.getArrayElement(excel, SPALTEN.ALT_DE.ordinal()).trim();
 		numDEverbal = !StringUtils.isNullOrWhitespace(numDEverbal)
 				? numDEverbal + " Kirchenton"
 				: "";
 		final String wiki = StringUtils.getArrayElement(excel,
 				SPALTEN.WIKI.ordinal());
-		final String numDE = StringUtils.getArrayElement(excel,
-				SPALTEN.NUM_DE.ordinal());
-		final String numEN = StringUtils.getArrayElement(excel,
-				SPALTEN.NUM_EN.ordinal());
+		final String numDE = StringUtils
+				.getArrayElement(excel, SPALTEN.NUM_DE.ordinal()).trim();
+		final String numEN = StringUtils
+				.getArrayElement(excel, SPALTEN.NUM_EN.ordinal()).trim();
 		final String numFR = StringUtils.capitalize(
-				StringUtils.getArrayElement(excel, SPALTEN.NUM_FR.ordinal()));
+				StringUtils.getArrayElement(excel, SPALTEN.NUM_FR.ordinal()))
+				.trim();
 		final String numIT = StringUtils.capitalize(
-				StringUtils.getArrayElement(excel, SPALTEN.NUM_IT.ordinal()));
-		final String idn = StringUtils.getArrayElement(excel,
-				SPALTEN.IDN.ordinal());
-		final String vb = StringUtils.getArrayElement(excel,
-				SPALTEN.VB.ordinal());
+				StringUtils.getArrayElement(excel, SPALTEN.NUM_IT.ordinal()))
+				.trim();
+		final String idn = StringUtils
+				.getArrayElement(excel, SPALTEN.IDN.ordinal()).trim();
+		final String vb = StringUtils
+				.getArrayElement(excel, SPALTEN.VB.ordinal()).trim();
 		final String authPlag = de.startsWith("Hypo") ? "Plagale"
 				: "Authentische";
 		final String finalis = StringUtils.getArrayElement(excel,
