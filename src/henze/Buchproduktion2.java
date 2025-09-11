@@ -265,7 +265,7 @@ public class Buchproduktion2 extends DownloadWorker {
 					.getStatus(idnBroader);
 			if (pair != null) {
 				final String ddcStr = pair.first;
-				dhs = SGUtils.getSG(ddcStr);
+				dhs = SGUtils.ddc2sg(ddcStr);
 			}
 		}
 		if (!meineSGG.contains(dhs))

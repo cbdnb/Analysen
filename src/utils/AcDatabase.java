@@ -51,7 +51,7 @@ public class AcDatabase {
 			final Pair<String, TIEFE> pair = AcDatabase.getStatus(idnBroader);
 			if (pair != null) {
 				final String ddcStr = pair.first;
-				dhs = SGUtils.getSG(ddcStr);
+				dhs = SGUtils.ddc2sg(ddcStr);
 			}
 		}
 		return dhs;

@@ -65,7 +65,7 @@ public class DDC5400Fehlt {
 					.getContentOfFirstSubfield(ddc5410line, 'a');
 
 			final DDC_SG dhs = SGUtils.getDDCDHS(record);
-			final DDC_SG dhsAusDDC = SGUtils.getSG(ddc);
+			final DDC_SG dhsAusDDC = SGUtils.ddc2sg(ddc);
 			if (dhs != dhsAusDDC)
 				return;
 			if (!SubjectUtils.getDDCSegment(record, 2).isEmpty())
