@@ -21,10 +21,18 @@ import de.dnb.gnd.utils.mx.MXAddress;
 import de.dnb.gnd.utils.mx.Mailbox;
 
 /**
+ * Anforderung: Nun benötige ich eine neue Abfrage über Mailboxen, die älter als
+ * 2022 sind; alle Mailboxen mit "spio" und "pseu" sollen dabei ausgenommen
+ * werden.
+ *
+ * Umsetzung: Es werden alle Mx aufgelistet. In Excel muss nach dem Datum
+ * gefiltert werden.
+ *
+ *
  * @author baumann
  *
  */
-public class MxTabelle4 extends DownloadWorker {
+public class MxTabelleFinal extends DownloadWorker {
 
 	private static PrintWriter out;
 
@@ -33,7 +41,7 @@ public class MxTabelle4 extends DownloadWorker {
 	 * @throws IOException
 	 */
 	public static void main(final String[] args) throws IOException {
-		final MxTabelle4 mxTabelle = new MxTabelle4();
+		final MxTabelleFinal mxTabelle = new MxTabelleFinal();
 
 		out = MyFileUtils.outputFile("D:/Analysen/scheven/mx/Mailboxen.txt",
 				false);
