@@ -6,6 +6,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 import java.util.function.Function;
 import java.util.function.Predicate;
@@ -22,6 +23,7 @@ import de.dnb.gnd.utils.BibRecUtils;
 import de.dnb.gnd.utils.ContainsTag;
 import de.dnb.gnd.utils.GNDUtils;
 import de.dnb.gnd.utils.IDNUtils;
+import de.dnb.gnd.utils.RecordUtils;
 import de.dnb.gnd.utils.SubjectUtils;
 import utils.DB.GND_DB_UTIL;
 
@@ -56,19 +58,38 @@ public class NewComer {
 		System.err.println("RSWK-Ketten laden");
 		idnJhr2Count = new CrossProductFrequency();
 		final RecordReader titleReader = RecordReader
-				.getMatchingReader(Constants.TITEL_STICHPROBE);
-		final Predicate<String> ab2000 = new ContainsTag("1100", 'a', "20",
+				.getMatchingReader(Constants.TITEL_PLUS_EXEMPLAR_D);
+		Predicate<String> ab1990 = new ContainsTag("1100", 'a', "20",
 				BibTagDB.getDB());
-		Predicate<String> filter = ab2000
+		ab1990 = ab1990
+				.or(new ContainsTag("1100", 'a', "199", BibTagDB.getDB()));
+		Predicate<String> filter = ab1990
 				.and(new ContainsTag("5100", BibTagDB.getDB()));
-		filter = filter
-				.and(new ContainsTag("0500", '0', "A", BibTagDB.getDB()));
+		Predicate<String> bbgAO = new ContainsTag("0500", '0', "A",
+				BibTagDB.getDB());
+		bbgAO = bbgAO.or(new ContainsTag("0500", '0', "O", BibTagDB.getDB()));
+		filter = filter.and(bbgAO);
 		titleReader.setStreamFilter(filter);
 
 		titleReader.forEach(record ->
 		{
 			final Integer jahr = BibRecUtils.getYearOfPublication(record);
 			if (jahr == null)
+				return;
+			// DBSM-Titel haben oft keine SG
+			if (!SubjectUtils.containsDHS(record))
+				return;
+			// DBSM haben meist 5590:
+			if (RecordUtils.containsField(record, "5590"))
+				return;
+
+			// Einziger Besitzer DBSM ausschließen:
+			final List<String> besitzer = RecordUtils
+					.getContentsOfAllSubfields(record, "4800", '9');
+			// if (!besitzer.isEmpty())
+			// System.err.println(besitzer);
+			if (besitzer.size() == 1
+					&& besitzer.get(0).equalsIgnoreCase("009033645"))
 				return;
 
 			SubjectUtils.getRSWKidsSet(record).forEach(id ->
