@@ -1,6 +1,7 @@
 package baumann.skurriles.jhr2025;
 
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -14,6 +15,7 @@ import java.util.function.Function;
 import java.util.function.Predicate;
 
 import de.dnb.basics.Constants;
+import de.dnb.basics.applicationComponents.MyFileUtils;
 import de.dnb.basics.applicationComponents.strings.StringUtils;
 import de.dnb.basics.applicationComponents.tuples.Pair;
 import de.dnb.basics.collections.CrossProductFrequency;
@@ -29,14 +31,15 @@ import de.dnb.gnd.utils.RecordUtils;
 import de.dnb.gnd.utils.SubjectUtils;
 import utils.DB.GND_DB_UTIL;
 
-public class NewComer {
+public class NewComerSWAutor {
 
+	private static final String FILE = "autoren_3_1_ohne_Gewicht ";
+	private static final String FOLDER = "D:/Analysen/baumann/skurriles/2025/";
 	private static final int RANGLISTE_GROESSE = 5;
-	private static final int JAHRE_VOR = 1;
+	private static final int JAHRE_VOR = 3;
 	private static final int JAHRE_NACH = 1;
 
-	// static List<String> listeTypen = Arrays.asList("Ts", "Tg", "Tp");
-	static List<String> listeTypen = Arrays.asList("Tg");
+	static List<String> listeTypen = Arrays.asList("Tb", "Tp");
 
 	private static CrossProductFrequency idnJhr2Count;
 	private static HashMap<String, Set<Integer>> typ2beruecksichtigende = new HashMap<>();
@@ -47,8 +50,6 @@ public class NewComer {
 
 	static {
 		idnRangComparator = (Comparator.comparingDouble(t -> t.second));
-		// new PriorityMultimap<>(RANGLISTE_GROESSE,
-		// idnRangComparator);
 		listeTypen.forEach(typ -> typ2tatsaechliche.put(typ, new HashSet<>()));
 	}
 
@@ -68,19 +69,19 @@ public class NewComer {
 			typ2beruecksichtigende.put(typ, zuBeruecksichtigendeIDNs);
 		}
 
-		System.err.println("RSWK-Ketten laden");
+		System.err.println("Autoren laden");
 		idnJhr2Count = new CrossProductFrequency();
 		final RecordReader titleReader = RecordReader
-				.getMatchingReader(Constants.TITEL_STICHPROBE);
+				.getMatchingReader(Constants.TITEL_PLUS_EXEMPLAR_D);
 		Predicate<String> ab1990 = new ContainsTag("1100", 'a', "20",
 				BibTagDB.getDB());
 		ab1990 = ab1990
 				.or(new ContainsTag("1100", 'a', "199", BibTagDB.getDB()));
-		Predicate<String> filter = ab1990
-				.and(new ContainsTag("5100", BibTagDB.getDB()));
-		Predicate<String> bbgAO = new ContainsTag("0500", '0', "A",
+		Predicate<String> filter = ab1990;
+		final Predicate<String> bbgAO = new ContainsTag("0500", '0', "A",
 				BibTagDB.getDB());
-		bbgAO = bbgAO.or(new ContainsTag("0500", '0', "O", BibTagDB.getDB()));
+		// bbgAO = bbgAO.or(new ContainsTag("0500", '0', "O",
+		// BibTagDB.getDB()));
 		filter = filter.and(bbgAO);
 		titleReader.setStreamFilter(filter);
 
@@ -103,22 +104,23 @@ public class NewComer {
 					&& besitzer.get(0).equalsIgnoreCase("009033645"))
 				return;
 
-			SubjectUtils.getRSWKidsSet(record).forEach(id ->
-			{
-				final int intID = IDNUtils.idn2int(id);
-				listeTypen.forEach(typ ->
-				{
-					final Set<Integer> zuBeruecksichtigendeIDNs = typ2beruecksichtigende
-							.get(typ);
-					if (zuBeruecksichtigendeIDNs.contains(intID)) {
-						idnJhr2Count.addValues(intID, jahr);
-						final Set<Integer> tatsaechlicheIDNs = typ2tatsaechliche
-								.get(typ);
-						tatsaechlicheIDNs.add(intID);
-					}
-				});
+			RecordUtils.getContentsOfFirstSubfield(record, '9', "3000", "3100")
+					.forEach(id ->
+					{
+						final int intID = IDNUtils.idn2int(id);
+						listeTypen.forEach(typ ->
+						{
+							final Set<Integer> zuBeruecksichtigendeIDNs = typ2beruecksichtigende
+									.get(typ);
+							if (zuBeruecksichtigendeIDNs.contains(intID)) {
+								idnJhr2Count.addValues(intID, jahr);
+								final Set<Integer> tatsaechlicheIDNs = typ2tatsaechliche
+										.get(typ);
+								tatsaechlicheIDNs.add(intID);
+							}
+						});
 
-			});
+					});
 		});
 
 		typ2beruecksichtigende = null;
@@ -126,6 +128,8 @@ public class NewComer {
 		System.err.println("Ränge feststellen und ausgeben");
 
 		ppn2name = GND_DB_UTIL.getppn2name();
+		final PrintWriter out = MyFileUtils.outputFile(FOLDER + FILE + ".txt",
+				false);
 
 		listeTypen.forEach(typ ->
 		{
@@ -143,7 +147,7 @@ public class NewComer {
 				}
 			});
 
-			System.out.println(typ + ":");
+			out.println(typ + ":");
 			for (int jahr = 2001; jahr <= 2025; jahr++) {
 				final Collection<Pair<Integer, Double>> values = jahr2idnRang
 						.getNullSafe(jahr);
@@ -163,8 +167,9 @@ public class NewComer {
 				};
 				final ArrayList<String> namen = FilterUtils.map(pairs,
 						idn2nameFun);
-				System.out.println(jahr + ": " + namen);
+				out.println(jahr + ": " + namen);
 			}
+			out.println();
 		});
 
 	}
@@ -212,12 +217,9 @@ public class NewComer {
 
 		final double max = Double.max(avrPre, avrPost);
 		final double delta = avrPost - avrPre;
-		final double gewicht = Math.abs(delta) / max;
+		double gewicht = Math.abs(delta) / max;
+		gewicht = 1;
 		return delta * gewicht;
 	}
 
-	public static void main2(final String[] args) throws IOException {
-		System.out.println(toRang(10, 30));
-
-	}
 }
