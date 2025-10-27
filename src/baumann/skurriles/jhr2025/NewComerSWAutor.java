@@ -34,6 +34,7 @@ import utils.DB.GND_DB_UTIL;
 public class NewComerSWAutor {
 
 	private static final String FILE = "autoren_3_1_ohne_Gewicht ";
+
 	private static final String FOLDER = "D:/Analysen/baumann/skurriles/2025/";
 	private static final int RANGLISTE_GROESSE = 5;
 	private static final int JAHRE_VOR = 3;
@@ -171,6 +172,8 @@ public class NewComerSWAutor {
 			}
 			out.println();
 		});
+
+		MyFileUtils.safeClose(out);
 
 	}
 

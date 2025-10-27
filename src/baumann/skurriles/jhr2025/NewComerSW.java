@@ -170,6 +170,7 @@ public class NewComerSW {
 			}
 			out.println();
 		});
+		MyFileUtils.safeClose(out);
 
 	}
 
