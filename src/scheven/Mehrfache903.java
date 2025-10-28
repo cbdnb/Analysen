@@ -27,7 +27,7 @@ public class Mehrfache903 {
 			if (sizeRed <= 1 && sizeUrh <= 1)
 				return;
 			final String outS = StringUtils.concatenateTab(record.getId(),
-					RecordUtils.getDatatype(record),
+					GNDUtils.getNID(record), RecordUtils.getDatatype(record),
 					GNDUtils.getNameOfRecord(record),
 					GNDUtils.getGNDClassifications(record), urheber.toString(),
 					redaktionen.toString());
