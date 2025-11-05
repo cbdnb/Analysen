@@ -4,8 +4,12 @@
 package baumann.skurriles;
 
 import java.io.IOException;
+import java.util.Comparator;
 
 import de.dnb.basics.Constants;
+import de.dnb.basics.applicationComponents.strings.StringUtils;
+import de.dnb.basics.applicationComponents.tuples.Triplett;
+import de.dnb.basics.collections.BoundedPriorityQueue;
 import de.dnb.gnd.parser.Record;
 import de.dnb.gnd.parser.RecordReader;
 import de.dnb.gnd.utils.BibRecUtils;
@@ -22,10 +26,12 @@ public class FindePalindromTitel {
 	 */
 	public static void main(final String[] args) throws IOException {
 
-		final RecordReader reader = RecordReader
-				.getMatchingReader(Constants.TITEL_PLUS_EXEMPLAR_D);
+		final BoundedPriorityQueue<Triplett<String, String, Integer>> idnTitLaengeQ = new BoundedPriorityQueue<>(
+				20, Comparator.comparing(Triplett::getThird));
 
-		int maxlen = 0;
+		final RecordReader reader = RecordReader
+				.getMatchingReader(Constants.TITEL_GESAMT_D);
+
 		for (final Record record : reader) {
 			final String titel = BibRecUtils.getMainTitle(record);
 			if (titel == null || titel.isEmpty())
@@ -34,12 +40,15 @@ public class FindePalindromTitel {
 			if (SKUtil.isPalindrome(titel)) {
 				final String eff = SKUtil.getRelevantChars(titel);
 				final int len = eff.length();
-				if (len > maxlen) {
-					maxlen = len;
-					System.out.println(record.getId() + ": " + titel);
-				}
+
+				final Triplett<String, String, Integer> idntitlen = new Triplett<>(
+						record.getId(), titel, len);
+				idnTitLaengeQ.add(idntitlen);
+
 			}
 		}
+		idnTitLaengeQ.forEach(t -> System.out
+				.println(StringUtils.concatenateTab(t.asList())));
 
 	}
 

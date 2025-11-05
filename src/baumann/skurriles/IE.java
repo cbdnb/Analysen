@@ -26,7 +26,7 @@ import de.dnb.gnd.utils.SubjectUtils;
  */
 public class IE extends DownloadWorker {
 
-	private static final String JJJJ = "2022";
+	private static final String JJJJ = "2025";
 
 	private static final int CAPACITY = 5;
 

@@ -20,17 +20,17 @@ import de.dnb.gnd.utils.GNDUtils;
 import de.dnb.gnd.utils.IDNUtils;
 import de.dnb.gnd.utils.RecordUtils;
 import de.dnb.gnd.utils.SubjectUtils;
+import utils.DB.GND_DB_UTIL;
 
-public class NewComerSW {
+public class NewComerAutor {
 
-	private static final String INPUT_FILE = Utils.INPUT_FILE;
-	static final List<String> LISTE_TYPEN = Arrays.asList("Ts", "Tg", "Tp");
-
-	static CrossProductFrequency idnJhr2Count;
+	private static final List<String> LISTE_TYPEN = Arrays.asList("Tb", "Tp");
+	private static CrossProductFrequency idnJhr2Count;
 	private static HashMap<String, Set<Integer>> typ2beruecksichtigende = new HashMap<>();
-	static HashMap<String, Set<Integer>> typ2tatsaechliche = new HashMap<>();
+	private static HashMap<String, Set<Integer>> typ2tatsaechliche = new HashMap<>();
 
 	static {
+
 		LISTE_TYPEN.forEach(typ -> typ2tatsaechliche.put(typ, new HashSet<>()));
 	}
 
@@ -50,19 +50,19 @@ public class NewComerSW {
 			typ2beruecksichtigende.put(typ, zuBeruecksichtigendeIDNs);
 		}
 
-		System.err.println("RSWK-Ketten laden");
+		System.err.println("Autoren laden");
 		idnJhr2Count = new CrossProductFrequency();
 		final RecordReader titleReader = RecordReader
-				.getMatchingReader(INPUT_FILE);
+				.getMatchingReader(Utils.INPUT_FILE);
 		Predicate<String> ab1990 = new ContainsTag("1100", 'a', "20",
 				BibTagDB.getDB());
 		ab1990 = ab1990
 				.or(new ContainsTag("1100", 'a', "199", BibTagDB.getDB()));
-		Predicate<String> filter = ab1990
-				.and(new ContainsTag("5100", BibTagDB.getDB()));
-		Predicate<String> bbgAO = new ContainsTag("0500", '0', "A",
+		Predicate<String> filter = ab1990;
+		final Predicate<String> bbgAO = new ContainsTag("0500", '0', "A",
 				BibTagDB.getDB());
-		bbgAO = bbgAO.or(new ContainsTag("0500", '0', "O", BibTagDB.getDB()));
+		// bbgAO = bbgAO.or(new ContainsTag("0500", '0', "O",
+		// BibTagDB.getDB()));
 		filter = filter.and(bbgAO);
 		titleReader.setStreamFilter(filter);
 
@@ -85,32 +85,35 @@ public class NewComerSW {
 					&& besitzer.get(0).equalsIgnoreCase("009033645"))
 				return;
 
-			SubjectUtils.getRSWKidsSet(record).forEach(id ->
-			{
-				final int intID = IDNUtils.idn2int(id);
-				LISTE_TYPEN.forEach(typ ->
-				{
-					final Set<Integer> zuBeruecksichtigendeIDNs = typ2beruecksichtigende
-							.get(typ);
-					if (zuBeruecksichtigendeIDNs.contains(intID)) {
-						idnJhr2Count.addValues(intID, jahr);
-						final Set<Integer> tatsaechlicheIDNs = typ2tatsaechliche
-								.get(typ);
-						tatsaechlicheIDNs.add(intID);
-					}
-				});
+			RecordUtils.getContentsOfFirstSubfield(record, '9', "3000", "3100")
+					.forEach(id ->
+					{
+						final int intID = IDNUtils.idn2int(id);
+						LISTE_TYPEN.forEach(typ ->
+						{
+							final Set<Integer> zuBeruecksichtigendeIDNs = typ2beruecksichtigende
+									.get(typ);
+							if (zuBeruecksichtigendeIDNs.contains(intID)) {
+								idnJhr2Count.addValues(intID, jahr);
+								final Set<Integer> tatsaechlicheIDNs = typ2tatsaechliche
+										.get(typ);
+								tatsaechlicheIDNs.add(intID);
+							}
+						});
 
-			});
+					});
 		});
 
 		typ2beruecksichtigende = null;
 
 		System.err.println("Ränge feststellen und ausgeben");
 
+		GND_DB_UTIL.getppn2name();
 		final PrintWriter out = MyFileUtils
-				.outputFile(Utils.makeOutputFile("SW"), false);
+				.outputFile(Utils.makeOutputFile("AU"), false);
 
 		Utils.ausgeben(out, LISTE_TYPEN, typ2tatsaechliche, idnJhr2Count);
+
 		MyFileUtils.safeClose(out);
 
 	}

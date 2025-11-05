@@ -22,7 +22,7 @@ import de.dnb.gnd.utils.RecordUtils;
  */
 public class BuchstabenGND extends DownloadWorker {
 
-	private static final int JJ = 22;
+	private static final int JJ = 25;
 	private static final int JAHR = JJ + 2000;
 	private static List<Character> typen = Arrays.asList('b', 'f', 'g', 'p',
 			's', 'u');

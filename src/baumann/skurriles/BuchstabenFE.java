@@ -19,7 +19,7 @@ import de.dnb.gnd.utils.SubfieldUtils;
  */
 public class BuchstabenFE extends DownloadWorker {
 
-	private static final String JJJJ = "2022";
+	private static final String JJJJ = "2025";
 	private static BuchstabenZaehler zaehler = new BuchstabenZaehler();
 
 	/**
