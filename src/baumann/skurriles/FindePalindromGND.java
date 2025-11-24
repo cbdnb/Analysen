@@ -5,6 +5,7 @@ package baumann.skurriles;
 
 import java.io.IOException;
 import java.util.Comparator;
+import java.util.Set;
 
 import de.dnb.basics.Constants;
 import de.dnb.basics.applicationComponents.strings.StringUtils;
@@ -42,14 +43,20 @@ public class FindePalindromGND {
 			if (name == null || name.isEmpty())
 				continue;
 
-			if (SKUtil.isPalindrome(name)) {
-				final String eff = SKUtil.getRelevantChars(name);
-				final int len = eff.length();
+			final Set<String> verweiseUndName = GNDUtils.getVerweise(record);
+			verweiseUndName.add(name);
 
-				final Triplett<String, String, Integer> idntitlen = new Triplett<>(
-						record.getId(), name, len);
-				idnTitLaengeQ.add(idntitlen);
+			for (final String vwn : verweiseUndName) {
+				if (SKUtil.isPalindrome(vwn)) {
+					// System.err.println(vwn);
+					final String eff = SKUtil.getRelevantChars(vwn);
+					final int len = eff.length();
 
+					final Triplett<String, String, Integer> idntitlen = new Triplett<>(
+							record.getId(), vwn, len);
+					idnTitLaengeQ.add(idntitlen);
+
+				}
 			}
 		}
 		idnTitLaengeQ.forEach(t -> System.out

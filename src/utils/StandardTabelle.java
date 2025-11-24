@@ -16,7 +16,7 @@ import de.dnb.gnd.parser.Record;
 /**
  * Bildet aus einem Download von Normdaten eine Exceltabelle der Felder <br>
  *
- * "Satzart", "1XX", "idn", "nid", "065", "Redaktion"
+ * "Satzart","008", "1XX", "idn", "nid", "065", "Urheber", "Redaktion"
  *
  * <br>
  * sortiert nach Systematiknummern (065)
@@ -35,9 +35,11 @@ public class StandardTabelle {
 		for (final Record record : reader) {
 			final List<String> zeile = new ArrayList<>(
 					Arrays.asList(RecordUtils.getDatatype(record),
+							GNDUtils.getEntityTypes(record).toString(),
 							GNDUtils.getSimpleName(record), record.getId(),
 							GNDUtils.getNID(record),
 							GNDUtils.getFirstGNDClassification(record),
+							GNDUtils.getIsilUrheber(record),
 							GNDUtils.getIsilVerbund(record)));
 			table.add(zeile);
 		}
@@ -47,8 +49,8 @@ public class StandardTabelle {
 		table.sort(myComparator);
 
 		final StringBuilder outputBuilder = new StringBuilder(
-				StringUtils.concatenateTab("Satzart", "1XX", "idn", "nid",
-						"065", "Redaktion"));
+				StringUtils.concatenateTab("Satzart", "008", "1XX", "idn",
+						"nid", "065", "Urheber", "Redaktion"));
 		table.forEach(zeile -> outputBuilder.append("\n")
 				.append(StringUtils.concatenateTab(zeile)));
 		StringUtils.writeToClipboard(outputBuilder.toString());
