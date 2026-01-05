@@ -30,8 +30,9 @@ public class TonartenStatistik {
 			if (!WorkUtils.isMusicalWork(record))
 				return;
 			final String key = WorkUtils.getKey(record);
-			if (key != null)
+			if (key != null) {
 				tonarten.add(key);
+			}
 		});
 		System.out.println(StatisticUtils.map2string(tonarten));
 
