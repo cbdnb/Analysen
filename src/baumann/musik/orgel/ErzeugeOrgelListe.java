@@ -1,4 +1,4 @@
-package baumann.musik;
+package baumann.musik.orgel;
 
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -18,7 +18,7 @@ import de.dnb.gnd.parser.RecordReader;
 import de.dnb.gnd.utils.GNDUtils;
 import de.dnb.gnd.utils.RecordUtils;
 
-public class Orgel {
+public class ErzeugeOrgelListe {
 
 	private static final String IDN_TASTENINSTR = "040591034";
 	private static final String IDN_ORGEL = "040438449";
@@ -43,8 +43,9 @@ public class Orgel {
 	private static final String IDN_CEMBALO = "04009667X";
 	private static final String IDN_KINDERKLAVIER = "950280984";
 
-	private static final String FILE1 = "Orgel.txt";
-	public static final String PATH = "D:/Analysen/baumann/Musik/Orgel/";
+	public static final String IDN_FILE_NAME = "Orgel_idns.txt";
+	public static final String FOLDER = "D:/Analysen/baumann/Musik/Orgel/";
+	public static final String IDN_FILE_PATH = FOLDER + IDN_FILE_NAME;
 	private static PrintWriter out;
 
 	public static void main1(final String[] args) {
@@ -81,7 +82,7 @@ public class Orgel {
 		alle = alle.or(new StringContains(IDN_KINDERKLAVIER));
 
 		matchingReader.setStreamFilter(alle);
-		out = MyFileUtils.outputFile(PATH + FILE1, false);
+		out = MyFileUtils.outputFile(IDN_FILE_PATH, false);
 		final Pattern orgPattern = Pattern.compile("orgel",
 				Pattern.CASE_INSENSITIVE);
 		matchingReader.forEach(r ->
