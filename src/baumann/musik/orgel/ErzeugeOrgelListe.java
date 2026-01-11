@@ -103,7 +103,7 @@ public class ErzeugeOrgelListe {
 	}
 
 	public static boolean check(final Record r) {
-		if (!GNDUtils.isEntityType(r, "wim"))
+		if (!GNDUtils.hasEntityTypes(r, "wim"))
 			return false;
 		final String name = GNDUtils.getSimpleName(r);
 		if (name.startsWith("Musik für"))
