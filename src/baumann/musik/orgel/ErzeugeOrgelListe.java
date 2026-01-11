@@ -2,6 +2,7 @@ package baumann.musik.orgel;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -11,6 +12,8 @@ import java.util.regex.Pattern;
 
 import de.dnb.basics.Constants;
 import de.dnb.basics.applicationComponents.MyFileUtils;
+import de.dnb.basics.applicationComponents.strings.StringUtils;
+import de.dnb.basics.collections.CollectionUtils;
 import de.dnb.basics.collections.ListUtils;
 import de.dnb.basics.filtering.StringContains;
 import de.dnb.gnd.parser.Record;
@@ -43,14 +46,21 @@ public class ErzeugeOrgelListe {
 	private static final String IDN_CEMBALO = "04009667X";
 	private static final String IDN_KINDERKLAVIER = "950280984";
 
+	private static final List<String> ECHTE_ORGELN = Arrays.asList(IDN_ORGEL,
+			IDN_DREHORGEL, IDN_WELTE, IDN_FLOETENUHR, IDN_KARUSSELORG,
+			IDN_MECHORG, IDN_LICHTTON, IDN_KINO, IDN_EORGEL, IDN_KLEINORG,
+			IDN_CLAVIORG, IDN_THEATERORG, IDN_FUNKORG);
+
 	public static final String IDN_FILE_NAME = "Orgel_idns.txt";
 	public static final String FOLDER = "D:/Analysen/baumann/Musik/Orgel/";
 	public static final String IDN_FILE_PATH = FOLDER + IDN_FILE_NAME;
 	private static PrintWriter out;
+	private static Pattern orgPattern = Pattern.compile("orgel",
+			Pattern.CASE_INSENSITIVE);
 
 	public static void main1(final String[] args) {
 		final Record record = RecordUtils.readFromClip();
-		System.out.println(genauEinInstrument(record));
+		System.out.println(check(record));
 
 	}
 
@@ -83,27 +93,48 @@ public class ErzeugeOrgelListe {
 
 		matchingReader.setStreamFilter(alle);
 		out = MyFileUtils.outputFile(IDN_FILE_PATH, false);
-		final Pattern orgPattern = Pattern.compile("orgel",
-				Pattern.CASE_INSENSITIVE);
+
 		matchingReader.forEach(r ->
 		{
-			final String name = GNDUtils.getSimpleName(r);
-			if (name.startsWith("Musik für"))
-				return;
-			if (name.startsWith("Werke$m"))
-				return;
-			final List<String> formids = RecordUtils
-					.getContentsOfFirstSubfields(r, "380", '9');
-			if (formids.contains("1130357813"))// Zusammenstellung
-				return;
-			if (!genauEinInstrument(r))
-				return;
-			final String raw = r.getRawData();
+			if (check(r))
+				out.println(r.getId());
+		});
+
+	}
+
+	public static boolean check(final Record r) {
+		if (!GNDUtils.isEntityType(r, "wim"))
+			return false;
+		final String name = GNDUtils.getSimpleName(r);
+		if (name.startsWith("Musik für"))
+			return false;
+		if (name.startsWith("Werke$m"))
+			return false;
+		final List<String> formids = RecordUtils.getContentsOfFirstSubfields(r,
+				"380", '9');
+		if (formids.contains("1130357813"))// Zusammenstellung
+			return false;
+		if (!genauEinInstrument(r))
+			return false;
+		final String raw = StringUtils.unicodeComposition(r.getRawData());
+		if (raw.contains("ufgeführte Musik"))
+			return false;
+		final boolean orgelIn382 = CollectionUtils.intersects(
+				RecordUtils.getContentsOfAllSubfields(r, "382", '9'),
+				ECHTE_ORGELN);
+
+		final List<String> dollar_ms = RecordUtils.getContents(r, "[14]30",
+				'm');
+		if (dollar_ms.contains("Org") || dollar_ms.contains("Orgel")
+				|| orgelIn382) {
+			// nix zu tun
+
+		} else { // anderweitig suchen
 			final Matcher matcher = orgPattern.matcher(raw);
 			if (!matcher.find())
-				return;
-			out.println(r.getId());
-		});
+				return false;
+		}
+		return true;
 
 	}
 
