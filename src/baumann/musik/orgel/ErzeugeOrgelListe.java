@@ -46,15 +46,28 @@ public class ErzeugeOrgelListe {
 	private static final String IDN_CEMBALO = "04009667X";
 	private static final String IDN_KINDERKLAVIER = "950280984";
 
+	private static final String IDN_PORTATIV = "947949607";
+	private static final String IDN_POSITIV = "947975969";
+	private static final String IDN_FLOETENWERK = "999005812";
+	private static final String IDN_REGAL = "94794978X";
+	private static final String IDN_PEDALKLAV = "948367709";
+
+	private static final String IDN_VIRGINAL = "041883845";
+	private static final String IDN_SPINETT = "040562697";
+	private static final String IDN_BOGENKLAV = "952776499";
+	private static final String IDN_SYNTHI = "041242793";
+
 	private static final List<String> ECHTE_ORGELN = Arrays.asList(IDN_ORGEL,
 			IDN_DREHORGEL, IDN_WELTE, IDN_FLOETENUHR, IDN_KARUSSELORG,
 			IDN_MECHORG, IDN_LICHTTON, IDN_KINO, IDN_EORGEL, IDN_KLEINORG,
-			IDN_CLAVIORG, IDN_THEATERORG, IDN_FUNKORG);
+			IDN_CLAVIORG, IDN_THEATERORG, IDN_FUNKORG, IDN_PORTATIV,
+			IDN_POSITIV, IDN_FLOETENWERK, IDN_REGAL, IDN_PEDALKLAV);
 
 	public static final String IDN_FILE_NAME = "Orgel_idns.txt";
 	public static final String FOLDER = "D:/Analysen/baumann/Musik/Orgel/";
 	public static final String IDN_FILE_PATH = FOLDER + IDN_FILE_NAME;
 	private static PrintWriter out;
+	// TODO: Erweitern
 	private static Pattern orgPattern = Pattern.compile("orgel",
 			Pattern.CASE_INSENSITIVE);
 
@@ -90,6 +103,16 @@ public class ErzeugeOrgelListe {
 		alle = alle.or(new StringContains(IDN_KLAVIER));
 		alle = alle.or(new StringContains(IDN_CEMBALO));
 		alle = alle.or(new StringContains(IDN_KINDERKLAVIER));
+
+		alle = alle.or(new StringContains(IDN_PORTATIV));
+		alle = alle.or(new StringContains(IDN_POSITIV));
+		alle = alle.or(new StringContains(IDN_FLOETENWERK));
+		alle = alle.or(new StringContains(IDN_REGAL));
+		alle = alle.or(new StringContains(IDN_PEDALKLAV));
+		alle = alle.or(new StringContains(IDN_VIRGINAL));
+		alle = alle.or(new StringContains(IDN_SPINETT));
+		alle = alle.or(new StringContains(IDN_BOGENKLAV));
+		alle = alle.or(new StringContains(IDN_SYNTHI));
 
 		matchingReader.setStreamFilter(alle);
 		out = MyFileUtils.outputFile(IDN_FILE_PATH, false);
