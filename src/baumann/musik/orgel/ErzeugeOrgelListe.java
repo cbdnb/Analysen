@@ -45,12 +45,14 @@ public class ErzeugeOrgelListe {
 	private static final String IDN_KLAVIER = "040309827";
 	private static final String IDN_CEMBALO = "04009667X";
 	private static final String IDN_KINDERKLAVIER = "950280984";
+	private static final String IDN_HARFE = "041294564";
 
 	private static final String IDN_PORTATIV = "947949607";
 	private static final String IDN_POSITIV = "947975969";
 	private static final String IDN_FLOETENWERK = "999005812";
 	private static final String IDN_REGAL = "94794978X";
 	private static final String IDN_PEDALKLAV = "948367709";
+	private static final String IDN_PEDAL = "041728106";
 
 	private static final String IDN_VIRGINAL = "041883845";
 	private static final String IDN_SPINETT = "040562697";
@@ -61,14 +63,14 @@ public class ErzeugeOrgelListe {
 			IDN_DREHORGEL, IDN_WELTE, IDN_FLOETENUHR, IDN_KARUSSELORG,
 			IDN_MECHORG, IDN_LICHTTON, IDN_KINO, IDN_EORGEL, IDN_KLEINORG,
 			IDN_CLAVIORG, IDN_THEATERORG, IDN_FUNKORG, IDN_PORTATIV,
-			IDN_POSITIV, IDN_FLOETENWERK, IDN_REGAL, IDN_PEDALKLAV);
+			IDN_POSITIV, IDN_FLOETENWERK, IDN_REGAL, IDN_PEDALKLAV, IDN_PEDAL);
 
 	public static final String IDN_FILE_NAME = "Orgel_idns.txt";
 	public static final String FOLDER = "D:/Analysen/baumann/Musik/Orgel/";
 	public static final String IDN_FILE_PATH = FOLDER + IDN_FILE_NAME;
 	private static PrintWriter out;
 	// TODO: Erweitern
-	private static Pattern orgPattern = Pattern.compile("orgel",
+	private static Pattern orgPattern = Pattern.compile("orgel|orgue|organ",
 			Pattern.CASE_INSENSITIVE);
 
 	public static void main1(final String[] args) {
@@ -113,6 +115,8 @@ public class ErzeugeOrgelListe {
 		alle = alle.or(new StringContains(IDN_SPINETT));
 		alle = alle.or(new StringContains(IDN_BOGENKLAV));
 		alle = alle.or(new StringContains(IDN_SYNTHI));
+		alle = alle.or(new StringContains(IDN_HARFE));
+		alle = alle.or(new StringContains(IDN_PEDAL));
 
 		matchingReader.setStreamFilter(alle);
 		out = MyFileUtils.outputFile(IDN_FILE_PATH, false);
