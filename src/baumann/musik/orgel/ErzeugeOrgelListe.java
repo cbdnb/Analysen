@@ -23,6 +23,8 @@ import de.dnb.gnd.utils.RecordUtils;
 
 public class ErzeugeOrgelListe {
 
+	private static final boolean BETRACHTE_GESAMT_WERK = false;
+
 	private static final String IDN_TASTENINSTR = "040591034";
 	private static final String IDN_ORGEL = "040438449";
 	private static final String IDN_DREHORGEL = "041293924";
@@ -133,10 +135,13 @@ public class ErzeugeOrgelListe {
 		if (!GNDUtils.hasEntityTypes(r, "wim"))
 			return false;
 		final String name = GNDUtils.getSimpleName(r);
-		if (name.startsWith("Musik für"))
+
+		// if (isGesamtwerk(name) == BETRACHTE_GESAMT_WERK)
+		// return true;
+
+		if (isGesamtwerk(name))
 			return false;
-		if (name.startsWith("Werke$m"))
-			return false;
+
 		final List<String> formids = RecordUtils.getContentsOfFirstSubfields(r,
 				"380", '9');
 		if (formids.contains("1130357813"))// Zusammenstellung
@@ -212,6 +217,16 @@ public class ErzeugeOrgelListe {
 		final Set<String> anzahlen = new HashSet<>(
 				RecordUtils.getContentsOfAllSubfields(r, "382", '9'));
 		return anzahlen.size();
+	}
+
+	/**
+	 *
+	 * @param name
+	 *            nicht null
+	 * @return name beginnt mit "Musik für" oder "Werke$m"
+	 */
+	public static boolean isGesamtwerk(final String name) {
+		return name.startsWith("Musik für") || name.startsWith("Werke$m");
 	}
 
 }

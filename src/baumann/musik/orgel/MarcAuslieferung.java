@@ -55,7 +55,13 @@ public class MarcAuslieferung {
 		input.lines().forEach(idn ->
 		{
 
-			final Record record = PortalUtils.getMarcRecord(idn);
+			Record record = PortalUtils.getMarcRecord(idn);
+			if (record == null)
+				record = PortalUtils.getMarcRecord(idn);
+			if (record == null) {
+				System.err.println("MARC nicht im Portalgefunden. Idn: " + idn);
+				return;
+			}
 
 			final Leader leader = record.getLeader();
 			final char[] pos17to19 = leader.getImplDefined2();
