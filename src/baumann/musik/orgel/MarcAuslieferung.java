@@ -24,7 +24,7 @@ import de.dnb.basics.utils.PortalUtils;
  */
 public class MarcAuslieferung {
 
-	private static final String OUTFILE = "Orgelwerke";
+	private static final String OUTFILE = "Gesamtwerk";
 
 	private static final String IN_FILE = ErzeugeOrgelListe.IDN_FILE_PATH;
 
@@ -48,8 +48,8 @@ public class MarcAuslieferung {
 		final MarcXmlWriter xmlWriter = new MarcXmlWriter(xmlgzPS, "UTF-8",
 				true);
 
-		final BufferedReader input = new BufferedReader(
-				new FileReader(IN_FILE));
+		final BufferedReader input = new BufferedReader(new FileReader(
+				"D:/Analysen/baumann/Musik/Orgel/Orgel_idns_Gesamtwerk.txt"));
 
 		final AtomicInteger i = new AtomicInteger();
 		input.lines().forEach(idn ->
