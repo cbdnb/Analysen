@@ -22,8 +22,8 @@ import de.dnb.gnd.utils.RecordUtils;
 public class Utils {
 
 	static final String GUELTIGE_SWW_NAME = "gueltige.out";
-	static final String PATH = "D:/Analysen/baumann/zulaessige/";
-	static final String GUELTIGE_PATH = PATH + GUELTIGE_SWW_NAME;
+	static final String FOLDER = "D:/Analysen/baumann/zulaessige/";
+	static final String GUELTIGE_PATH = FOLDER + GUELTIGE_SWW_NAME;
 	static HashSet<Integer> gueltigeSWW = null;
 	static HashSet<Integer> bestandsgliederung = null;
 	static HashSet<Integer> dbsmKlassifik = null;
@@ -40,11 +40,22 @@ public class Utils {
 		loadGueltigeSWW();
 	}
 
+	public static boolean isGueltigesSW(final String idn) {
+		try {
+			loadGueltigeSWW();
+		} catch (ClassNotFoundException | IOException e) {
+			e.printStackTrace();
+			return false;
+		}
+		final Integer intID = IDNUtils.idn2int(idn);
+		return gueltigeSWW.contains(intID);
+	}
+
 	public static void loadBestandsgliederung() throws IOException {
 		if (bestandsgliederung == null) {
 			bestandsgliederung = new HashSet<>();
 			final BufferedReader bufferedReader = new BufferedReader(
-					new FileReader(PATH + "DBSM-Bestandsgliederung.txt"));
+					new FileReader(FOLDER + "DBSM-Bestandsgliederung.txt"));
 			bufferedReader.lines().forEach(line ->
 			{
 				final int idn = IDNUtils.idn2int(line);
@@ -59,7 +70,7 @@ public class Utils {
 		if (dbsmKlassifik == null) {
 			dbsmKlassifik = new HashSet<>();
 			final BufferedReader bufferedReader = new BufferedReader(
-					new FileReader(PATH + "DBSMKlassIDN.txt"));
+					new FileReader(FOLDER + "DBSMKlassIDN.txt"));
 			bufferedReader.lines().forEach(line ->
 			{
 				final int idn = IDNUtils.idn2int(line);
@@ -103,14 +114,10 @@ public class Utils {
 		if (raw.contains("DBSM"))
 			return true;
 
-		System.err.println("1");
-
 		final List<String> subs = RecordUtils.getContentsOfAllSubfields(record,
 				"0600", 'a');
 		if (subs.contains("yy"))
 			return true;
-
-		System.err.println(2);
 
 		if (RecordUtils.containsField(record, "4105")) // Zugehörigkeit zu einer
 														// Sammlung
@@ -123,8 +130,6 @@ public class Utils {
 														// Bemerkungen
 			return true;
 
-		System.err.println(3);
-
 		final List<String> dollarBs = RecordUtils
 				.getContentsOfAllSubfields(record, "5550", 'b');
 		for (final String dollarB : dollarBs) {
@@ -132,13 +137,9 @@ public class Utils {
 				return true;
 		}
 
-		System.err.println(4);
-
 		// Gestaltungsmerkmale auf bibliografischer Ebene
 		if (!RecordUtils.getLines(record, "559.").isEmpty())
 			return true;
-
-		System.err.println(5);
 
 		// die aufwendigeren Tests:
 		loadDbsmKlassifik();
@@ -147,8 +148,6 @@ public class Utils {
 		List<Integer> intIDS = IDNUtils.idns2ints(idns);
 		if (CollectionUtils.intersects(intIDS, dbsmKlassifik))
 			return true;
-
-		System.err.println("q");
 
 		loadBestandsgliederung();
 		// Aufstellung innerhalb / Zugehörigkeit zu einer Sammlung
