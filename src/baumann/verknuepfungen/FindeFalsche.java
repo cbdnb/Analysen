@@ -8,6 +8,7 @@ import de.dnb.basics.applicationComponents.MyFileUtils;
 import de.dnb.basics.applicationComponents.strings.StringUtils;
 import de.dnb.gnd.parser.Record;
 import de.dnb.gnd.parser.RecordReader;
+import de.dnb.gnd.parser.Subfield;
 import de.dnb.gnd.parser.line.Line;
 import de.dnb.gnd.parser.tag.BibTagDB;
 import de.dnb.gnd.utils.BibRecUtils;
@@ -23,10 +24,9 @@ public class FindeFalsche {
 	public static void main(final String[] args)
 			throws IOException, ClassNotFoundException {
 		final String outFileName = Utils.FOLDER + "falsche.txt";
-		System.out.println(outFileName);
 		final PrintWriter out = MyFileUtils.outputFile(outFileName, false);
 		final RecordReader reader = RecordReader
-				.getMatchingReader(Constants.TITEL_STICHPROBE);
+				.getMatchingReader(Constants.TITEL_PLUS_EXEMPLAR_D);
 		reader.setStreamFilter(new ContainsTag("5100", BibTagDB.getDB()));
 		for (final Record record : reader) {
 			if (Utils.isDBSM(record))
@@ -38,19 +38,28 @@ public class FindeFalsche {
 					continue;
 				if (Utils.isGueltigesSW(rswkID))
 					continue;
-				final String typ = SubfieldUtils
-						.getContentOfFirstSubfield(rswkLine, '7');
-				final String entit = SubfieldUtils
-						.getContentOfFirstSubfield(rswkLine, 'V');
-				String name = SubfieldUtils.getContentOfFirstSubfield(rswkLine,
-						'a');
-				// wenigstens etwas:
-				if (name == null)
-					name = SubfieldUtils.getContentOfFirstSubfield(rswkLine,
-							't');
+				// Unterfeld $7 kann in bei Werken mehrfach auftreten: Wir
+				// nehmen das letzte (das für das Werk , nicht das für den
+				// Autor):
+				final List<String> typen = SubfieldUtils
+						.getContentsOfSubfields(rswkLine, '7');
+				final String typ = typen.isEmpty() ? "?" : typen.getLast();
 
+				// Unterfeld $V kann in bei Werken mehrfach auftreten: Wir
+				// nehmen das letzte (das für das Werk , nicht das für den
+				// Autor). Leider tritt es auch dann mehrfach auf, wenn der
+				// Entitätencode mehrfach besetzt ist.
+				// Wir akzeptieren das:
+				final List<String> entits = SubfieldUtils
+						.getContentsOfSubfields(rswkLine, 'V');
+				final String entit = entits.isEmpty() ? "?" : entits.getLast();
+
+				final List<Subfield> sublist = SubfieldUtils.removeSubfields(
+						rswkLine, '9', 'A', '0', '7', 'V', 'E', 'H', 'K', 'D');
+				final String name = StringUtils.concatenate(" ",
+						SubfieldUtils.getContentsOfSubfields(sublist));
 				final SG dhs = SGUtils.getDHS(record);
-				final String dhsS = dhs != null ? dhs.getDDCString() : "";
+				final String dhsS = dhs != null ? dhs.getDDCString() : "?";
 				String title = BibRecUtils.getVollstaendigenTitel(record);
 				// wenigstens etwas
 				if (title == null)
