@@ -40,7 +40,7 @@ public class FindeFalsche {
 					continue;
 				// Unterfeld $7 kann in bei Werken mehrfach auftreten: Wir
 				// nehmen das letzte (das für das Werk , nicht das für den
-				// Autor):
+				// Autor) :
 				final List<String> typen = SubfieldUtils
 						.getContentsOfSubfields(rswkLine, '7');
 				final String typ = typen.isEmpty() ? "?" : typen.getLast();
