@@ -1,4 +1,4 @@
-package schumann;
+package jacobi;
 
 import java.io.IOException;
 import java.text.ParseException;
@@ -12,6 +12,8 @@ import de.dnb.basics.applicationComponents.strings.StringUtils;
 import de.dnb.basics.utils.TimeUtils;
 
 /**
+ * Veraltet. Nimm stattdessen {@link Onix2}
+ *
  * Liest die MVB-Einspielungen. Zuerst kommt ein String wie:
  *
  * ** Tue Nov 5 11:00:02 CET 2024: Neue MVB-Daten
@@ -24,6 +26,7 @@ import de.dnb.basics.utils.TimeUtils;
  *
  * erkennbar.
  */
+@Deprecated
 public class Onix {
 
 	public static enum STANDORT {

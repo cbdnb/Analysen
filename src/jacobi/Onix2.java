@@ -1,4 +1,4 @@
-package schumann;
+package jacobi;
 
 import java.io.File;
 import java.io.IOException;
@@ -55,7 +55,7 @@ public class Onix2 {//
 				StringUtils.concatenateTab("Datum", "L", "F", "gesamt"));
 
 		Stream.of(new File(
-				"//dnbf-fs01/DNB-Gesamt/03_FB_EE/13_BF/_Bestandsaufbau/MVB-Zahlen/2024_Statistikmails")
+				"//dnbf-fs01/DNB-Gesamt/03_FB_EE/13_BF/_Bestandsaufbau/Zahlen/MVB-Zahlen/2025_Statistikmails")
 						.listFiles())
 				.filter(file -> !file.isDirectory())
 				.forEach(Onix2::printMailData);
