@@ -23,5 +23,6 @@
 			<attribute name="javadoc_location" value="https://poi.apache.org/apidocs/5.0/"/>
 		</attributes>
 	</classpathentry>
+	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/4"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
