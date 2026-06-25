@@ -85,7 +85,7 @@ public abstract class Transformer {
 
 	public static final String KOMM_670_678 = "aus Hinweisdatensatz ";
 
-	protected HinweisDBUtil db = new HinweisDBUtil();
+	protected HinweisDB db = new HinweisDB();
 
 	protected char typ;
 	protected GNDTag feld1XX;
@@ -122,20 +122,20 @@ public abstract class Transformer {
 	 * Macht aus der Kombination und dem Typ typ des Zieldatensatzes den Rumpf
 	 * eines neuen Datensatzes.
 	 *
-	 * @param kombi
+	 * @param idnExpansionkombi
 	 * @param record
 	 * @param typ2
 	 */
-	abstract void make1XX(final Set<Pair<String, String>> kombi,
+	abstract void make1XX(final Set<Pair<String, String>> idnExpansionkombi,
 			final Record record);
 
 	/**
 	 * Lässt nur die Kombinationen übrig, die in diesem Verarbeitungschritt
 	 * benutzt werden sollen. Benutzt
-	 * {@link HinweisDBUtil#retainIfAllRecords(java.util.function.Predicate)},
-	 * {@link HinweisDBUtil#retainIfAnyRecord(java.util.function.Predicate)},
-	 * {@link HinweisDBUtil#retainIfRecords(java.util.function.Predicate)} oder
-	 * {@link HinweisDBUtil#retainIfKombi(java.util.function.Predicate)}
+	 * {@link HinweisDB#retainIfAllRecords(java.util.function.Predicate)},
+	 * {@link HinweisDB#retainIfAnyRecord(java.util.function.Predicate)},
+	 * {@link HinweisDB#retainIfRecords(java.util.function.Predicate)} oder
+	 * {@link HinweisDB#retainIfKombi(java.util.function.Predicate)}
 	 *
 	 */
 	protected abstract void filter();
@@ -333,20 +333,20 @@ public abstract class Transformer {
 		for (final Pair<String, String> pair : kombi) {
 			final String idn260 = pair.first;
 			final String expans260 = pair.second;
-			if (HinweisDBUtil.getIndikator(pair) == 'p')
+			if (Util.getIndikator(pair) == 'p')
 				veraerbeiteP(newRecord, idn260, expans260);
-			if (HinweisDBUtil.getIndikator(pair) == 's')
+			if (Util.getIndikator(pair) == 's')
 				newRecord.add(LineParser.parseGND(
 						"550 !" + idn260 + "!" + expans260 + "$4obin"));
-			if (HinweisDBUtil.getIndikator(pair) == 'g')
+			if (Util.getIndikator(pair) == 'g')
 				newRecord.add(LineParser.parseGND(
 						"551 !" + idn260 + "!" + expans260 + "$4orta" + "$X1"));
-			if (HinweisDBUtil.getIndikator(pair) == 'b') {
+			if (Util.getIndikator(pair) == 'b') {
 				newRecord.add(LineParser.parseGND(
 						"510 !" + idn260 + "!" + expans260 + "$4rela"));
-				final Integer geoidInt = HinweisDBUtil.getGeoIdInt(idn260);
+				final Integer geoidInt = Util.getGeoIdInt(idn260);
 				final String geoIDN = IDNUtils.int2PPN(geoidInt);
-				final String geoName = HinweisDBUtil.getGeoName(idn260);
+				final String geoName = Util.getGeoName(idn260);
 				newRecord.add(LineParser.parseGND(
 						"551 !" + geoIDN + "!" + geoName + "$4orta" + "$X1"));
 			}

@@ -56,9 +56,9 @@ final class Transformer313ab extends Transformer {
 	}
 
 	@Override
-	void make1XX(final Set<Pair<String, String>> kombi, final Record record) {
-		final Multimap<Character, Pair<String, String>> signatureMap = HinweisDBUtil
-				.getSignatureMap(kombi);
+	void make1XX(final Set<Pair<String, String>> idnExpansionkombi, final Record record) {
+		final Multimap<Character, Pair<String, String>> signatureMap = Util
+				.getSignatureMap(idnExpansionkombi);
 
 		String feld1XX = "";
 
@@ -70,7 +70,7 @@ final class Transformer313ab extends Transformer {
 		for (final Pair<String, String> dollarS : dollarSs) {
 			try {
 				final Line tempLine = LineParser.parseGND(
-						"150 " + HinweisDBUtil.getTrueExpansion(dollarS));
+						"150 " + Util.getName(dollarS));
 				anteilS.add(ohneDollarGmitBlank(tempLine));
 			} catch (final IllFormattedLineException e) {
 			}
@@ -85,7 +85,7 @@ final class Transformer313ab extends Transformer {
 				final Pair<String, String> first = ListUtils.getFirst(dollarPs);
 				Line tempLine;
 				tempLine = LineParser.parseGND(
-						"100 " + HinweisDBUtil.getTrueExpansion(first));
+						"100 " + Util.getName(first));
 				final String name = PersonUtils
 						.getName((GNDPersonLine) tempLine, false);
 				// name = mitKomma(tempLine); ???
@@ -102,10 +102,10 @@ final class Transformer313ab extends Transformer {
 			try {
 				final Pair<String, String> first = ListUtils.getFirst(dollarBs);
 				final Line tempLine = LineParser.parseGND(
-						"110 " + HinweisDBUtil.getTrueExpansion(first));
+						"110 " + Util.getName(first));
 				final String bMitKomma = mitKomma(tempLine);
 				feld1XX += " " + bMitKomma + "$g"
-						+ HinweisDBUtil.getGeoName(first.first);
+						+ Util.getGeoName(first.first);
 			} catch (final IllFormattedLineException e) {
 				e.printStackTrace();
 			}
@@ -117,7 +117,7 @@ final class Transformer313ab extends Transformer {
 			try {
 				final Pair<String, String> first = ListUtils.getFirst(dollarGs);
 				final Line tempLine = LineParser.parseGND(
-						"151 " + HinweisDBUtil.getTrueExpansion(first));
+						"151 " + Util.getName(first));
 				final String gmitKomma = mitKomma(tempLine);
 				// psg
 				if (!dollarPs.isEmpty()) {
@@ -153,7 +153,7 @@ final class Transformer313ab extends Transformer {
 		db.retainIfKombi(kombi ->
 		{
 			final Multiset<Character> sigset = new Multiset<>(
-					HinweisDBUtil.getSignature(kombi));
+					Util.getSignature(kombi));
 			/*
 			 * sg bs ssg psg ps ssb
 			 */
@@ -194,7 +194,7 @@ final class Transformer313ab extends Transformer {
 
 		final Transformer transformer = new Transformer313ab('g');
 
-		transformer.db.getKombis().forEach(kombi ->
+		transformer.db.getIdnExpansionKombis().forEach(kombi ->
 		{
 			try {
 				final Record newRec = transformer.transform(kombi);

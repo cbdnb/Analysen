@@ -20,11 +20,11 @@ public class Idn2Nid {
 
 	public static void main(final String[] args) throws IOException {
 		final PrintWriter out = MyFileUtils
-				.outputFile(HinweisDBUtil.FOLDER + "nids.txt", false);
+				.outputFile(Util.FOLDER + "nids.txt", false);
 		// Alle 260-idns einsammeln:
 		final Set<String> idns260 = new HashSet<>();
 		final RecordReader recordReader260 = RecordReader
-				.getMatchingReader(HinweisDBUtil.DOWNLOAD_FILE);
+				.getMatchingReader(Util.DOWNLOAD_FILE);
 		System.err.println("260 einlesen");
 		recordReader260.forEach(rec ->
 		{
@@ -53,7 +53,7 @@ public class Idn2Nid {
 		final Set<String> idns = new HashSet<>(StringUtils.readLinesFromFile(
 				"D:/Analysen/scheven/Hinweis/zu_loeschen_31.3ab_gib_2024-07-18.txt"));
 		final RecordReader recordReader = RecordReader
-				.getMatchingReader(HinweisDBUtil.DOWNLOAD_FILE);
+				.getMatchingReader(Util.DOWNLOAD_FILE);
 		System.err.println("Anfang");
 		recordReader.forEach(rec ->
 		{

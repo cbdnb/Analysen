@@ -27,8 +27,8 @@ public class Test {
 			throws OperationNotSupportedException, IllFormattedLineException {
 		final Transformer tr = new Transformer313ab('g');
 		final Record record = RecordUtils.readFromClip();
-		final Set<Pair<String, String>> kombi = HinweisDBUtil
-				.getPairKombi(record);
+		final Set<Pair<String, String>> kombi = Util
+				.getIDNExpansionPairs(record);
 		System.err.println(kombi);
 		final Record newRec = tr.transform(kombi);
 

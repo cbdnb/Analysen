@@ -40,7 +40,7 @@ public class StandardTabelle {
 							GNDUtils.getSimpleName(record), record.getId(),
 							GNDUtils.getNID(record),
 							GNDUtils.getFirstGNDClassification(record),
-							HinweisDBUtil.getPairKombi(record).toString(),
+							Util.getIDNExpansionPairs(record).toString(),
 							GNDUtils.getIsilUrheber(record),
 							GNDUtils.getIsilVerbund(record)));
 			table.add(zeile);

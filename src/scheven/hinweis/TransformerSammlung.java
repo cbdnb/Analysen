@@ -54,9 +54,9 @@ final class TransformerSammlung extends Transformer {
 	}
 
 	@Override
-	void make1XX(final Set<Pair<String, String>> kombi, final Record record) {
-		final Multimap<Character, Pair<String, String>> signatureMap = HinweisDBUtil
-				.getSignatureMap(kombi);
+	void make1XX(final Set<Pair<String, String>> idnExpansionkombi, final Record record) {
+		final Multimap<Character, Pair<String, String>> signatureMap = Util
+				.getSignatureMap(idnExpansionkombi);
 
 		String feld1XX = "";
 
@@ -68,7 +68,7 @@ final class TransformerSammlung extends Transformer {
 		for (final Pair<String, String> dollarS : dollarSs) {
 			try {
 				final Line tempLine = LineParser.parseGND(
-						"150 " + HinweisDBUtil.getTrueExpansion(dollarS));
+						"150 " + Util.getName(dollarS));
 				anteilS.add(ohneDollarGmitBlank(tempLine));
 			} catch (final IllFormattedLineException e) {
 			}
@@ -83,7 +83,7 @@ final class TransformerSammlung extends Transformer {
 				final Pair<String, String> first = ListUtils.getFirst(dollarPs);
 				GNDPersonLine tempLine;
 				tempLine = (GNDPersonLine) LineParser.parseGND(
-						"100 " + HinweisDBUtil.getTrueExpansion(first));
+						"100 " + Util.getName(first));
 				final String name = PersonUtils.getName(tempLine, false);
 				feld1XX += " " + name;
 			} catch (final IllFormattedLineException e) {
@@ -113,7 +113,7 @@ final class TransformerSammlung extends Transformer {
 		db.retainIfKombi(kombi ->
 		{
 			final Multiset<Character> sigset = new Multiset<>(
-					HinweisDBUtil.getSignature(kombi));
+					Util.getSignature(kombi));
 			return sigset.equals(ps);
 		});
 	}
@@ -153,7 +153,7 @@ final class TransformerSammlung extends Transformer {
 		final PrintWriter zuloeschen = MyFileUtils
 				.outputFile(FOLDER + "zu_loeschen_" + SIGNATUR + ".txt", false);
 
-		transformer.db.getKombis().forEach(kombi ->
+		transformer.db.getIdnExpansionKombis().forEach(kombi ->
 		{
 			try {
 				final Record newRec = transformer.transform(kombi);
