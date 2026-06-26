@@ -36,9 +36,7 @@ import de.dnb.gnd.utils.formatter.Pica3Formatter;
  */
 final class TransformerSammlung extends Transformer {
 
-	private static final String SIGNATUR = "ps_Sammlung";
-
-	private static final String FOLDER = "D:/Analysen/scheven/Hinweis/";
+	private static final String FILE_NAME_OUT_PART = "ps_Sammlung";
 
 	/**
 	 * @param typ
@@ -53,8 +51,13 @@ final class TransformerSammlung extends Transformer {
 		}
 	}
 
+	/**
+	 * Die Sachbegriffe (Sammlung, Nachlass) aus idnExpansionkombi werden mit
+	 * der Personenangabe verkettet.
+	 */
 	@Override
-	void make1XX(final Set<Pair<String, String>> idnExpansionkombi, final Record record) {
+	void make1XX(final Set<Pair<String, String>> idnExpansionkombi,
+			final Record newRecord) {
 		final Multimap<Character, Pair<String, String>> signatureMap = Util
 				.getSignatureMap(idnExpansionkombi);
 
@@ -67,23 +70,24 @@ final class TransformerSammlung extends Transformer {
 		Collections.reverse(dollarSs);
 		for (final Pair<String, String> dollarS : dollarSs) {
 			try {
-				final Line tempLine = LineParser.parseGND(
-						"150 " + Util.getName(dollarS));
-				anteilS.add(ohneDollarGmitBlank(tempLine));
+				final Line tempLine = LineParser
+						.parseGND("150 " + Util.getName(dollarS));
+				anteilS.add(Util.ohneDollarGmitBlank(tempLine));
 			} catch (final IllFormattedLineException e) {
 			}
 		}
 		feld1XX += StringUtils.concatenate(" ", anteilS);
 
-		// p:
+		// + p:
 		final Collection<Pair<String, String>> dollarPs = signatureMap
 				.getNullSafe('p');
 		if (!dollarPs.isEmpty())
 			try {
 				final Pair<String, String> first = ListUtils.getFirst(dollarPs);
-				GNDPersonLine tempLine;
-				tempLine = (GNDPersonLine) LineParser.parseGND(
-						"100 " + Util.getName(first));
+				// tempLine, weil man das besser umwandeln kann, wenn der String
+				// geparst ist.
+				final GNDPersonLine tempLine = (GNDPersonLine) LineParser
+						.parseGND("100 " + Util.getName(first));
 				final String name = PersonUtils.getName(tempLine, false);
 				feld1XX += " " + name;
 			} catch (final IllFormattedLineException e) {
@@ -94,20 +98,23 @@ final class TransformerSammlung extends Transformer {
 			feld1XX += TEXT_DEBUG;
 		// Jetzt die neue Ansetzung erzeugen:
 		try {
-			final Line line151 = LineParser.parseGND("130 " + feld1XX);
-			record.add(line151);
+			final Line line130 = LineParser.parseGND("130 " + feld1XX);
+			newRecord.add(line130);
 		} catch (final IllFormattedLineException
 				| OperationNotSupportedException e) {
 		}
 	}
 
+	/**
+	 * Anpassen.
+	 */
 	@Override
 	protected void filter() {
 		// Sammlung (IDN
 		db.retainIfKombi(kombi ->
 		{
 			return kombi.stream().map(Pair::getFirst)
-					.anyMatch(s -> s.equals("041288440"));
+					.anyMatch(s -> s.equals("041288440"));// Sammlung
 		});
 
 		db.retainIfKombi(kombi ->
@@ -119,11 +126,7 @@ final class TransformerSammlung extends Transformer {
 	}
 
 	/**
-	 * @param newRecord
-	 * @param idn260
-	 * @param expans260
-	 * @throws OperationNotSupportedException
-	 * @throws IllFormattedLineException
+	 * $4 saml (Sammler)
 	 */
 	@Override
 	public void veraerbeiteP(final Record newRecord, final String idn260,
@@ -143,20 +146,20 @@ final class TransformerSammlung extends Transformer {
 	public static void main(final String[] args)
 			throws OperationNotSupportedException, IllFormattedLineException,
 			IOException {
-		final PrintWriter outHTML = MyFileUtils
-				.outputFile(FOLDER + "test_" + SIGNATUR + ".html", false);
-		final PrintWriter log = MyFileUtils
-				.outputFile(FOLDER + "log_" + SIGNATUR + ".txt", false);
-		final PrintWriter prod = MyFileUtils
-				.outputFile(FOLDER + "produktion_" + SIGNATUR + ".txt", false);
+		final PrintWriter outHTML = MyFileUtils.outputFile(
+				Util.FOLDER + "test_" + FILE_NAME_OUT_PART + ".html", false);
+		final PrintWriter log = MyFileUtils.outputFile(
+				Util.FOLDER + "log_" + FILE_NAME_OUT_PART + ".txt", false);
+		final PrintWriter prod = MyFileUtils.outputFile(
+				Util.FOLDER + "produktion_" + FILE_NAME_OUT_PART + ".txt", false);
 		final Transformer transformer = new TransformerSammlung('u');
-		final PrintWriter zuloeschen = MyFileUtils
-				.outputFile(FOLDER + "zu_loeschen_" + SIGNATUR + ".txt", false);
+		final PrintWriter zuloeschen = MyFileUtils.outputFile(
+				Util.FOLDER + "zu_loeschen_" + FILE_NAME_OUT_PART + ".txt", false);
 
 		transformer.db.getIdnExpansionKombis().forEach(kombi ->
 		{
 			try {
-				final Record newRec = transformer.transform(kombi);
+				final Record newRec = transformer.createRawRecord(kombi);
 
 				final int size = transformer.db.getRecords(kombi).size();
 				outHTML.println(HTMLUtils.heading(

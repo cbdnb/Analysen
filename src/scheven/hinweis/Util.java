@@ -13,6 +13,7 @@ import de.dnb.basics.collections.ListMultimap;
 import de.dnb.basics.collections.Multimap;
 import de.dnb.basics.filtering.FilterUtils;
 import de.dnb.gnd.parser.Record;
+import de.dnb.gnd.parser.Subfield;
 import de.dnb.gnd.parser.line.Line;
 import de.dnb.gnd.utils.GNDUtils;
 import de.dnb.gnd.utils.IDNUtils;
@@ -249,6 +250,68 @@ public class Util {
 		idnExpansionKombi.forEach(idnExpansionPair -> map
 				.add(getIndikator(idnExpansionPair), idnExpansionPair));
 		return map;
+	}
+
+	/*
+	 * Hilfsfunktionen zur Verarbeitung der Unterfelder.
+	 */
+
+	/**
+	 *
+	 * @param line
+	 *            nicht null
+	 * @return Nur relevante Unterfelder (ohne $v..). Alle verbunden durch
+	 *         Komma.
+	 */
+	static String mitKomma(final Line line) {
+		final List<Subfield> relevantsubs = SubfieldUtils
+				.getNamingRelevantSubfields(line);
+		return relevantsubs.stream().map(Subfield::getContent)
+				.collect(Collectors.joining(", "));
+	}
+
+	/**
+	 *
+	 * @param line
+	 *            nicht null
+	 * @return Nur relevante Unterfelder (ohne $v..). Alle verbunden durch
+	 *         Blank.
+	 */
+	static String mitBlank(final Line line) {
+		final List<Subfield> relevantsubs = SubfieldUtils
+				.getNamingRelevantSubfields(line);
+		return relevantsubs.stream().map(Subfield::getContent)
+				.collect(Collectors.joining(" "));
+	}
+
+	/**
+	 *
+	 * @param line
+	 *            nicht null
+	 * @return Nur relevante Unterfelder (ohne $v..), ohne $g. Alle verbunden
+	 *         durch Komma.
+	 */
+	static String ohneDollarGmitKomma(final Line line) {
+		final List<Subfield> relevantsubs = SubfieldUtils
+				.getNamingRelevantSubfields(line);
+		return relevantsubs.stream()
+				.filter(sub -> sub.getIndicator().indicatorChar != 'g')
+				.map(Subfield::getContent).collect(Collectors.joining(", "));
+	}
+
+	/**
+	 *
+	 * @param line
+	 *            nicht null
+	 * @return Nur relevante Unterfelder (ohne $v..), ohne $g. Alle verbunden
+	 *         durch Blank.
+	 */
+	static String ohneDollarGmitBlank(final Line line) {
+		final List<Subfield> relevantsubs = SubfieldUtils
+				.getNamingRelevantSubfields(line);
+		return relevantsubs.stream()
+				.filter(sub -> sub.getIndicator().indicatorChar != 'g')
+				.map(Subfield::getContent).collect(Collectors.joining(" "));
 	}
 
 }

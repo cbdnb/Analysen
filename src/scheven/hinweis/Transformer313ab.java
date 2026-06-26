@@ -71,7 +71,7 @@ final class Transformer313ab extends Transformer {
 			try {
 				final Line tempLine = LineParser.parseGND(
 						"150 " + Util.getName(dollarS));
-				anteilS.add(ohneDollarGmitBlank(tempLine));
+				anteilS.add(Util.ohneDollarGmitBlank(tempLine));
 			} catch (final IllFormattedLineException e) {
 			}
 		}
@@ -103,7 +103,7 @@ final class Transformer313ab extends Transformer {
 				final Pair<String, String> first = ListUtils.getFirst(dollarBs);
 				final Line tempLine = LineParser.parseGND(
 						"110 " + Util.getName(first));
-				final String bMitKomma = mitKomma(tempLine);
+				final String bMitKomma = Util.mitKomma(tempLine);
 				feld1XX += " " + bMitKomma + "$g"
 						+ Util.getGeoName(first.first);
 			} catch (final IllFormattedLineException e) {
@@ -118,7 +118,7 @@ final class Transformer313ab extends Transformer {
 				final Pair<String, String> first = ListUtils.getFirst(dollarGs);
 				final Line tempLine = LineParser.parseGND(
 						"151 " + Util.getName(first));
-				final String gmitKomma = mitKomma(tempLine);
+				final String gmitKomma = Util.mitKomma(tempLine);
 				// psg
 				if (!dollarPs.isEmpty()) {
 					feld1XX += "$g" + gmitKomma;
@@ -197,7 +197,7 @@ final class Transformer313ab extends Transformer {
 		transformer.db.getIdnExpansionKombis().forEach(kombi ->
 		{
 			try {
-				final Record newRec = transformer.transform(kombi);
+				final Record newRec = transformer.createRawRecord(kombi);
 
 				final int size = transformer.db.getRecords(kombi).size();
 				outHTML.println(HTMLUtils.heading(

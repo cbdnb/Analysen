@@ -24,7 +24,6 @@ import de.dnb.basics.collections.Multiset;
 import de.dnb.gnd.exceptions.IllFormattedLineException;
 import de.dnb.gnd.parser.Format;
 import de.dnb.gnd.parser.Record;
-import de.dnb.gnd.parser.Subfield;
 import de.dnb.gnd.parser.line.Line;
 import de.dnb.gnd.parser.line.LineParser;
 import de.dnb.gnd.parser.tag.GNDTag;
@@ -46,6 +45,8 @@ import de.dnb.gnd.utils.mx.MXAddress.Adressierung;
  *
  */
 public abstract class Transformer {
+
+	private static final String DUMMY_ID = "1234";
 
 	/**
 	 * Eingabe von Datensätzen zu Testzwecken.
@@ -105,10 +106,11 @@ public abstract class Transformer {
 	protected Transformer(final char typ) {
 		super();
 		System.err.println();
-		System.err.println("* Aufpassen: Die verwendeteten Datenbanken\r\n"
-				+ "* GND_DB_UTIL.getppn2name() und GND_DB_UTIL.getTb2Ort()\r\n"
-				+ "* müssen über GUI so geladen werden, dass sie auch die nötigen\r\n"
-				+ "* Geografika enthalten.");
+		System.err.println(
+				"* Aufpassen: Die möglicherweise verwendeteten Datenbanken\r\n"
+						+ "* GND_DB_UTIL.getppn2name() und GND_DB_UTIL.getTb2Ort()\r\n"
+						+ "* müssen über GUI so geladen werden, dass sie auch die nötigen\r\n"
+						+ "* Geografika enthalten.");
 		this.typ = typ;
 		feld1XX = (GNDTag) TYP_TO_1XX.get(typ);
 		feld4XX = (GNDTag) TYP_TO_4XX.get(typ);
@@ -119,8 +121,6 @@ public abstract class Transformer {
 	 * Reichert record mit den Daten aus kombi an. Dazu wird auch der Typ
 	 * benutzt.
 	 *
-	 * Macht aus der Kombination und dem Typ typ des Zieldatensatzes den Rumpf
-	 * eines neuen Datensatzes.
 	 *
 	 * @param idnExpansionkombi
 	 * @param record
@@ -215,7 +215,7 @@ public abstract class Transformer {
 			{
 
 				try {
-					final String mitKomma = mitKomma(quelle);
+					final String mitKomma = Util.mitKomma(quelle);
 					final Line line670Neu = LineParser
 							.parseGND("670 " + mitKomma + "$b" + KOMM_670_678);
 					newRecord.addWithoutDuplicates(line670Neu);
@@ -290,25 +290,35 @@ public abstract class Transformer {
 		});
 	}
 
+	/**
+	 * die aktuell verarbeiteten Hinweisdatensätze.
+	 */
 	public Set<String> idnsHinweis = new HashSet<>();
 
 	/**
-	 * @param kombi
-	 *            Kombination
+	 * Erzeugt den Rumpf eines neuen Datensatzes aus der Kombination der im
+	 * Hinweisdatensatz enthaltenen 260-Feldern und dem Typ des Zieldatensatzes.
+	 *
+	 * @param idnExpansionKombi
+	 *            Kombination [(idn, Expansion),...] der Hinweisdatensätze
 	 * @throws IllFormattedLineException
+	 *             irrelelvant
 	 * @throws OperationNotSupportedException
+	 *             irrelelvant
 	 */
-	public final Record transform(final Set<Pair<String, String>> kombi)
+	public final Record createRawRecord(
+			final Set<Pair<String, String>> idnExpansionKombi)
 			throws IllFormattedLineException, OperationNotSupportedException {
 
-		final Collection<Record> recordGroup = db.getRecords(kombi);
-		if (recordGroup == null)
+		final Collection<Record> hinweisSaetze = db
+				.getRecords(idnExpansionKombi);
+		if (hinweisSaetze == null)
 			return null;
 
-		recordGroup.forEach(rec -> idnsHinweis.add(rec.getId()));
+		hinweisSaetze.forEach(rec -> idnsHinweis.add(rec.getId()));
 
 		// Allgemeine Felder:
-		final Record newRecord = new Record("1234", TAG_DB);
+		final Record newRecord = new Record(DUMMY_ID, TAG_DB);
 		newRecord.add(LineParser.parseGND("005 T" + typ + "6"));
 		newRecord.add(line008);
 		newRecord.add(LineParser.parseGND("011 s"));
@@ -316,7 +326,7 @@ public abstract class Transformer {
 
 		// 6XX
 		newRecord.add(LineParser.parseGND("670 SWD"));
-		String einfeugung = kombi.stream().map(pair ->
+		String einfeugung = idnExpansionKombi.stream().map(pair ->
 		{
 			if (pair.second != null)
 				return "260 !" + pair.first + "!" + pair.second;
@@ -330,7 +340,7 @@ public abstract class Transformer {
 				+ " verwendet; ggf. wurden die Titel nicht umgehängt."));
 
 		// 5XX:
-		for (final Pair<String, String> pair : kombi) {
+		for (final Pair<String, String> pair : idnExpansionKombi) {
 			final String idn260 = pair.first;
 			final String expans260 = pair.second;
 			if (Util.getIndikator(pair) == 'p')
@@ -353,80 +363,29 @@ public abstract class Transformer {
 
 		}
 
-		make1XX(kombi, newRecord);
-		mergeRecords(newRecord, recordGroup);
+		make1XX(idnExpansionKombi, newRecord);
+		mergeRecords(newRecord, hinweisSaetze);
 		return newRecord;
 	}
 
 	/**
-	 * Personen relationieren.
+	 * Wird nur aus createRawRecord aufgerufen. Muss in den Unterklassen
+	 * überschrieben werden, um den $4-Code zu erzeugen.
 	 *
 	 * @param newRecord
+	 *            nicht null
 	 * @param idn260
+	 *            klar
 	 * @param expans260
+	 *            kann volle Expansion sein, da sie für die Produktion sowieso
+	 *            weggelassen wird; ist nur für die Anzeige
 	 * @throws OperationNotSupportedException
+	 *             unwichtig
 	 * @throws IllFormattedLineException
+	 *             unwichtig
 	 */
 	public abstract void veraerbeiteP(final Record newRecord,
 			final String idn260, final String expans260)
 			throws OperationNotSupportedException, IllFormattedLineException;
-
-	/**
-	 *
-	 * @param line
-	 *            nicht null
-	 * @return Nur relevante Unterfelder (ohne $v..), ohne $g. Alle verbunden
-	 *         durch Blank.
-	 */
-	protected String ohneDollarGmitBlank(final Line line) {
-		final List<Subfield> relevantsubs = SubfieldUtils
-				.getNamingRelevantSubfields(line);
-		return relevantsubs.stream()
-				.filter(sub -> sub.getIndicator().indicatorChar != 'g')
-				.map(Subfield::getContent).collect(Collectors.joining(" "));
-	}
-
-	/**
-	 *
-	 * @param line
-	 *            nicht null
-	 * @return Nur relevante Unterfelder (ohne $v..), ohne $g. Alle verbunden
-	 *         durch Komma.
-	 */
-	protected String ohneDollarGmitKomma(final Line line) {
-		final List<Subfield> relevantsubs = SubfieldUtils
-				.getNamingRelevantSubfields(line);
-		return relevantsubs.stream()
-				.filter(sub -> sub.getIndicator().indicatorChar != 'g')
-				.map(Subfield::getContent).collect(Collectors.joining(", "));
-	}
-
-	/**
-	 *
-	 * @param line
-	 *            nicht null
-	 * @return Nur relevante Unterfelder (ohne $v..). Alle verbunden durch
-	 *         Blank.
-	 */
-	protected String mitBlank(final Line line) {
-		final List<Subfield> relevantsubs = SubfieldUtils
-				.getNamingRelevantSubfields(line);
-		return relevantsubs.stream().map(Subfield::getContent)
-				.collect(Collectors.joining(" "));
-	}
-
-	/**
-	 *
-	 * @param line
-	 *            nicht null
-	 * @return Nur relevante Unterfelder (ohne $v..). Alle verbunden durch
-	 *         Komma.
-	 */
-	protected String mitKomma(final Line line) {
-		final List<Subfield> relevantsubs = SubfieldUtils
-				.getNamingRelevantSubfields(line);
-		return relevantsubs.stream().map(Subfield::getContent)
-				.collect(Collectors.joining(", "));
-	}
 
 }
