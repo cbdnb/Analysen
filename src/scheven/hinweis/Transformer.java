@@ -295,6 +295,8 @@ public abstract class Transformer {
 	 */
 	public Set<String> idnsHinweis = new HashSet<>();
 
+	protected String tbs = "s";
+
 	/**
 	 * Erzeugt den Rumpf eines neuen Datensatzes aus der Kombination der im
 	 * Hinweisdatensatz enthaltenen 260-Feldern und dem Typ des Zieldatensatzes.
@@ -321,7 +323,7 @@ public abstract class Transformer {
 		final Record newRecord = new Record(DUMMY_ID, TAG_DB);
 		newRecord.add(LineParser.parseGND("005 T" + typ + "6"));
 		newRecord.add(line008);
-		newRecord.add(LineParser.parseGND("011 s"));
+		newRecord.add(LineParser.parseGND("011 " + tbs));
 		newRecord.add(LineParser.parseGND("040 $frswk"));
 
 		// 6XX

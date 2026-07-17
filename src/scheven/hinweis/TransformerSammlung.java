@@ -8,6 +8,7 @@ import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -43,6 +44,7 @@ final class TransformerSammlung extends Transformer {
 	 */
 	TransformerSammlung(final char typ) {
 		super(typ);
+		tbs = "d;h";
 		try {
 			line008 = LineParser.parseGND("008 win");
 		} catch (final IllFormattedLineException e) {
@@ -57,6 +59,46 @@ final class TransformerSammlung extends Transformer {
 	 */
 	@Override
 	void make1XX(final Set<Pair<String, String>> idnExpansionkombi,
+			final Record newRecord) {
+
+		final Collection<Record> records = db.getRecords(idnExpansionkombi);
+		final Set<String> moeglicheNamen = new LinkedHashSet<>();
+		records.forEach(hinweisRecord ->
+		{
+			final List<String> dollarxe = RecordUtils.getContents(hinweisRecord,
+					"1..", 'x');
+			// .getContentsOfAllSubfields(hinweisRecord, "100", 'x');
+			if (dollarxe.isEmpty())
+				return;
+			final String dollarX = ListUtils.getLast(dollarxe);
+			moeglicheNamen.add(dollarX);
+		});
+		// Wenn es keine moeglichen Namen gibt, dann die Alternative:
+		if (moeglicheNamen.isEmpty()) {
+			make1XXAlternative(idnExpansionkombi, newRecord);
+			return;
+		}
+		// Versuch. Wenn es mehrere Namen gibt, dann ist das am "//" zu
+		// erkennen.
+		String moeglicherName = StringUtils.concatenate(" // ", moeglicheNamen);
+
+		if (DEBUG)
+			moeglicherName += TEXT_DEBUG;
+		// Jetzt die neue Ansetzung erzeugen:
+		try {
+			final Line line130 = LineParser.parseGND("130 " + moeglicherName);
+			newRecord.add(line130);
+		} catch (final IllFormattedLineException
+				| OperationNotSupportedException e) {
+		}
+	}
+
+	/**
+	 * Die Sachbegriffe (Sammlung, Nachlass) aus idnExpansionkombi werden mit
+	 * der Personenangabe verkettet.
+	 */
+	//
+	void make1XXAlternative(final Set<Pair<String, String>> idnExpansionkombi,
 			final Record newRecord) {
 		final Multimap<Character, Pair<String, String>> signatureMap = Util
 				.getSignatureMap(idnExpansionkombi);
@@ -151,10 +193,12 @@ final class TransformerSammlung extends Transformer {
 		final PrintWriter log = MyFileUtils.outputFile(
 				Util.FOLDER + "log_" + FILE_NAME_OUT_PART + ".txt", false);
 		final PrintWriter prod = MyFileUtils.outputFile(
-				Util.FOLDER + "produktion_" + FILE_NAME_OUT_PART + ".txt", false);
+				Util.FOLDER + "produktion_" + FILE_NAME_OUT_PART + ".txt",
+				false);
 		final Transformer transformer = new TransformerSammlung('u');
 		final PrintWriter zuloeschen = MyFileUtils.outputFile(
-				Util.FOLDER + "zu_loeschen_" + FILE_NAME_OUT_PART + ".txt", false);
+				Util.FOLDER + "zu_loeschen_" + FILE_NAME_OUT_PART + ".txt",
+				false);
 
 		transformer.db.getIdnExpansionKombis().forEach(kombi ->
 		{
