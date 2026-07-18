@@ -37,6 +37,8 @@ import de.dnb.gnd.utils.formatter.Pica3Formatter;
  */
 final class TransformerSammlung extends Transformer {
 
+	private static final String BUZZWORD = "Sammlung";
+	private static final String IDN_BUZZWORD = "041288440";
 	private static final String FILE_NAME_OUT_PART = "ps_Sammlung";
 
 	/**
@@ -73,8 +75,10 @@ final class TransformerSammlung extends Transformer {
 			final String dollarX = ListUtils.getLast(dollarxe);
 			moeglicheNamen.add(dollarX);
 		});
+		moeglicheNamen.remove(BUZZWORD);
 		// Wenn es keine moeglichen Namen gibt, dann die Alternative:
 		if (moeglicheNamen.isEmpty()) {
+			// oder: moeglicheNamen.size() != 1, dann kein concatenate
 			make1XXAlternative(idnExpansionkombi, newRecord);
 			return;
 		}
@@ -156,7 +160,7 @@ final class TransformerSammlung extends Transformer {
 		db.retainIfKombi(kombi ->
 		{
 			return kombi.stream().map(Pair::getFirst)
-					.anyMatch(s -> s.equals("041288440"));// Sammlung
+					.anyMatch(s -> s.equals(IDN_BUZZWORD));// Sammlung
 		});
 
 		db.retainIfKombi(kombi ->
