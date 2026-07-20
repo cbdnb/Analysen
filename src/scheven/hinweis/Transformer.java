@@ -51,7 +51,7 @@ public abstract class Transformer {
 	/**
 	 * Eingabe von Datensätzen zu Testzwecken.
 	 */
-	protected static final boolean DEBUG = false;
+	protected static final boolean DEBUG = true;
 
 	protected static final String TEXT_DEBUG = "$vTestTestTest";
 
@@ -172,8 +172,7 @@ public abstract class Transformer {
 		// 4XX:
 		for (final Record record : recordGroup) {
 			final String heading = RDAFormatter.getPureRDAHeading(record)
-					+ "$valte Vorzugsbenennung aus dem Hinweisdatensatz "
-					+ GNDUtils.getNID(record);
+					+ dollarV430 + GNDUtils.getNID(record);
 			final Line line4XX = LineParser.parse(feld4XX, Format.PICA3,
 					heading, false);
 			newRecord.add(line4XX);
@@ -297,6 +296,8 @@ public abstract class Transformer {
 
 	protected String tbs = "s";
 
+	protected String dollarV430 = "$valte Vorzugsbenennung aus dem Hinweisdatensatz ";
+
 	/**
 	 * Erzeugt den Rumpf eines neuen Datensatzes aus der Kombination der im
 	 * Hinweisdatensatz enthaltenen 260-Feldern und dem Typ des Zieldatensatzes.
@@ -308,7 +309,7 @@ public abstract class Transformer {
 	 * @throws OperationNotSupportedException
 	 *             irrelelvant
 	 */
-	public final Record createRawRecord(
+	public final Record createRecord(
 			final Set<Pair<String, String>> idnExpansionKombi)
 			throws IllFormattedLineException, OperationNotSupportedException {
 

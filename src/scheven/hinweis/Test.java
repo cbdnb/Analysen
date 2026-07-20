@@ -30,7 +30,7 @@ public class Test {
 		final Set<Pair<String, String>> kombi = Util
 				.getIDNExpansionPairs(record);
 		System.err.println(kombi);
-		final Record newRec = tr.createRawRecord(kombi);
+		final Record newRec = tr.createRecord(kombi);
 
 		System.out.println(newRec);
 

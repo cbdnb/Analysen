@@ -197,7 +197,7 @@ final class Transformer313ab extends Transformer {
 		transformer.db.getIdnExpansionKombis().forEach(kombi ->
 		{
 			try {
-				final Record newRec = transformer.createRawRecord(kombi);
+				final Record newRec = transformer.createRecord(kombi);
 
 				final int size = transformer.db.getRecords(kombi).size();
 				outHTML.println(HTMLUtils.heading(

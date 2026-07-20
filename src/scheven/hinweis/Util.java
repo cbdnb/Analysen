@@ -23,14 +23,9 @@ import utils.DB.GUI;
 
 public class Util {
 
-	public static final String FILE_NAME = "download_ohne_s_p.txt";
+	public static final String FILE_NAME = "tsammlBisMusikbibliothek.txt";
 	public static final String FOLDER = "D:/Analysen/scheven/Hinweis/";
 	public static final String DOWNLOAD_FILE = FOLDER + FILE_NAME;
-
-	public static void main(final String[] args) {
-		// TODO Auto-generated method stub
-
-	}
 
 	/**
 	 * Körperschaft zu IDN. Muss extern erstellt werden, z.B. aus der
