@@ -226,10 +226,10 @@ final class TransformerSammlung extends Transformer {
 			throws OperationNotSupportedException, IllFormattedLineException,
 			IOException {
 		final BiMultimap<String, String> idSamml2Tb = BiMultimap.createSetMap();
-		final RecordReader tfReader = RecordReader
+		final RecordReader tbReader = RecordReader
 				.getMatchingReader(Util.FOLDER + "TbSaml.txt");
 		System.err.println("Lese Tb");
-		tfReader.forEach(tbRecord ->
+		tbReader.forEach(tbRecord ->
 		{
 			final String tbId = GNDUtils.getNID(tbRecord);
 			String name = "";
