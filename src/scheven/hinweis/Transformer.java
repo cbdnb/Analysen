@@ -92,6 +92,7 @@ public abstract class Transformer {
 	protected GNDTag feld1XX;
 	protected GNDTag feld4XX;
 	protected Line line008 = null;
+	protected boolean isSammlung = false;
 
 	final Multiset<Character> sg = new Multiset<>('s', 'g');
 	final Multiset<Character> bs = new Multiset<>('b', 's');
@@ -102,8 +103,10 @@ public abstract class Transformer {
 
 	/**
 	 * @param typ
+	 * @param isSammlung
+	 *            TODO
 	 */
-	protected Transformer(final char typ) {
+	protected Transformer(final char typ, final boolean isSammlung) {
 		super();
 		System.err.println();
 		System.err.println(
@@ -114,6 +117,7 @@ public abstract class Transformer {
 		this.typ = typ;
 		feld1XX = (GNDTag) TYP_TO_1XX.get(typ);
 		feld4XX = (GNDTag) TYP_TO_4XX.get(typ);
+		this.isSammlung = isSammlung;
 		filter();
 	};
 
@@ -164,10 +168,11 @@ public abstract class Transformer {
 			newRecord.add(LineParser
 					.parseGND("043 " + StringUtils.concatenate(";", ccs)));
 		}
-		if (!systs.isEmpty()) {
-			newRecord.add(LineParser
-					.parseGND("065 " + StringUtils.concatenate(";", systs)));
-		}
+		if (!isSammlung)
+			if (!systs.isEmpty()) {
+				newRecord.add(LineParser.parseGND(
+						"065 " + StringUtils.concatenate(";", systs)));
+			}
 
 		// 4XX:
 		for (final Record record : recordGroup) {
@@ -178,15 +183,14 @@ public abstract class Transformer {
 			newRecord.add(line4XX);
 		}
 
-		// 548:
+		// 5XX:
 		for (final Record record : recordGroup) {
-			final ArrayList<Line> lines548 = RecordUtils.getLines(record,
-					"548");
-			// System.err.println(lines548);
-			lines548.forEach(line548 ->
+			final ArrayList<Line> lines5XX = RecordUtils.getLines(record,
+					"5..");
+			lines5XX.forEach(line5XX ->
 			{
 				try {
-					newRecord.addWithoutDuplicates(line548);
+					newRecord.addWithoutDuplicates(line5XX);
 				} catch (final OperationNotSupportedException e) {
 					e.printStackTrace();
 				}
@@ -202,10 +206,12 @@ public abstract class Transformer {
 								: "den Hinweisdatensätzen ")
 						+ nids + "; " + "bei Aufgreifen bitte aufarbeiten."));
 
-		final Set<String> isils = recordGroup.stream()
-				.map(GNDUtils::getIsilVerbund).collect(Collectors.toSet());
-		newRecord.add(LineParser.parseGND("667 Beteiligte Redaktion(en): "
-				+ StringUtils.concatenate(", ", isils)));
+		if (!isSammlung) {
+			final Set<String> isils = recordGroup.stream()
+					.map(GNDUtils::getIsilVerbund).collect(Collectors.toSet());
+			newRecord.add(LineParser.parseGND("667 Beteiligte Redaktion(en): "
+					+ StringUtils.concatenate(", ", isils)));
+		}
 
 		// Sammle 670 + 677 (-> 678)
 		recordGroup.forEach(record ->
@@ -237,6 +243,20 @@ public abstract class Transformer {
 				}
 			});
 		});
+
+		// 678:
+		for (final Record record : recordGroup) {
+			final ArrayList<Line> lines678 = RecordUtils.getLines(record,
+					"678");
+			lines678.forEach(line678 ->
+			{
+				try {
+					newRecord.addWithoutDuplicates(line678);
+				} catch (final OperationNotSupportedException e) {
+					e.printStackTrace();
+				}
+			});
+		}
 
 		// makeMX(newRecord, recordGroup);
 	}
@@ -325,22 +345,30 @@ public abstract class Transformer {
 		newRecord.add(LineParser.parseGND("005 T" + typ + "6"));
 		newRecord.add(line008);
 		newRecord.add(LineParser.parseGND("011 " + tbs));
-		newRecord.add(LineParser.parseGND("040 $frswk"));
+		if (isSammlung)
+			newRecord.add(LineParser.parseGND("040 $erda"));
+		else
+			newRecord.add(LineParser.parseGND("040 $frswk"));
 
 		// 6XX
-		newRecord.add(LineParser.parseGND("670 SWD"));
-		String einfeugung = idnExpansionKombi.stream().map(pair ->
-		{
-			if (pair.second != null)
-				return "260 !" + pair.first + "!" + pair.second;
-			else
-				return "260 " + pair.first;
-		}).collect(Collectors.joining(" "));
-		// Die $in 680 nicht erlaubt:
-		einfeugung = einfeugung.replaceAll("\\$.", " / ");
-		newRecord.add(LineParser.parseGND("680 früher wurde die Kombination "
-				+ einfeugung
-				+ " verwendet; ggf. wurden die Titel nicht umgehängt."));
+		if (DEBUG)
+			newRecord.add(LineParser.parseGND("667 TESTDATENSATZ"));
+
+		if (!isSammlung) {
+			newRecord.add(LineParser.parseGND("670 SWD"));
+			String einfuegung = idnExpansionKombi.stream().map(pair ->
+			{
+				if (pair.second != null)
+					return "260 !" + pair.first + "!" + pair.second;
+				else
+					return "260 " + pair.first;
+			}).collect(Collectors.joining(" "));
+			// Die $in 680 nicht erlaubt:
+			einfuegung = einfuegung.replaceAll("\\$.", " / ");
+			newRecord.add(LineParser
+					.parseGND("680 früher wurde die Kombination " + einfuegung
+							+ " verwendet; ggf. wurden die Titel nicht umgehängt."));
+		}
 
 		// 5XX:
 		for (final Pair<String, String> pair : idnExpansionKombi) {
@@ -363,7 +391,10 @@ public abstract class Transformer {
 				newRecord.add(LineParser.parseGND(
 						"551 !" + geoIDN + "!" + geoName + "$4orta" + "$X1"));
 			}
-
+		}
+		if (isSammlung) {
+			newRecord.add(LineParser.parseGND("903 $eDE-4562"));
+			newRecord.add(LineParser.parseGND("903 $rDE-4562"));
 		}
 
 		make1XX(idnExpansionKombi, newRecord);

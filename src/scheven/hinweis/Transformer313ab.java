@@ -46,7 +46,7 @@ final class Transformer313ab extends Transformer {
 	 * @param typ
 	 */
 	Transformer313ab(final char typ) {
-		super(typ);
+		super(typ, false);
 		try {
 			line008 = LineParser.parseGND("008 gib");
 		} catch (final IllFormattedLineException e) {

@@ -33,10 +33,14 @@ import de.dnb.gnd.parser.Format;
 import de.dnb.gnd.parser.Record;
 import de.dnb.gnd.parser.RecordReader;
 import de.dnb.gnd.parser.Repeatability;
+import de.dnb.gnd.parser.Subfield;
 import de.dnb.gnd.parser.line.GNDPersonLine;
 import de.dnb.gnd.parser.line.Line;
+import de.dnb.gnd.parser.line.LineFactory;
 import de.dnb.gnd.parser.line.LineParser;
+import de.dnb.gnd.parser.tag.GNDTagDB;
 import de.dnb.gnd.utils.GNDUtils;
+import de.dnb.gnd.utils.Komprimierer;
 import de.dnb.gnd.utils.PersonUtils;
 import de.dnb.gnd.utils.RecordUtils;
 import de.dnb.gnd.utils.SubfieldUtils;
@@ -59,8 +63,8 @@ final class TransformerSammlung extends Transformer {
 	 * @param typ
 	 */
 	TransformerSammlung(final char typ) {
-		super(typ);
-		tbs = "d;h";
+		super(typ, true);
+		tbs = "d";
 		try {
 			line008 = LineParser.parseGND("008 win");
 		} catch (final IllFormattedLineException e) {
@@ -115,8 +119,6 @@ final class TransformerSammlung extends Transformer {
 		}
 		moeglicheNamen.remove(moeglicherName);
 
-		if (DEBUG)
-			moeglicherName += TEXT_DEBUG;
 		// Jetzt die neue Ansetzung erzeugen:
 		try {
 			final Line line130 = LineParser.parseGND("130 " + moeglicherName);
@@ -173,8 +175,6 @@ final class TransformerSammlung extends Transformer {
 				e.printStackTrace();
 			}
 
-		if (DEBUG)
-			feld1XX += TEXT_DEBUG;
 		// Jetzt die neue Ansetzung erzeugen:
 		try {
 			final Line line130 = LineParser.parseGND("130 " + feld1XX);
@@ -225,7 +225,8 @@ final class TransformerSammlung extends Transformer {
 	public static void main(final String[] args)
 			throws OperationNotSupportedException, IllFormattedLineException,
 			IOException {
-		final BiMultimap<String, String> idSamml2Tb = BiMultimap.createSetMap();
+		final BiMultimap<String, String> idSammler2Tb = BiMultimap
+				.createSetMap();
 		final RecordReader tbReader = RecordReader
 				.getMatchingReader(Util.FOLDER + "TbSaml.txt");
 		System.err.println("Lese Tb");
@@ -240,9 +241,9 @@ final class TransformerSammlung extends Transformer {
 				e.printStackTrace();
 			}
 			final String tb = name + " (NID: " + tbId + ")";
-			final Collection<String> samlIds = getSammlIDs(tbRecord);
+			final Collection<String> samlIds = getSammlerIDs(tbRecord);
 			for (final String samlID : samlIds) {
-				idSamml2Tb.add(samlID, tb);
+				idSammler2Tb.add(samlID, tb);
 			}
 		});
 
@@ -302,6 +303,19 @@ final class TransformerSammlung extends Transformer {
 				}
 			});
 
+			// 550 obin korrigieren:
+			try {
+				final List<Line> lines550 = RecordUtils
+						.getLinesWithSubfield(destRecord, "550", '4', "obin");
+				RecordUtils.removeLines(destRecord, lines550);
+				destRecord.add(LineParser.parseGND("550 !" + "041288440" + "!"
+						+ "Sammlung [Tsz]" + "$4obin"));
+			} catch (OperationNotSupportedException
+					| IllFormattedLineException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+
 			// in 430 stehen die ursprünglichen IDNs am Ende, z.B.:
 			// $valte Vorzugsbenennung aus dem Hinweisdatensatz 7509435-6
 			final Field felder430 = RecordUtils
@@ -326,15 +340,35 @@ final class TransformerSammlung extends Transformer {
 					+ " zum nachfolgenden Datensatz:");
 			outHTML.println(idnList + "<br>");
 			// Mögliche Tb erkennen:
-			final Collection<String> samlIDs = getSammlIDs(destRecord);
+			final Collection<String> samlIDs = getSammlerIDs(destRecord);
 			final Set<String> intersection = CollectionUtils
-					.intersection(samlIDs, idSamml2Tb.getKeySet());
+					.intersection(samlIDs, idSammler2Tb.getKeySet());
 			if (!intersection.isEmpty()) {
+				try {
+					// 1XX korrigieren:
+					Line line130 = RecordUtils.getFirstLineTagGivenAsString(
+							destRecord, "130").first;
+					RecordUtils.removeLines(destRecord, line130);
+					final List<Subfield> subs = line130.getSubfields();
+					final Subfield dollarG = new Subfield(GNDTagDB.DOLLAR_G,
+							"Sammlung");
+					subs.add(dollarG);
+					final LineFactory factory = line130.getTag()
+							.getLineFactory();
+					factory.load(subs);
+					line130 = factory.createLine();
+					destRecord.add(line130);
+				} catch (final IllFormattedLineException
+						| OperationNotSupportedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+
 				outHTML.println(
 						"<br>Es gibt mögliche konkurrierende Tb-Datensätze: <br>");
 				final Set<String> konkurr = new HashSet<>();
 				intersection.forEach(samlID -> konkurr
-						.addAll(idSamml2Tb.getValueSet(samlID)));
+						.addAll(idSammler2Tb.getValueSet(samlID)));
 				outHTML.println(konkurr + "<br>");
 			}
 
@@ -356,13 +390,15 @@ final class TransformerSammlung extends Transformer {
 		final Collection<String> greater = name2count.getGreater(1);
 		System.out.println("Anzahl der mehrfachen Namen: " + greater.size());
 		System.out.println("Die mehrfachen Namen: " + greater);
+		Komprimierer.toGZip(transformer.db.getAlleHinweisRecords(),
+				Util.FOLDER + "Zu_loeschende_Hinweissaetze" + ".dat.gzip");
 		MyFileUtils.safeClose(outHTML);
 		MyFileUtils.safeClose(log);
 		MyFileUtils.safeClose(prod);
 		MyFileUtils.safeClose(zuloeschen);
 	}
 
-	private static Collection<String> getSammlIDs(final Record record) {
+	private static Collection<String> getSammlerIDs(final Record record) {
 		final ArrayList<Line> lines500 = RecordUtils.getLines(record, "500");
 		final List<Line> samlLines = GNDUtils.getLinesWithDollar4(lines500,
 				"saml");

@@ -7,8 +7,8 @@ import java.util.Set;
 import java.util.function.Predicate;
 
 import de.dnb.basics.Constants;
-import de.dnb.basics.filtering.StringContains;
 import de.dnb.gnd.parser.RecordReader;
+import de.dnb.gnd.parser.tag.BibTagDB;
 import de.dnb.gnd.parser.tag.GNDTagDB;
 import de.dnb.gnd.utils.ContainsTag;
 import de.dnb.gnd.utils.GNDUtils;
@@ -32,11 +32,13 @@ public class VorgNachfListe {
 				"Anzahl Tb mit Vorgänger/Nachfolger: " + vorNach.size());
 
 		final Set<Integer> verknuepfte = new HashSet<>();
-		final RecordReader titelReader = RecordReader
-				.getMatchingReader(Constants.TITEL_STICHPROBE);
+		final RecordReader titelReader = RecordReader.getMatchingReader(
+				"D:/pica-0.22.0-x86_64-pc-windows-msvc/temp.dat.gz");
 
-		Predicate<String> titleFilter = new StringContains("bvz");
-		titleFilter = titleFilter.or(new StringContains("dvz"));
+		Predicate<String> titleFilter = new ContainsTag("3100", '9', "",
+				BibTagDB.getDB());
+		titleFilter = titleFilter
+				.or(new ContainsTag("3110", '9', "", BibTagDB.getDB()));
 		titelReader.setStreamFilter(titleFilter);
 		titelReader.forEach(rec ->
 		{

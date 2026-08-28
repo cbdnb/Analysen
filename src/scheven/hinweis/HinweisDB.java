@@ -17,7 +17,6 @@ import de.dnb.basics.applicationComponents.tuples.Pair;
 import de.dnb.basics.collections.BiMap;
 import de.dnb.basics.collections.Frequency;
 import de.dnb.basics.collections.ListMultimap;
-import de.dnb.basics.collections.Multimap;
 import de.dnb.gnd.parser.Record;
 import de.dnb.gnd.parser.RecordReader;
 
@@ -69,7 +68,7 @@ public class HinweisDB {
 	 * verändert!
 	 *
 	 */
-	private Multimap<Set<Pair<String, String>>, Record> idnExpansionKombi2Records;
+	private ListMultimap<Set<Pair<String, String>>, Record> idnExpansionKombi2Records;
 
 	/**
 	 * Füllt alle Maps und Multimaps aus {@link Util#DOWNLOAD_FILE} Muss
@@ -280,6 +279,10 @@ public class HinweisDB {
 			if (!found)
 				idnExpansionKombi2Records.remove(kombi);
 		}
+	}
+
+	public Collection<Record> getAlleHinweisRecords() {
+		return idnExpansionKombi2Records.getValueSet();
 	}
 
 }
