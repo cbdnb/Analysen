@@ -40,8 +40,7 @@ public class HinweisDB {
 
 	public static void main(final String[] args) {
 		final HinweisDB db = new HinweisDB();
-		System.out.println(db.getExpansion("115367918"));
-		System.out.println(db.getIDN("Gatterer, Johann Christoph"));
+		System.out.println(db.getAnzahlHinweissaetze());
 	}
 
 	/**

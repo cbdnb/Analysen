@@ -256,7 +256,7 @@ final class TransformerSammlung extends Transformer {
 				false);
 		final Transformer transformer = new TransformerSammlung('u');
 		final PrintWriter zuloeschen = MyFileUtils.outputFile(
-				Util.FOLDER + "zu_loeschen_" + FILE_NAME_OUT_PART + ".txt",
+				Util.FOLDER + "idns_zu_loeschen_" + FILE_NAME_OUT_PART + ".txt",
 				false);
 
 		final Frequency<String> name2count = new Frequency<>();
@@ -392,6 +392,16 @@ final class TransformerSammlung extends Transformer {
 		System.out.println("Die mehrfachen Namen: " + greater);
 		Komprimierer.toGZip(transformer.db.getAlleHinweisRecords(),
 				Util.FOLDER + "Zu_loeschende_Hinweissaetze" + ".dat.gzip");
+		final PrintWriter outHinweis = MyFileUtils.outputFile(
+				Util.FOLDER + "Zu_loeschende_Hinweissaetze" + ".txt", false);
+		transformer.db.getAlleHinweisRecords().forEach(record ->
+		{
+			if (transformer.idnsHinweis.contains(record.getId())) {
+				outHinweis.println(RecordUtils.toPica(record));
+				outHinweis.println("------------");
+			}
+		});
+		MyFileUtils.safeClose(outHinweis);
 		MyFileUtils.safeClose(outHTML);
 		MyFileUtils.safeClose(log);
 		MyFileUtils.safeClose(prod);
