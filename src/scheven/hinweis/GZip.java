@@ -21,7 +21,7 @@ public class GZip {
 				"D:/Analysen/scheven/Hinweis/idns_zu_loeschen_ps_Sammlung.txt");
 		final Set<String> idnsZuLoeschen = new HashSet<>(idnsZuLoeschenL);
 		final String dateiName = Util.FOLDER + "Zu_loeschende_Hinweissaetze"
-				+ ".dat.gzip";
+				+ ".dat.gz";
 		final File file = new File(dateiName);
 		final PrintStream outGND = MyFileUtils.getGZipPrintStream(file);
 

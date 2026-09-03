@@ -391,7 +391,7 @@ final class TransformerSammlung extends Transformer {
 		System.out.println("Anzahl der mehrfachen Namen: " + greater.size());
 		System.out.println("Die mehrfachen Namen: " + greater);
 		Komprimierer.toGZip(transformer.db.getAlleHinweisRecords(),
-				Util.FOLDER + "Zu_loeschende_Hinweissaetze" + ".dat.gzip");
+				Util.FOLDER + "Zu_loeschende_Hinweissaetze");
 		final PrintWriter outHinweis = MyFileUtils.outputFile(
 				Util.FOLDER + "Zu_loeschende_Hinweissaetze" + ".txt", false);
 		transformer.db.getAlleHinweisRecords().forEach(record ->
