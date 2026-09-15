@@ -19,6 +19,7 @@ import de.dnb.basics.collections.Frequency;
 import de.dnb.basics.collections.ListMultimap;
 import de.dnb.gnd.parser.Record;
 import de.dnb.gnd.parser.RecordReader;
+import de.dnb.gnd.utils.GNDUtils;
 
 /**
  * @author baumann
@@ -55,6 +56,10 @@ public class HinweisDB {
 	 */
 	private final BiMap<String, String> idn2Name = new BiMap<>();
 
+	private final BiMap<String, String> idn2HinweisName = new BiMap<>();
+
+	private final BiMap<String, String> idn2nid = new BiMap<>();
+
 	/**
 	 * Zentrale quasirelationale Datenbank. Enthält zu einer Kombination von
 	 * relationierten Datensätzen (IDNs) die Hinweisdatensätze zu dieser
@@ -86,6 +91,14 @@ public class HinweisDB {
 		if (reader != null)
 			reader.forEach(record ->
 			{
+				final String nid = GNDUtils.getNID(record);
+				final String idHinweis = record.getId();
+				idn2nid.put(idHinweis, nid);
+				final String hinweisName = GNDUtils.getSimpleName(record);
+				if (hinweisName == null)
+					System.err.println(idHinweis);
+				idn2HinweisName.put(idHinweis, hinweisName);
+				idn2Name.put(idHinweis, hinweisName);
 				final Set<Pair<String, String>> kombi = Util
 						.getIDNExpansionPairs(record);
 				if (kombi.isEmpty())
@@ -100,6 +113,7 @@ public class HinweisDB {
 						idn2Expansion.put(idn, expansion);
 						idn2Name.put(idn, Util.getNameFromExpansion(expansion));
 					}
+
 				});
 			});
 	}
@@ -146,7 +160,11 @@ public class HinweisDB {
 	 * @return Die reine Expansion (ohne " [Tp1]") aus 260, wenn kein Zeit-SW.
 	 */
 	public String getExpansion(final String idn) {
-		return idn2Name.get(idn);
+		final String name = idn2Name.get(idn);
+		if (name != null)
+			return name;
+		else
+			return idn2HinweisName.get(name);
 	}
 
 	/**
@@ -158,6 +176,10 @@ public class HinweisDB {
 	 */
 	public String getIDN(final String swName) {
 		return idn2Name.getKey(swName);
+	}
+
+	public String getNID(final String idn) {
+		return idn2nid.get(idn);
 	}
 
 	/**

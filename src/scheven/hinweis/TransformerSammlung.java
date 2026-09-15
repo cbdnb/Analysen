@@ -53,11 +53,13 @@ import de.dnb.gnd.utils.formatter.RDAFormatter;
  */
 final class TransformerSammlung extends Transformer {
 
-	private static final List<String> BUZZWORDS = Arrays.asList("Sammlung",
-			"Nachlass", "Bibliothek", "Musikbibliothek");
-	private static final List<String> IDN_BUZZWORDS = Arrays.asList("041288440",
+	static final List<String> BUZZWORDS = Arrays.asList("Sammlung", "Nachlass",
+			"Bibliothek", "Musikbibliothek");
+	static final List<String> IDN_BUZZWORDS = Arrays.asList("041288440",
 			"041238117", "040064395", "041288386");
-	private static final String FILE_NAME_OUT_PART = "ps_Sammlung";
+	static final String FILE_NAME_OUT_PART = "ps_Sammlung";
+	static String fileNameIDNsZuLoeschen = Util.FOLDER + "idns_zu_loeschen_"
+			+ FILE_NAME_OUT_PART + ".txt";
 
 	/**
 	 * @param typ
@@ -255,9 +257,9 @@ final class TransformerSammlung extends Transformer {
 				Util.FOLDER + "produktion_" + FILE_NAME_OUT_PART + ".txt",
 				false);
 		final Transformer transformer = new TransformerSammlung('u');
-		final PrintWriter zuloeschen = MyFileUtils.outputFile(
-				Util.FOLDER + "idns_zu_loeschen_" + FILE_NAME_OUT_PART + ".txt",
-				false);
+
+		final PrintWriter zuloeschen = MyFileUtils
+				.outputFile(fileNameIDNsZuLoeschen, false);
 
 		final Frequency<String> name2count = new Frequency<>();
 		final ListMultimap<String, Record> name2records = new ListMultimap<>();
@@ -387,6 +389,7 @@ final class TransformerSammlung extends Transformer {
 		System.out.println("Anzahl der bearbeiteten Hinweissätze: "
 				+ transformer.db.getAnzahlHinweissaetze());
 		transformer.idnsHinweis.forEach(zuloeschen::println);
+
 		final Collection<String> greater = name2count.getGreater(1);
 		System.out.println("Anzahl der mehrfachen Namen: " + greater.size());
 		System.out.println("Die mehrfachen Namen: " + greater);
@@ -406,6 +409,7 @@ final class TransformerSammlung extends Transformer {
 		MyFileUtils.safeClose(log);
 		MyFileUtils.safeClose(prod);
 		MyFileUtils.safeClose(zuloeschen);
+
 	}
 
 	private static Collection<String> getSammlerIDs(final Record record) {

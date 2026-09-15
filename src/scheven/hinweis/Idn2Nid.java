@@ -19,8 +19,8 @@ import de.dnb.gnd.utils.SubfieldUtils;
 public class Idn2Nid {
 
 	public static void main(final String[] args) throws IOException {
-		final PrintWriter out = MyFileUtils
-				.outputFile(Util.FOLDER + "nids.txt", false);
+		final PrintWriter outNid = MyFileUtils.outputFile(Util.FOLDER + "nids.txt",
+				false);
 		// Alle 260-idns einsammeln:
 		final Set<String> idns260 = new HashSet<>();
 		final RecordReader recordReader260 = RecordReader
@@ -50,19 +50,19 @@ public class Idn2Nid {
 			}
 		});
 
-		final Set<String> idns = new HashSet<>(StringUtils.readLinesFromFile(
-				"D:/Analysen/scheven/Hinweis/zu_loeschen_31.3ab_gib_2024-07-18.txt"));
+		final Set<String> idnsZuLoeschen = new HashSet<>(StringUtils
+				.readLinesFromFile(TransformerSammlung.fileNameIDNsZuLoeschen));
 		final RecordReader recordReader = RecordReader
 				.getMatchingReader(Util.DOWNLOAD_FILE);
 		System.err.println("Anfang");
 		recordReader.forEach(rec ->
 		{
 			final String idn = rec.getId();
-			if (!idns.contains(idn))
+			if (!idnsZuLoeschen.contains(idn))
 				return;
-			idns.remove(idn);
+			idnsZuLoeschen.remove(idn);
 			final String nid = GNDUtils.getNID(rec);
-			out.print(StringUtils.concatenateTab(idn, nid));
+			outNid.print(StringUtils.concatenateTab(idn, nid));
 			final List<String> nids260 = new ArrayList<>();
 			GNDUtils.getHinweisLines(rec).forEach(line ->
 			{
@@ -73,9 +73,9 @@ public class Idn2Nid {
 					nids260.add(
 							SubfieldUtils.getContentOfFirstSubfield(line, 'a'));
 			});
-			out.println("\t" + StringUtils.concatenateTab(nids260));
+			outNid.println("\t" + StringUtils.concatenateTab(nids260));
 		});
-		System.err.println(idns.size());
+		System.err.println(idnsZuLoeschen.size());
 	}
 
 }

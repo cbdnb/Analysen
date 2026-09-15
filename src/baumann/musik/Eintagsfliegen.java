@@ -1,7 +1,6 @@
 package baumann.musik;
 
 import java.io.IOException;
-import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
 import java.util.function.Predicate;
@@ -16,7 +15,7 @@ import de.dnb.gnd.utils.ContainsTag;
 import de.dnb.gnd.utils.IDNUtils;
 
 /**
- * Werktitel, die nur einmalig vergeben werden.
+ * Werktitel, die nur einmalig vergeben werden. Braucht etwa 1 Stunde.
  *
  * @author baumann
  */
@@ -46,12 +45,16 @@ public class Eintagsfliegen
 					frequencyEST.add(idn);
 				}
 			});
-
 		});
-		final Collection<Integer> fliegen = frequencyEST
-				.filterKeysByFrequency(frequency -> frequency == 1);
-		System.out.println("Eintagsfliegen: " + fliegen.size());
-		System.out.println(CollectionUtils.shortView(fliegen, 5));
+
+		System.out.println(frequencyEST.toString());
+		System.out.println();
+		System.out.println("Anzahl aller Musikwerktitel: " + musikIDNs.size());
+		System.out.println(
+				"Anzahl verwendeter Werktitel: " + frequencyEST.size());
+		System.out
+				.println("Summe aller Verwendungen: " + frequencyEST.getSum());
+		System.out.println("Durchschnitt: " + frequencyEST.getAverage());
 
 	}
 
