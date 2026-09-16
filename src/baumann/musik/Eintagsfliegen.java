@@ -34,7 +34,7 @@ public class Eintagsfliegen
 		contTag321X = contTag321X.or(new ContainsTag("3211", BibTagDB.getDB()));
 
 		reader.setStreamFilter(contTag321X);
-		final Frequency<Integer> frequencyEST = new Frequency<>();
+		final Frequency<Integer> est2freq = new Frequency<>();
 		reader.forEach(record ->
 		{
 			final List<String> werkeS = BibRecUtils.getWorkIds(record);
@@ -42,19 +42,24 @@ public class Eintagsfliegen
 			idns.forEach(idn ->
 			{
 				if (musikIDNs.contains(idn)) {
-					frequencyEST.add(idn);
+					est2freq.add(idn);
 				}
 			});
 		});
 
-		System.out.println(frequencyEST.toString());
+		// FALSCH!
+
 		System.out.println();
 		System.out.println("Anzahl aller Musikwerktitel: " + musikIDNs.size());
+		System.out.println("Anzahl verwendeter Werktitel: " + est2freq.size());
+		System.out.println("Summe aller Verwendungen: " + est2freq.getSum());
 		System.out.println(
-				"Anzahl verwendeter Werktitel: " + frequencyEST.size());
-		System.out
-				.println("Summe aller Verwendungen: " + frequencyEST.getSum());
-		System.out.println("Durchschnitt: " + frequencyEST.getAverage());
+				"Durchschnitt (der Verwendeten): " + est2freq.getAverage());
+		System.out.println("Häufigkeit:");
+		est2freq.getInverseDistribution().forEach((h, c) ->
+		{
+			System.out.println(h + "-mal verwendet: " + c + " Werktitel");
+		});
 
 	}
 
