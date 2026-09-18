@@ -25,6 +25,7 @@ public class Eintagsfliegen
 
 	public static void main(final String[] args)
 			throws IOException, ClassNotFoundException {
+
 		final HashSet<Integer> musikIDNs = CollectionUtils
 				.loadHashSet(ErzeugeMusikIDs.MUSIK_IDNS_FILE);
 		final RecordReader reader = RecordReader
