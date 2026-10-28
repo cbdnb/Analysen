@@ -48,7 +48,17 @@ import de.dnb.gnd.utils.formatter.Pica3Formatter;
 import de.dnb.gnd.utils.formatter.RDAFormatter;
 
 /**
- * @author baumann
+ * Tb-Sätze findet man mit
+ *
+ * "f bbg tb* und rcc saml".
+ *
+ * Diese in die Datei TbSaml.txt downloaden. Die Sammlungs-Sätze findet man mit
+ *
+ * "f rlh (sammlung or Bibliothek or Nachlass or Musikbibliothek)"
+ *
+ * Diese in die Datei TbSaml.txt downloaden
+ *
+ * * @author baumann
  *
  */
 final class TransformerSammlung extends Transformer {
@@ -62,10 +72,16 @@ final class TransformerSammlung extends Transformer {
 			+ FILE_NAME_OUT_PART + ".txt";
 
 	/**
+	 * Soll an die 130 noch $gSammlung angehängt werden, nur weil es noch
+	 * mögliche konkurrierende Tb-Sätze gibt?
+	 */
+	static final boolean KORR_1XX_WG_TB = false;
+
+	/**
 	 * @param typ
 	 */
 	TransformerSammlung(final char typ) {
-		super(typ, true);
+		super(typ, true);// true: isSammlung
 		tbs = "d";
 		try {
 			line008 = LineParser.parseGND("008 win");
@@ -227,7 +243,9 @@ final class TransformerSammlung extends Transformer {
 	public static void main(final String[] args)
 			throws OperationNotSupportedException, IllFormattedLineException,
 			IOException {
-		final BiMultimap<String, String> idSammler2Tb = BiMultimap
+		final BiMultimap<String, String> idSammler2TbNamePlusNID = BiMultimap
+				.createSetMap();
+		final BiMultimap<String, Record> idSammler2Tb = BiMultimap
 				.createSetMap();
 		final RecordReader tbReader = RecordReader
 				.getMatchingReader(Util.FOLDER + "TbSaml.txt");
@@ -242,10 +260,11 @@ final class TransformerSammlung extends Transformer {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-			final String tb = name + " (NID: " + tbId + ")";
+			final String tbNamePlusNID = name + " (NID: " + tbId + ")";
 			final Collection<String> samlIds = getSammlerIDs(tbRecord);
 			for (final String samlID : samlIds) {
-				idSammler2Tb.add(samlID, tb);
+				idSammler2TbNamePlusNID.add(samlID, tbNamePlusNID);
+				idSammler2Tb.add(samlID, tbRecord);
 			}
 		});
 
@@ -305,13 +324,26 @@ final class TransformerSammlung extends Transformer {
 				}
 			});
 
-			// 550 obin korrigieren:
+			// 550 obin korrigieren, aber von "Sammlung" abweichende in 678
+			// aufbewahren:
 			try {
 				final List<Line> lines550 = RecordUtils
 						.getLinesWithSubfield(destRecord, "550", '4', "obin");
 				RecordUtils.removeLines(destRecord, lines550);
 				destRecord.add(LineParser.parseGND("550 !" + "041288440" + "!"
 						+ "Sammlung [Tsz]" + "$4obin"));
+				final List<String> abweichendeOBIN = lines550.stream()
+						.map(line -> SubfieldUtils
+								.getContentOfFirstSubfield(line, '8'))
+						.map(s -> s.replaceAll(" \\[Ts.\\]", ""))
+						.filter(s -> !s.equals("Sammlung"))
+						.collect(Collectors.toList());
+				if (!abweichendeOBIN.isEmpty()) {
+					final String phrase = StringUtils.concatenate(" oder ",
+							abweichendeOBIN);
+					destRecord.add(LineParser.parseGND("678 $bursprünglich als "
+							+ phrase + " bezeichnet"));
+				}
 			} catch (OperationNotSupportedException
 					| IllFormattedLineException e) {
 				// TODO Auto-generated catch block
@@ -344,34 +376,51 @@ final class TransformerSammlung extends Transformer {
 			// Mögliche Tb erkennen:
 			final Collection<String> samlIDs = getSammlerIDs(destRecord);
 			final Set<String> intersection = CollectionUtils
-					.intersection(samlIDs, idSammler2Tb.getKeySet());
+					.intersection(samlIDs, idSammler2TbNamePlusNID.getKeySet());
 			if (!intersection.isEmpty()) {
-				try {
-					// 1XX korrigieren:
-					Line line130 = RecordUtils.getFirstLineTagGivenAsString(
-							destRecord, "130").first;
-					RecordUtils.removeLines(destRecord, line130);
-					final List<Subfield> subs = line130.getSubfields();
-					final Subfield dollarG = new Subfield(GNDTagDB.DOLLAR_G,
-							"Sammlung");
-					subs.add(dollarG);
-					final LineFactory factory = line130.getTag()
-							.getLineFactory();
-					factory.load(subs);
-					line130 = factory.createLine();
-					destRecord.add(line130);
-				} catch (final IllFormattedLineException
-						| OperationNotSupportedException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
+				if (KORR_1XX_WG_TB)
+					try {
+						// 1XX korrigieren:
+						Line line130 = RecordUtils.getFirstLineTagGivenAsString(
+								destRecord, "130").first;
+						RecordUtils.removeLines(destRecord, line130);
+						final List<Subfield> subs = line130.getSubfields();
+						final Subfield dollarG = new Subfield(GNDTagDB.DOLLAR_G,
+								"Sammlung");
+						subs.add(dollarG);
+						final LineFactory factory = line130.getTag()
+								.getLineFactory();
+						factory.load(subs);
+						line130 = factory.createLine();
+						destRecord.add(line130);
+
+					} catch (final IllFormattedLineException
+							| OperationNotSupportedException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
 
 				outHTML.println(
 						"<br>Es gibt mögliche konkurrierende Tb-Datensätze: <br>");
 				final Set<String> konkurr = new HashSet<>();
-				intersection.forEach(samlID -> konkurr
-						.addAll(idSammler2Tb.getValueSet(samlID)));
+				intersection.forEach(samlID ->
+				{
+					konkurr.addAll(idSammler2TbNamePlusNID.getValueSet(samlID));
+				});
 				outHTML.println(konkurr + "<br>");
+				// Die konkurrierenden jetzt noch in den Datensatz einbringen:
+				konkurr.forEach(konk ->
+				{
+					try {
+						destRecord.add(LineParser.parseGND(
+								"667 ggf. konkurrierender Körperschaftsdatensatz: "
+										+ konk));
+					} catch (OperationNotSupportedException
+							| IllFormattedLineException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+				});
 			}
 
 			outHTML.println("<br>");

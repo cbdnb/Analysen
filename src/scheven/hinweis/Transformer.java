@@ -12,6 +12,8 @@ import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 import javax.naming.OperationNotSupportedException;
@@ -104,7 +106,7 @@ public abstract class Transformer {
 	/**
 	 * @param typ
 	 * @param isSammlung
-	 *            TODO
+	 *
 	 */
 	protected Transformer(final char typ, final boolean isSammlung) {
 		super();
@@ -165,8 +167,14 @@ public abstract class Transformer {
 			systs.addAll(sy);
 		}
 		if (!ccs.isEmpty()) {
-			newRecord.add(LineParser
-					.parseGND("043 " + StringUtils.concatenate(";", ccs)));
+			if (isSammlung) {
+				final List<String> kurze = ccs.stream().map(lc -> kuerzeLC(lc))
+						.filter(lc -> lc != null).collect(Collectors.toList());
+				newRecord.add(LineParser.parseGND(
+						"043 " + StringUtils.concatenate(";", kurze)));
+			} else
+				newRecord.add(LineParser
+						.parseGND("043 " + StringUtils.concatenate(";", ccs)));
 		}
 		if (!isSammlung)
 			if (!systs.isEmpty()) {
@@ -190,8 +198,18 @@ public abstract class Transformer {
 			lines5XX.forEach(line5XX ->
 			{
 				try {
-					newRecord.addWithoutDuplicates(line5XX);
+					if (isSammlung) {
+						String pica3 = RecordUtils.toPica(line5XX, Format.PICA3,
+								true, '$');
+						pica3 = pica3.replace("$4adue", "$4rela");
+						line5XX = LineParser.parseGND(pica3);
+						newRecord.addWithoutDuplicates(line5XX);
+					} else
+						newRecord.addWithoutDuplicates(line5XX);
 				} catch (final OperationNotSupportedException e) {
+					e.printStackTrace();
+				} catch (final IllFormattedLineException e) {
+					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 			});
@@ -251,8 +269,19 @@ public abstract class Transformer {
 			lines678.forEach(line678 ->
 			{
 				try {
+					if (isSammlung) {
+						// fehlendes $b ergänzen:
+						String pica3 = RecordUtils.toPicaWithoutTag(line678);
+						if (!pica3.contains("$b")) {
+							pica3 = "$b" + pica3;
+							line678 = LineParser.parseGND("678 " + pica3);
+						}
+					}
 					newRecord.addWithoutDuplicates(line678);
 				} catch (final OperationNotSupportedException e) {
+					e.printStackTrace();
+				} catch (final IllFormattedLineException e) {
+					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 			});
@@ -421,5 +450,14 @@ public abstract class Transformer {
 	public abstract void veraerbeiteP(final Record newRecord,
 			final String idn260, final String expans260)
 			throws OperationNotSupportedException, IllFormattedLineException;
+
+	public String kuerzeLC(final String lc) {
+		final Pattern p = Pattern.compile("..-..");
+		final Matcher m = p.matcher(lc);
+		if (m.find())
+			return m.group();
+		else
+			return null;
+	}
 
 }

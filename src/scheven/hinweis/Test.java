@@ -3,14 +3,12 @@
  */
 package scheven.hinweis;
 
-import java.util.Set;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import javax.naming.OperationNotSupportedException;
 
-import de.dnb.basics.applicationComponents.tuples.Pair;
 import de.dnb.gnd.exceptions.IllFormattedLineException;
-import de.dnb.gnd.parser.Record;
-import de.dnb.gnd.utils.RecordUtils;
 
 /**
  * @author baumann
@@ -25,14 +23,15 @@ public class Test {
 	 */
 	public static void main(final String[] args)
 			throws OperationNotSupportedException, IllFormattedLineException {
-		final Transformer tr = new Transformer313ab('g');
-		final Record record = RecordUtils.readFromClip();
-		final Set<Pair<String, String>> kombi = Util
-				.getIDNExpansionPairs(record);
-		System.err.println(kombi);
-		final Record newRec = tr.createRecord(kombi);
-
-		System.out.println(newRec);
+		final String lc = "XA-IT-32-44";
+		final Pattern p = Pattern.compile("..-..");
+		final Matcher m = p.matcher(lc);
+		if (m.find())
+			System.out.println(m.group());
+		if (m.find())
+			System.out.println(m.group());
+		else
+			System.out.println("nix");
 
 	}
 
