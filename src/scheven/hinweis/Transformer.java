@@ -170,8 +170,9 @@ public abstract class Transformer {
 			if (isSammlung) {
 				final List<String> kurze = ccs.stream().map(lc -> kuerzeLC(lc))
 						.filter(lc -> lc != null).collect(Collectors.toList());
-				newRecord.add(LineParser.parseGND(
-						"043 " + StringUtils.concatenate(";", kurze)));
+				if (!kurze.isEmpty())
+					newRecord.add(LineParser.parseGND(
+							"043 " + StringUtils.concatenate(";", kurze)));
 			} else
 				newRecord.add(LineParser
 						.parseGND("043 " + StringUtils.concatenate(";", ccs)));

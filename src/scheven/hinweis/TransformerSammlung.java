@@ -26,7 +26,6 @@ import de.dnb.basics.collections.Frequency;
 import de.dnb.basics.collections.ListMultimap;
 import de.dnb.basics.collections.ListUtils;
 import de.dnb.basics.collections.Multimap;
-import de.dnb.basics.collections.Multiset;
 import de.dnb.gnd.exceptions.IllFormattedLineException;
 import de.dnb.gnd.parser.Field;
 import de.dnb.gnd.parser.Format;
@@ -64,9 +63,11 @@ import de.dnb.gnd.utils.formatter.RDAFormatter;
 final class TransformerSammlung extends Transformer {
 
 	static final List<String> BUZZWORDS = Arrays.asList("Sammlung", "Nachlass",
-			"Bibliothek", "Musikbibliothek");
+			"Bibliothek", "Musikbibliothek", "Archiv", "Museumsbau",
+			"Firmenarchiv", "Handbibliothek", "Ästhetik");
 	static final List<String> IDN_BUZZWORDS = Arrays.asList("041288440",
-			"041238117", "040064395", "041288386");
+			"041238117", "040064395", "041288386", "040028593", "041249704",
+			"041390245", "953314537", "040006263");
 	static final String FILE_NAME_OUT_PART = "ps_Sammlung";
 	static String fileNameIDNsZuLoeschen = Util.FOLDER + "idns_zu_loeschen_"
 			+ FILE_NAME_OUT_PART + ".txt";
@@ -104,7 +105,8 @@ final class TransformerSammlung extends Transformer {
 		records.forEach(hinweisRecord ->
 		{
 			final List<String> dollarxe = RecordUtils.getContents(hinweisRecord,
-					"1..", 'x');
+					"1..", 'x', 'a'); // Wenn gar kein $x vorhanden ist, dann $a
+										// als Notlösung
 			// .getContentsOfAllSubfields(hinweisRecord, "100", 'x');
 			if (dollarxe.isEmpty())
 				return;
@@ -164,25 +166,34 @@ final class TransformerSammlung extends Transformer {
 
 		// s:
 		final List<String> anteilS = new ArrayList<>();
-		final List<Pair<String, String>> dollarSs = (List<Pair<String, String>>) signatureMap
+		final List<Pair<String, String>> idnPlusExpansionList = (List<Pair<String, String>>) signatureMap
 				.getNullSafe('s');
-		Collections.reverse(dollarSs);
-		for (final Pair<String, String> dollarS : dollarSs) {
+		Collections.reverse(idnPlusExpansionList);
+		boolean buzzWordFound = false;
+		for (final Pair<String, String> idnPlusExpansion : idnPlusExpansionList) {
 			try {
-				final Line tempLine = LineParser
-						.parseGND("150 " + Util.getName(dollarS));
+				final String nameS = Util.getName(idnPlusExpansion);
+				if (buzzWordFound && BUZZWORDS.contains(nameS))
+					continue;// damit nur ein Buzzword in den Namen eingeht
+				final Line tempLine = LineParser.parseGND("150 " + nameS);
 				anteilS.add(Util.ohneDollarGmitBlank(tempLine));
+				if (BUZZWORDS.contains(nameS))
+					buzzWordFound = true;
 			} catch (final IllFormattedLineException e) {
+				// nix
 			}
 		}
-		feld1XX += StringUtils.concatenate(" ", anteilS);
+		final String concatenated = StringUtils.concatenate(" ", anteilS);
+		// damit nur eines der Buzzwords in den Namen eingeht:
 
-		// + p:
+		feld1XX += concatenated;
+
+		// + p, sofern vorhanden. Andernsfalls müssen die Sachbegriffe reichen:
 		final Collection<Pair<String, String>> dollarPs = signatureMap
 				.getNullSafe('p');
 		if (!dollarPs.isEmpty())
 			try {
-				final Pair<String, String> first = ListUtils.getFirst(dollarPs);
+				final Pair<String, String> first = ListUtils.getLast(dollarPs);
 				// tempLine, weil man das besser umwandeln kann, wenn der String
 				// geparst ist.
 				final GNDPersonLine tempLine = (GNDPersonLine) LineParser
@@ -214,12 +225,13 @@ final class TransformerSammlung extends Transformer {
 					.anyMatch(idn -> IDN_BUZZWORDS.contains(idn));// Sammlung
 		});
 
-		db.retainIfKombi(kombi ->
-		{
-			final Multiset<Character> sigset = new Multiset<>(
-					Util.getSignature(kombi));
-			return sigset.equals(ps);
-		});
+		// Auch mehr als zweigliedrige verarbeiten, daher auskommentiert:
+		// db.retainIfKombi(kombi ->
+		// {
+		// final Multiset<Character> sigset = new Multiset<>(
+		// Util.getSignature(kombi));
+		// return sigset.equals(ps);
+		// });
 	}
 
 	/**
@@ -253,6 +265,7 @@ final class TransformerSammlung extends Transformer {
 		tbReader.forEach(tbRecord ->
 		{
 			final String tbId = GNDUtils.getNID(tbRecord);
+			final char type = GNDUtils.getRecordType(tbRecord);
 			String name = "";
 			try {
 				name = RDAFormatter.getPureRDAHeading(tbRecord);
@@ -260,7 +273,8 @@ final class TransformerSammlung extends Transformer {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-			final String tbNamePlusNID = name + " (NID: " + tbId + ")";
+			final String tbNamePlusNID = name + " T" + type + " (NID: " + tbId
+					+ ")";
 			final Collection<String> samlIds = getSammlerIDs(tbRecord);
 			for (final String samlID : samlIds) {
 				idSammler2TbNamePlusNID.add(samlID, tbNamePlusNID);
@@ -337,6 +351,7 @@ final class TransformerSammlung extends Transformer {
 								.getContentOfFirstSubfield(line, '8'))
 						.map(s -> s.replaceAll(" \\[Ts.\\]", ""))
 						.filter(s -> !s.equals("Sammlung"))
+						.filter(s -> BUZZWORDS.contains(s))
 						.collect(Collectors.toList());
 				if (!abweichendeOBIN.isEmpty()) {
 					final String phrase = StringUtils.concatenate(" oder ",
@@ -401,7 +416,7 @@ final class TransformerSammlung extends Transformer {
 					}
 
 				outHTML.println(
-						"<br>Es gibt mögliche konkurrierende Tb-Datensätze: <br>");
+						"<br>Es gibt mögliche konkurrierende Tb- oder Tu-Datensätze: <br>");
 				final Set<String> konkurr = new HashSet<>();
 				intersection.forEach(samlID ->
 				{
@@ -412,9 +427,17 @@ final class TransformerSammlung extends Transformer {
 				konkurr.forEach(konk ->
 				{
 					try {
-						destRecord.add(LineParser.parseGND(
-								"667 ggf. konkurrierender Körperschaftsdatensatz: "
-										+ konk));
+						if (konk.contains("Tb (NID")) {
+							konk = konk.replace(" Tb (NID: ", " (NID: ");
+							destRecord.add(LineParser.parseGND(
+									"667 ggf. konkurrierender Körperschaftsdatensatz: "
+											+ konk));
+						} else {
+							konk = konk.replace(" Tu (NID: ", " (NID: ");
+							destRecord.add(LineParser.parseGND(
+									"667 ggf. konkurrierender Werkdatensatz: "
+											+ konk));
+						}
 					} catch (OperationNotSupportedException
 							| IllFormattedLineException e) {
 						// TODO Auto-generated catch block
@@ -461,6 +484,12 @@ final class TransformerSammlung extends Transformer {
 
 	}
 
+	/**
+	 *
+	 * @param record
+	 *            nicht null
+	 * @return Alle Sammler im Datensatz (500 $asaml)
+	 */
 	private static Collection<String> getSammlerIDs(final Record record) {
 		final ArrayList<Line> lines500 = RecordUtils.getLines(record, "500");
 		final List<Line> samlLines = GNDUtils.getLinesWithDollar4(lines500,
